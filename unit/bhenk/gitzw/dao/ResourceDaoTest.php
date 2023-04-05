@@ -11,21 +11,21 @@ use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertTrue;
 
 #[LogAttribute(false)]
-class RidDaoTest extends TestCase {
+class ResourceDaoTest extends TestCase {
     use ConsoleLoggerTrait;
 
     #[LogAttribute(false)]
     public function testCreateTable() {
-        $dao = new RidDao();
+        $dao = new ResourceDao();
         $sql = $dao->getCreateTableStatement();
-        assertStringContainsString("tbl_rid", $sql);
+        assertStringContainsString("tbl_resources", $sql);
         $result = $dao->createTable(true);
         assertTrue($result >= 1);
     }
 
     #[LogAttribute(true)]
     public function testInsert() {
-        $rid = new RidDo(null,
+        $rid = new ResourceDo(null,
         "hnq.work.paint.2020.0000",
         "A new work",
         "Een nieuw werk",
@@ -40,7 +40,7 @@ class RidDaoTest extends TestCase {
         5,
         "paint"
         );
-        $dao = new RidDao();
+        $dao = new ResourceDao();
         $rid2 = $dao->insert($rid);
         assertTrue($rid->equals($rid2));
         $selected = $dao->selectWhere("RID='hnq.work.paint.2020.0000'");
