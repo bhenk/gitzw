@@ -1,0 +1,25 @@
+{
+  "name": "bhenk/gitzw",
+  "type": "project",
+  "description": "web application",
+  "keywords": ["gallery", "art", "PHP"],
+  "homepage": "https://github.com/bhenk/gitzw",
+  "minimum-stability": "stable",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "henk van den berg",
+      "homepage": "https://gitzw.art"
+    }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "bhenk/msdata": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.0"
+  },
+  "autoload": {
+    "psr-4": {"bhenk\\": "application/bhenk"}
+  }
+}

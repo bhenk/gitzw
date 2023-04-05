@@ -1,0 +1,14 @@
+/logs/
+/vendor/
+/.phpunit.result.cache
+/docker/notes.txt
+/.idea/.gitignore
+/.idea/codeception.xml
+/.idea/gitzw.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/php.xml
+/.idea/php-test-framework.xml
+/.idea/phpspec.xml
+/.idea/phpunit.xml
+/.idea/vcs.xml

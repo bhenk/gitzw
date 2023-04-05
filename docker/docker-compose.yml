@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: "no"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: wztig
+      MYSQL_PASSWORD: pass
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - ../../../mysql/gitzwart/cosql:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: "no"
+    ports:
+      - "8080:8080"
