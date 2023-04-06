@@ -5,23 +5,26 @@ namespace bhenk\gitzw\dao;
 use bhenk\msdata\abc\AbstractDao;
 use function file_get_contents;
 
-class ResourceDao extends AbstractDao {
+class ResRepDao extends AbstractDao {
 
     /**
      * @inheritDoc
      */
     public function getDataObjectName(): string {
-        return ResourceDo::class;
+        return ResRepDo::class;
     }
 
     /**
      * @inheritDoc
      */
     public function getTableName(): string {
-        return "tbl_resources";
+        return "tbl_res_rep";
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getCreateTableStatement(): string {
-        return file_get_contents(__DIR__ . "/sql/tbl_resources.sql");
+        return file_get_contents(__DIR__ . "/sql/tbl_res_rep.sql");
     }
 }

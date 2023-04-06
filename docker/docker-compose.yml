@@ -9,8 +9,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: mydb
-      MYSQL_USER: wztig
-      MYSQL_PASSWORD: pass
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
     ports:
       - "3306:3306"
 

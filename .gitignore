@@ -12,3 +12,11 @@
 /.idea/phpspec.xml
 /.idea/phpunit.xml
 /.idea/vcs.xml
+/doc2rst.phar
+/docs/_build/
+/docs/d2r-conf.php
+/docs/d2r-order.php
+/docs/d2r-styles.txt
+/docs/make.bat
+/docs/Makefile
+/.idea/codeStyles/codeStyleConfig.xml

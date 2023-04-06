@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `tbl_resources`
 (
     `ID`        INT                NOT NULL AUTO_INCREMENT,
-    `RID`       VARCHAR(25) UNIQUE NOT NULL,
+    `RESID`     VARCHAR(25) UNIQUE NOT NULL,
     `title_en`  VARCHAR(255),
     `title_nl`  VARCHAR(255),
     `preferred` VARCHAR(2),

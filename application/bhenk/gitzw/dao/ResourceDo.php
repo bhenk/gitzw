@@ -4,11 +4,10 @@ namespace bhenk\gitzw\dao;
 
 use bhenk\msdata\abc\Entity;
 
-class ResourceDo extends Entity
-{
+class ResourceDo extends Entity {
 
     function __construct(?int            $ID = null,
-                         private ?string $RID = null,
+                         private ?string $RESID = null,
                          private ?string $title_en = null,
                          private ?string $title_nl = null,
                          private ?string $preferred = null,
@@ -21,216 +20,189 @@ class ResourceDo extends Entity
                          private ?bool   $hidden = false,
                          private int     $ordinal = -1,
                          private ?string $category = null
-    )
-    {
+    ) {
         parent::__construct($ID);
     }
 
     /**
      * @return string|null
      */
-    public function getRID(): ?string
-    {
-        return $this->RID;
+    public function getRESID(): ?string {
+        return $this->RESID;
     }
 
     /**
-     * @param string|null $RID
+     * @param string|null $RESID
      */
-    public function setRID(?string $RID): void
-    {
-        $this->RID = $RID;
+    public function setRESID(?string $RESID): void {
+        $this->RESID = $RESID;
     }
 
     /**
      * @return string|null
      */
-    public function getTitleEn(): ?string
-    {
+    public function getTitleEn(): ?string {
         return $this->title_en;
     }
 
     /**
      * @param string|null $title_en
      */
-    public function setTitleEn(?string $title_en): void
-    {
+    public function setTitleEn(?string $title_en): void {
         $this->title_en = $title_en;
     }
 
     /**
      * @return string|null
      */
-    public function getTitleNl(): ?string
-    {
+    public function getTitleNl(): ?string {
         return $this->title_nl;
     }
 
     /**
      * @param string|null $title_nl
      */
-    public function setTitleNl(?string $title_nl): void
-    {
+    public function setTitleNl(?string $title_nl): void {
         $this->title_nl = $title_nl;
     }
 
     /**
      * @return string|null
      */
-    public function getPreferred(): ?string
-    {
+    public function getPreferredLanguage(): ?string {
         return $this->preferred;
     }
 
     /**
      * @param string|null $preferred
      */
-    public function setPreferred(?string $preferred): void
-    {
+    public function setPreferredLanguage(?string $preferred): void {
         $this->preferred = $preferred;
     }
 
     /**
      * @return string|null
      */
-    public function getMedia(): ?string
-    {
+    public function getMedia(): ?string {
         return $this->media;
     }
 
     /**
      * @param string|null $media
      */
-    public function setMedia(?string $media): void
-    {
+    public function setMedia(?string $media): void {
         $this->media = $media;
     }
 
     /**
      * @return int
      */
-    public function getWidth(): int
-    {
+    public function getWidth(): int {
         return $this->width;
     }
 
     /**
      * @param int $width
      */
-    public function setWidth(int $width): void
-    {
+    public function setWidth(int $width): void {
         $this->width = $width;
     }
 
     /**
      * @return int
      */
-    public function getHeight(): int
-    {
+    public function getHeight(): int {
         return $this->height;
     }
 
     /**
      * @param int $height
      */
-    public function setHeight(int $height): void
-    {
+    public function setHeight(int $height): void {
         $this->height = $height;
     }
 
     /**
      * @return int
      */
-    public function getDepth(): int
-    {
+    public function getDepth(): int {
         return $this->depth;
     }
 
     /**
      * @param int $depth
      */
-    public function setDepth(int $depth): void
-    {
+    public function setDepth(int $depth): void {
         $this->depth = $depth;
     }
 
     /**
      * @return string|null
      */
-    public function getDate(): ?string
-    {
+    public function getDate(): ?string {
         return $this->date;
     }
 
     /**
      * @param string|null $date
      */
-    public function setDate(?string $date): void
-    {
+    public function setDate(?string $date): void {
         $this->date = $date;
     }
 
     /**
      * @return string|null
      */
-    public function getDateFormat(): ?string
-    {
+    public function getDateFormat(): ?string {
         return $this->d_format;
     }
 
     /**
      * @param string|null $d_format
      */
-    public function setDateFormat(?string $d_format): void
-    {
+    public function setDateFormat(?string $d_format): void {
         $this->d_format = $d_format;
     }
 
     /**
      * @return bool|null
      */
-    public function getHidden(): ?bool
-    {
+    public function getHidden(): ?bool {
         return $this->hidden;
     }
 
     /**
      * @param bool|null $hidden
      */
-    public function setHidden(?bool $hidden): void
-    {
+    public function setHidden(?bool $hidden): void {
         $this->hidden = $hidden;
     }
 
     /**
      * @return int
      */
-    public function getOrdinal(): int
-    {
+    public function getOrdinal(): int {
         return $this->ordinal;
     }
 
     /**
      * @param int $ordinal
      */
-    public function setOrdinal(int $ordinal): void
-    {
+    public function setOrdinal(int $ordinal): void {
         $this->ordinal = $ordinal;
     }
 
     /**
      * @return string|null
      */
-    public function getCategory(): ?string
-    {
+    public function getCategory(): ?string {
         return $this->category;
     }
 
     /**
      * @param string|null $category
      */
-    public function setCategory(?string $category): void
-    {
+    public function setCategory(?string $category): void {
         $this->category = $category;
     }
 

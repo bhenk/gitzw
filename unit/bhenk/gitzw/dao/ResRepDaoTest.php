@@ -7,20 +7,19 @@ use bhenk\logger\unit\LogAttribute;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
-use function count;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertTrue;
 
 #[LogAttribute(false)]
-class RepresentationDaoTest extends TestCase {
+class ResRepDaoTest extends TestCase {
     use ConsoleLoggerTrait;
 
     /**
      * @throws ReflectionException
      */
     public function testCreateTable() {
-        $dao = new RepresentationDao();
+        $dao = new ResRepDao();
         $result = $dao->createTable(true);
         assertTrue($result >= 1);
     }
@@ -29,14 +28,16 @@ class RepresentationDaoTest extends TestCase {
      * @throws Exception
      */
     public function testInsert() {
-        $do = new RepresentationDo(null,
-            "hnq/2020/_DSC0584_00001.jpg",
-            "nikon",
-            "in stromen vertellen (linker paneel)");
-        $dao = new RepresentationDao();
+        $do = new ResRepDo(null,
+            1,
+            1,
+            6,
+            true,
+            false);
+        $dao = new ResRepDao();
         $do2 = $dao->insert($do);
         assertTrue($do->equals($do2));
-        $selected = $dao->selectWhere("REPID='hnq/2020/_DSC0584_00001.jpg'");
+        $selected = $dao->selectWhere("REPID=1");
         assertEquals(1, count($selected));
         assertIsArray($selected);
         $do3 = $selected[0];

@@ -1,2 +1,2 @@
 CREATE DATABASE IF NOT EXISTS `gitzw`;
-GRANT ALL ON `gitzw`.* TO 'wztig'@'%';
+GRANT ALL ON `gitzw`.* TO 'user'@'%';
