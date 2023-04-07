@@ -25,6 +25,9 @@ class ResourceDaoTest extends TestCase {
 
     #[LogAttribute(true)]
     public function testInsert() {
+        $dao = new ResourceDao();
+        $result = $dao->createTable(true);
+        assertTrue($result >= 1);
         $rid = new ResourceDo(null,
             "hnq.work.paint.2020.0000",
             "A new work",

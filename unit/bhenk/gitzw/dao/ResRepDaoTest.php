@@ -28,6 +28,9 @@ class ResRepDaoTest extends TestCase {
      * @throws Exception
      */
     public function testInsert() {
+        $dao = new ResRepDao();
+        $result = $dao->createTable(true);
+        assertTrue($result >= 1);
         $do = new ResRepDo(null,
             1,
             1,

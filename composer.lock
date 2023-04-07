@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "16eb38f9ea9e4be8b6cf2f2284313d83",
+    "content-hash": "93c6f39672420fe0a07d226fc4a114a2",
     "packages": [
         {
             "name": "bhenk/logger",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bhenk/logger.git",
-                "reference": "5e8c06d124b0a32b3522719001bc6a2f6fadb306"
+                "reference": "82934750547a3af5ffb81776fb1eb4ec7d4f9897"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bhenk/logger/zipball/5e8c06d124b0a32b3522719001bc6a2f6fadb306",
-                "reference": "5e8c06d124b0a32b3522719001bc6a2f6fadb306",
+                "url": "https://api.github.com/repos/bhenk/logger/zipball/82934750547a3af5ffb81776fb1eb4ec7d4f9897",
+                "reference": "82934750547a3af5ffb81776fb1eb4ec7d4f9897",
                 "shasum": ""
             },
             "require": {
@@ -50,9 +50,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bhenk/logger/issues",
-                "source": "https://github.com/bhenk/logger/tree/1.0.4"
+                "source": "https://github.com/bhenk/logger/tree/1.0.5"
             },
-            "time": "2023-04-01T12:01:49+00:00"
+            "time": "2023-04-07T08:37:44+00:00"
         },
         {
             "name": "bhenk/msdata",

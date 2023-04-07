@@ -29,6 +29,9 @@ class RepresentationDaoTest extends TestCase {
      * @throws Exception
      */
     public function testInsert() {
+        $dao = new RepresentationDao();
+        $result = $dao->createTable(true);
+        assertTrue($result >= 1);
         $do = new RepresentationDo(null,
             "hnq/2020/_DSC0584_00001.jpg",
             "nikon",

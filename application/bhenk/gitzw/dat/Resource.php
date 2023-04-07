@@ -5,7 +5,6 @@ namespace bhenk\gitzw\dat;
 use bhenk\gitzw\dao\ResourceDo;
 use DateTimeImmutable;
 use function in_array;
-use function is_null;
 use function str_replace;
 use function strlen;
 
@@ -47,18 +46,21 @@ class Resource extends AbstractStoredObject {
 
     /**
      * @param string $preferred
+     * @return bool
      */
-    public function setPreferredLanguage(string $preferred): void {
+    public function setPreferredLanguage(string $preferred): bool {
         if (in_array($preferred, self::LANGUAGES)) {
             $this->resourceDo->setPreferredLanguage($preferred);
+            return true;
         }
+        return false;
     }
 
     public function getPreferredTitle(): string {
         if ($this->getPreferredLanguage() == "en") {
-            return $this->getTitleEn();
+            return $this->getTitleEn() ?? "";
         } else {
-            return $this->getTitleNl();
+            return $this->getTitleNl() ?? "";
         }
     }
 
@@ -66,8 +68,7 @@ class Resource extends AbstractStoredObject {
      * @return string
      */
     public function getPreferredLanguage(): string {
-        $preferred = $this->resourceDo->getPreferredLanguage();
-        return is_null($preferred) ? "nl" : $preferred;
+        return $this->resourceDo->getPreferredLanguage() ?? "nl";
     }
 
     /**
@@ -161,6 +162,19 @@ class Resource extends AbstractStoredObject {
         return $this->resourceDo->getDepth();
     }
 
+    /**
+     * Set creation date of the resource
+     *
+     * Allowed formats:
+     * ```
+     * yyyy-mm-dd
+     * yyyy-mm
+     * yyyy
+     * ```
+     *
+     * @param string $date date in year-first format
+     * @return bool *true* if date format was accepted, *false* otherwise
+     */
     public function setDate(string $date): bool {
         $date = str_replace("/", "-", $date);
         $l = strlen($date);
@@ -173,7 +187,7 @@ class Resource extends AbstractStoredObject {
             $format = "Y";
             $date = $date . "-01-01";
         }
-        $dt = DateTimeImmutable::createFromFormat($format, $date);
+        $dt = DateTimeImmutable::createFromFormat("Y-m-d", $date);
         if ($dt) {
             $this->resourceDo->setDate($dt->format("Y-m-d"));
             $this->resourceDo->setDateFormat($format);
@@ -182,6 +196,14 @@ class Resource extends AbstractStoredObject {
         return false;
     }
 
+    /**
+     * Get the creation date of the resource
+     *
+     * Gets the creation date in the original format. If no creation date was set will return
+     * the empty string.
+     *
+     * @return string date in original format or empty string
+     */
     public function getDate(): string {
         if ($this->resourceDo->getDate()) {
             $format = $this->resourceDo->getDateFormat() ?? "Y";
@@ -222,14 +244,25 @@ class Resource extends AbstractStoredObject {
     /**
      * @return string|null
      */
-    public function getCategory(): ?string {
-        return $this->resourceDo->getCategory();
+    public function getCategory(): ?ResourceCategories {
+        return ResourceCategories::forName($this->resourceDo->getCategory());
     }
 
     /**
-     * @param string|null $category
+     * @param string|ResourceCategories $category
+     * @return bool
      */
-    public function setCategory(?string $category): void {
-        $this->resourceDo->setCategory($category);
+    public function setCategory(string|ResourceCategories $category): bool {
+        if ($category instanceof ResourceCategories) {
+            $this->resourceDo->setCategory($category->name);
+            return true;
+        } else {
+            $cat = ResourceCategories::forName($category) ?? ResourceCategories::forValue($category);
+            if ($cat) {
+                $this->resourceDo->setCategory($cat->name);
+                return true;
+            }
+        }
+        return false;
     }
 }
