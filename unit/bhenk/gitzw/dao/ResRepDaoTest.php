@@ -40,7 +40,7 @@ class ResRepDaoTest extends TestCase {
         $dao = new ResRepDao();
         $do2 = $dao->insert($do);
         assertTrue($do->equals($do2));
-        $selected = $dao->selectWhere("REPID=1");
+        $selected = $dao->selectWhere("representationID=1");
         assertEquals(1, count($selected));
         assertIsArray($selected);
         $do3 = $selected[0];

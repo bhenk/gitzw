@@ -7,11 +7,12 @@ use bhenk\msdata\abc\Entity;
 class ResRepDo extends Entity {
 
     function __construct(?int         $ID = null,
-                         private ?int $RESID = null,
-                         private ?int $REPID = null,
+                         private ?int $resourceID = null,
+                         private ?int $representationID = null,
                          private int  $ordinal = -1,
                          private bool $hidden = false,
-                         private bool $preferred = false
+                         private bool $preferred = false,
+                         private bool $deleted = false
     ) {
         parent::__construct($ID);
     }
@@ -19,29 +20,29 @@ class ResRepDo extends Entity {
     /**
      * @return int|null
      */
-    public function getRESID(): ?int {
-        return $this->RESID;
+    public function getResourceID(): ?int {
+        return $this->resourceID;
     }
 
     /**
-     * @param int|null $RESID
+     * @param int|null $resourceID
      */
-    public function setRESID(?int $RESID): void {
-        $this->RESID = $RESID;
+    public function setResourceID(?int $resourceID): void {
+        $this->resourceID = $resourceID;
     }
 
     /**
      * @return int|null
      */
-    public function getREPID(): ?int {
-        return $this->REPID;
+    public function getRepresentationID(): ?int {
+        return $this->representationID;
     }
 
     /**
-     * @param int|null $REPID
+     * @param int|null $representationID
      */
-    public function setREPID(?int $REPID): void {
-        $this->REPID = $REPID;
+    public function setRepresentationID(?int $representationID): void {
+        $this->representationID = $representationID;
     }
 
     /**
@@ -84,6 +85,20 @@ class ResRepDo extends Entity {
      */
     public function setPreferred(bool $preferred): void {
         $this->preferred = $preferred;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeleted(): bool {
+        return $this->deleted;
+    }
+
+    /**
+     * @param bool $deleted
+     */
+    public function setDeleted(bool $deleted): void {
+        $this->deleted = $deleted;
     }
 
 }

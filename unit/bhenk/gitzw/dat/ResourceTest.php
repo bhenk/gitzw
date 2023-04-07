@@ -2,10 +2,13 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\dao\ResourceDo;
+use bhenk\gitzw\dao\ResRepDo;
 use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
 use PHPUnit\Framework\TestCase;
+use function count;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNull;
@@ -129,6 +132,53 @@ class ResourceTest extends TestCase {
         assertEquals(ResourceCategories::dry, $this->res->getCategory());
         assertTrue($this->res->setCategory(ResourceCategories::draw));
         assertEquals(ResourceCategories::draw, $this->res->getCategory());
+    }
+
+    public function testRepresentations() {
+        $repDo= new RepresentationDo(42, "REPID_23");
+        $representation = new Representation($repDo);
+        assertEquals(0, count($this->res->getRepresentations()));
+        assertEquals(0, count($this->res->getRepRelations()));
+        assertTrue($this->res->addRepresentation($representation));
+        assertEquals(1, count($this->res->getRepresentations()));
+        assertEquals(1, count($this->res->getRepRelations()));
+        /** @var ResRepDo $repRel */
+        $repRel = $this->res->getRepRelations()[42];
+        assertNull($repRel->getResourceID());
+        assertEquals(42, $repRel->getRepresentationID());
+
+        $repDo2 = new RepresentationDo("43", "REPID_24");
+        $representation2 = new Representation($repDo2);
+        assertTrue($this->res->addRepresentation($representation2));
+        assertEquals(2, count($this->res->getRepresentations()));
+        assertEquals(2, count($this->res->getRepRelations()));
+
+        assertFalse($this->res->removeRepresentation(8));
+        assertFalse($this->res->removeRepresentation("foo"));
+        assertFalse($this->res->removeRepresentation(new Representation()));
+
+        assertTrue($this->res->removeRepresentation(42));
+        assertEquals(1, count($this->res->getRepresentations()));
+        assertEquals(2, count($this->res->getRepRelations()));
+        /** @var ResRepDo $repRel */
+        $repRel = $this->res->getRepRelations()[42];
+        assertTrue($repRel->isDeleted());
+
+        assertTrue($this->res->addRepresentation($representation));
+        assertTrue($this->res->removeRepresentation("REPID_23"));
+        assertEquals(1, count($this->res->getRepresentations()));
+        assertEquals(2, count($this->res->getRepRelations()));
+        /** @var ResRepDo $repRel */
+        $repRel = $this->res->getRepRelations()[42];
+        assertTrue($repRel->isDeleted());
+
+        assertTrue($this->res->addRepresentation($representation));
+        assertTrue($this->res->removeRepresentation($representation));
+        assertEquals(1, count($this->res->getRepresentations()));
+        assertEquals(2, count($this->res->getRepRelations()));
+        /** @var ResRepDo $repRel */
+        $repRel = $this->res->getRepRelations()[42];
+        assertTrue($repRel->isDeleted());
     }
 
 }

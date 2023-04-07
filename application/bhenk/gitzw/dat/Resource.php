@@ -3,20 +3,20 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\ResourceDo;
+use bhenk\gitzw\dao\ResRepDo;
 use DateTimeImmutable;
+use function array_keys;
+use function gettype;
 use function in_array;
+use function is_null;
 use function str_replace;
 use function strlen;
 
 class Resource extends AbstractStoredObject {
 
-    function __construct(private readonly ResourceDo $resourceDo = new ResourceDo()) {}
-
-    /**
-     * @return int|null
-     */
-    public function getID(): ?int {
-        return $this->resourceDo->getID();
+    function __construct(private readonly ResourceDo $resourceDo = new ResourceDo(),
+                         private array               $representations = [],
+                         private array               $repRelations = []) {
     }
 
     public function getRESID(): ?string {
@@ -262,6 +262,74 @@ class Resource extends AbstractStoredObject {
                 $this->resourceDo->setCategory($cat->name);
                 return true;
             }
+        }
+        return false;
+    }
+
+    /**
+     * @return ResourceDo
+     */
+    public function getResourceDo(): ResourceDo {
+        return $this->resourceDo;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRepresentations(): array {
+        return $this->representations;
+    }
+
+    public function getRepRelations(): array {
+        return $this->repRelations;
+    }
+
+    public function addRepresentation(Representation $representation): bool {
+        $RID = $representation->getID();
+        if (is_null($RID)) {
+            return false;
+        }
+        if (in_array($RID, array_keys($this->representations))) {
+            return false;
+        }
+        $this->representations[$RID] = $representation;
+        $repRel = new ResRepDo();
+        $repRel->setResourceID($this->getID());
+        $repRel->setRepresentationID($RID);
+        $this->repRelations[$RID] = $repRel;
+        return true;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getID(): ?int {
+        return $this->resourceDo->getID();
+    }
+
+    public function removeRepresentation(Representation|int|string $representation): bool {
+        $RID = -1;
+        if ($representation instanceof Representation) {
+            if (!is_null($representation->getID())) {
+                $RID = $representation->getID();
+            }
+        } elseif (gettype($representation) == "integer") {
+            $RID = $representation;
+        } elseif (gettype($representation) == "string") {
+            /** @var Representation $repo */
+            foreach ($this->representations as $repo) {
+                if ($repo->getREPID() == $representation) {
+                    $RID = $repo->getID();
+                    break;
+                }
+            }
+        }
+        if (in_array($RID, array_keys($this->representations))) {
+            unset($this->representations[$RID]);
+            /** @var ResRepDo $repRel */
+            $repRel = $this->repRelations[$RID];
+            $repRel->setDeleted(true);
+            return true;
         }
         return false;
     }
