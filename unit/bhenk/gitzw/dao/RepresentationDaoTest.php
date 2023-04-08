@@ -7,6 +7,7 @@ use bhenk\logger\unit\LogAttribute;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
+use function array_values;
 use function count;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsArray;
@@ -42,7 +43,7 @@ class RepresentationDaoTest extends TestCase {
         $selected = $dao->selectWhere("REPID='hnq/2020/_DSC0584_00001.jpg'");
         assertEquals(1, count($selected));
         assertIsArray($selected);
-        $do3 = $selected[0];
+        $do3 = array_values($selected)[0];
         assertTrue($do2->isSame($do3));
     }
 

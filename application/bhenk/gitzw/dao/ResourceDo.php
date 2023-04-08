@@ -2,9 +2,12 @@
 
 namespace bhenk\gitzw\dao;
 
+use bhenk\gitzw\model\DateInterface;
+use bhenk\gitzw\model\DimensionsInterface;
+use bhenk\gitzw\model\MultiLanguageTitleInterface;
 use bhenk\msdata\abc\Entity;
 
-class ResourceDo extends Entity {
+class ResourceDo extends Entity implements MultiLanguageTitleInterface, DimensionsInterface, DateInterface {
 
     function __construct(?int            $ID = null,
                          private ?string $RESID = null,
@@ -95,44 +98,44 @@ class ResourceDo extends Entity {
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getWidth(): int {
+    public function getWidth(): float {
         return $this->width;
     }
 
     /**
-     * @param int $width
+     * @param float $width
      */
-    public function setWidth(int $width): void {
+    public function setWidth(float $width): void {
         $this->width = $width;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getHeight(): int {
+    public function getHeight(): float {
         return $this->height;
     }
 
     /**
-     * @param int $height
+     * @param float $height
      */
-    public function setHeight(int $height): void {
+    public function setHeight(float $height): void {
         $this->height = $height;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getDepth(): int {
+    public function getDepth(): float {
         return $this->depth;
     }
 
     /**
-     * @param int $depth
+     * @param float $depth
      */
-    public function setDepth(int $depth): void {
+    public function setDepth(float $depth): void {
         $this->depth = $depth;
     }
 
@@ -144,9 +147,9 @@ class ResourceDo extends Entity {
     }
 
     /**
-     * @param string|null $date
+     * @param string $date
      */
-    public function setDate(?string $date): void {
+    public function setDate(string $date): void {
         $this->date = $date;
     }
 

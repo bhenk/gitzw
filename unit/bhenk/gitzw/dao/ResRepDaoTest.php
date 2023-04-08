@@ -7,6 +7,7 @@ use bhenk\logger\unit\LogAttribute;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
+use function array_values;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertTrue;
@@ -43,7 +44,7 @@ class ResRepDaoTest extends TestCase {
         $selected = $dao->selectWhere("representationID=1");
         assertEquals(1, count($selected));
         assertIsArray($selected);
-        $do3 = $selected[0];
+        $do3 = array_values($selected)[0];
         assertTrue($do2->isSame($do3));
     }
 

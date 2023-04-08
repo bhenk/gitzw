@@ -4,6 +4,9 @@ namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\ResourceDo;
 use bhenk\gitzw\dao\ResRepDo;
+use bhenk\gitzw\model\DateTrait;
+use bhenk\gitzw\model\DimensionsTrait;
+use bhenk\gitzw\model\MultiLanguageTitleTrait;
 use DateTimeImmutable;
 use function array_keys;
 use function gettype;
@@ -13,10 +16,16 @@ use function str_replace;
 use function strlen;
 
 class Resource extends AbstractStoredObject {
+    use MultiLanguageTitleTrait;
+    use DimensionsTrait;
+    use DateTrait;
 
     function __construct(private readonly ResourceDo $resourceDo = new ResourceDo(),
                          private array               $representations = [],
                          private array               $repRelations = []) {
+        $this->initTitleTrait($this->resourceDo);
+        $this->initDimensionsTrait($this->resourceDo);
+        $this->initDateTrait($this->resourceDo);
     }
 
     public function getRESID(): ?string {
@@ -31,78 +40,6 @@ class Resource extends AbstractStoredObject {
     }
 
     /**
-     * @param string $title_en
-     */
-    public function setTitleEn(string $title_en): void {
-        $this->resourceDo->setTitleEn($title_en);
-    }
-
-    /**
-     * @param string $title_nl
-     */
-    public function setTitleNl(string $title_nl): void {
-        $this->resourceDo->setTitleNl($title_nl);
-    }
-
-    /**
-     * @param string $preferred
-     * @return bool
-     */
-    public function setPreferredLanguage(string $preferred): bool {
-        if (in_array($preferred, self::LANGUAGES)) {
-            $this->resourceDo->setPreferredLanguage($preferred);
-            return true;
-        }
-        return false;
-    }
-
-    public function getPreferredTitle(): string {
-        if ($this->getPreferredLanguage() == "en") {
-            return $this->getTitleEn() ?? "";
-        } else {
-            return $this->getTitleNl() ?? "";
-        }
-    }
-
-    /**
-     * @return string
-     */
-    public function getPreferredLanguage(): string {
-        return $this->resourceDo->getPreferredLanguage() ?? "nl";
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getTitleEn(): ?string {
-        return $this->resourceDo->getTitleEn();
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getTitleNl(): ?string {
-        return $this->resourceDo->getTitleNl();
-    }
-
-    public function getTitles(): string {
-        if ($this->getPreferredLanguage() == "nl") {
-            $first = $this->getTitleNl();
-            $second = $this->getTitleEn();
-        } else {
-            $first = $this->getTitleEn();
-            $second = $this->getTitleNl();
-        }
-        if ($first and $second) {
-            return $first . " (" . $second . ")";
-        } elseif ($first) {
-            return $first;
-        } else {
-            return $second;
-        }
-    }
-
-    /**
      * @return string|null
      */
     public function getMedia(): ?string {
@@ -114,103 +51,6 @@ class Resource extends AbstractStoredObject {
      */
     public function setMedia(string $media): void {
         $this->resourceDo->setMedia($media);
-    }
-
-    /**
-     * @param int $width
-     */
-    public function setWidth(int $width): void {
-        $this->resourceDo->setWidth($width);
-    }
-
-    /**
-     * @param int $height
-     */
-    public function setHeight(int $height): void {
-        $this->resourceDo->setHeight($height);
-    }
-
-    /**
-     * @param int $depth
-     */
-    public function setDepth(int $depth): void {
-        $this->resourceDo->setDepth($depth);
-    }
-
-    public function getDimensions(): string {
-        return self::dimensionsToString($this->getWidth(), $this->getHeight(), $this->getDepth());
-    }
-
-    /**
-     * @return int
-     */
-    public function getWidth(): int {
-        return $this->resourceDo->getWidth();
-    }
-
-    /**
-     * @return int
-     */
-    public function getHeight(): int {
-        return $this->resourceDo->getHeight();
-    }
-
-    /**
-     * @return int
-     */
-    public function getDepth(): int {
-        return $this->resourceDo->getDepth();
-    }
-
-    /**
-     * Set creation date of the resource
-     *
-     * Allowed formats:
-     * ```
-     * yyyy-mm-dd
-     * yyyy-mm
-     * yyyy
-     * ```
-     *
-     * @param string $date date in year-first format
-     * @return bool *true* if date format was accepted, *false* otherwise
-     */
-    public function setDate(string $date): bool {
-        $date = str_replace("/", "-", $date);
-        $l = strlen($date);
-        if ($l == 10) {
-            $format = "Y-m-d";
-        } elseif ($l == 7) {
-            $format = "Y-m";
-            $date = $date . "-01";
-        } else {
-            $format = "Y";
-            $date = $date . "-01-01";
-        }
-        $dt = DateTimeImmutable::createFromFormat("Y-m-d", $date);
-        if ($dt) {
-            $this->resourceDo->setDate($dt->format("Y-m-d"));
-            $this->resourceDo->setDateFormat($format);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Get the creation date of the resource
-     *
-     * Gets the creation date in the original format. If no creation date was set will return
-     * the empty string.
-     *
-     * @return string date in original format or empty string
-     */
-    public function getDate(): string {
-        if ($this->resourceDo->getDate()) {
-            $format = $this->resourceDo->getDateFormat() ?? "Y";
-            $dt = DateTimeImmutable::createFromFormat("Y-m-d", $this->resourceDo->getDate());
-            return $dt->format($format);
-        }
-        return "";
     }
 
     /**
@@ -274,12 +114,15 @@ class Resource extends AbstractStoredObject {
     }
 
     /**
-     * @return array
+     * @return Representation[]
      */
     public function getRepresentations(): array {
         return $this->representations;
     }
 
+    /**
+     * @return ResRepDo[]
+     */
     public function getRepRelations(): array {
         return $this->repRelations;
     }

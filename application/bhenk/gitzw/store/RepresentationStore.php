@@ -6,6 +6,7 @@ use bhenk\doc2rst\log\Log;
 use bhenk\gitzw\dao\RepresentationDao;
 use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\dat\Representation;
+use function array_values;
 use function count;
 use function is_null;
 
@@ -30,7 +31,7 @@ class RepresentationStore {
 
     public function getRepresentationByREPID(string $REPID): bool|Representation {
         $arr = $this->getRepresentationDao()->selectWhere("REPID='" . $REPID . "'");
-        if (count($arr) == 1) return new Representation($arr[0]);
+        if (count($arr) == 1) return new Representation(array_values($arr)[0]);
         if (count($arr) > 1) Log::warning("REPID not unique: " . $REPID);
         return false;
     }

@@ -5,7 +5,6 @@ namespace bhenk\gitzw\store;
 use bhenk\gitzw\dao\RepresentationDao;
 use bhenk\gitzw\dao\ResourceDao;
 use bhenk\gitzw\dao\ResRepDao;
-use bhenk\gitzw\dao\ResRepDo;
 use bhenk\gitzw\dat\Representation;
 use bhenk\gitzw\dat\Resource;
 use bhenk\logger\unit\ConsoleLoggerTrait;
@@ -78,7 +77,6 @@ class ResourceStoreTest extends TestCase {
         $resource->addRepresentation($representation);
         $resource = $this->store->storeResource($resource);
 
-        /** @var ResRepDo $repRel */
         $repRel = $resource->getRepRelations()[$representation->getID()];
         assertEquals($representation->getID(), $repRel->getRepresentationID());
         assertEquals($resource->getID(), $repRel->getResourceID());
@@ -125,7 +123,6 @@ class ResourceStoreTest extends TestCase {
         $resource = new Resource();
         $resource->setRESID("resourceAltID");
         $resource->addRepresentation($representation);
-        /** @var ResRepDo $resRepDo */
         $resRepDo = $resource->getRepRelations()[$representation->getID()];
         $resRepDo->setOrdinal(44);
         $resource = $this->store->storeResource($resource);

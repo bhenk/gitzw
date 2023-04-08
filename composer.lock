@@ -56,16 +56,16 @@
         },
         {
             "name": "bhenk/msdata",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bhenk/msdata.git",
-                "reference": "55c2a2cb67583086d54edd90bce2130cb6ca6bf3"
+                "reference": "5198ac3d2e703fede71914633e538b5509448b5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bhenk/msdata/zipball/55c2a2cb67583086d54edd90bce2130cb6ca6bf3",
-                "reference": "55c2a2cb67583086d54edd90bce2130cb6ca6bf3",
+                "url": "https://api.github.com/repos/bhenk/msdata/zipball/5198ac3d2e703fede71914633e538b5509448b5f",
+                "reference": "5198ac3d2e703fede71914633e538b5509448b5f",
                 "shasum": ""
             },
             "require": {
@@ -98,9 +98,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bhenk/msdata/issues",
-                "source": "https://github.com/bhenk/msdata/tree/1.0.0"
+                "source": "https://github.com/bhenk/msdata/tree/1.0.1"
             },
-            "time": "2023-04-04T15:05:55+00:00"
+            "time": "2023-04-08T09:20:23+00:00"
         },
         {
             "name": "monolog/monolog",

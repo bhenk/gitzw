@@ -5,6 +5,7 @@ namespace bhenk\gitzw\dao;
 use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
 use PHPUnit\Framework\TestCase;
+use function array_values;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertStringContainsString;
@@ -49,7 +50,7 @@ class ResourceDaoTest extends TestCase {
         $selected = $dao->selectWhere("RESID='hnq.work.paint.2020.0000'");
         assertEquals(1, count($selected));
         assertIsArray($selected);
-        $rid3 = $selected[0];
+        $rid3 = array_values($selected)[0];
         assertTrue($rid2->isSame($rid3));
     }
 

@@ -10,6 +10,7 @@ use bhenk\gitzw\dao\ResRepDao;
 use bhenk\gitzw\dao\ResRepDo;
 use bhenk\gitzw\dat\Resource;
 use Exception;
+use function array_values;
 use function count;
 use function is_null;
 
@@ -54,7 +55,7 @@ class ResourceStore {
     public function getResourceByRESID(string $RESID): bool|Resource {
         $arr = $this->getResourceDao()->selectWhere("RESID='" . $RESID . "'");
         if (count($arr) == 1) {
-            return $this->assembleResource($arr[0]);
+            return $this->assembleResource(array_values($arr)[0]);
         }
         if (count($arr) > 1) Log::warning("RESID not unique: " . $RESID);
         return false;
@@ -138,11 +139,7 @@ class ResourceStore {
             $representationIds[] = $resRepDo->getRepresentationID();
             $repRelations[$resRepDo->getRepresentationID()] = $resRepDo;
         }
-        $reps = $this->getRepresentationDao()->selectBatch($representationIds);
-        $representations = [];
-        foreach ($reps as $rep) {
-            $representations[$rep->getID()] = $rep;
-        }
+        $representations = $this->getRepresentationDao()->selectBatch($representationIds);
         return new Resource($resourceDo, $representations, $repRelations);
     }
 

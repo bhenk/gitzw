@@ -16,7 +16,7 @@ services:
 
     volumes:
       - ./init:/docker-entrypoint-initdb.d
-      - ../../../mysql/gitzwart/cosql:/var/lib/mysql
+      - ../../../mysql/data/cosql:/var/lib/mysql
 
   adminer:
     image: adminer
