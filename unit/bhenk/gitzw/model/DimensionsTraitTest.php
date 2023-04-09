@@ -1,7 +1,8 @@
 <?php
 
-namespace bhenk\gitzw\dat;
+namespace bhenk\gitzw\model;
 
+use bhenk\gitzw\dat\Resource;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 

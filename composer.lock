@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "93c6f39672420fe0a07d226fc4a114a2",
+    "content-hash": "c700174a3c6774c4d758c63777543b75",
     "packages": [
         {
             "name": "bhenk/logger",
@@ -56,16 +56,16 @@
         },
         {
             "name": "bhenk/msdata",
-            "version": "1.0.1",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bhenk/msdata.git",
-                "reference": "5198ac3d2e703fede71914633e538b5509448b5f"
+                "reference": "44ca9bbe1ea105850e444e6a7dafaa5e57a49a87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bhenk/msdata/zipball/5198ac3d2e703fede71914633e538b5509448b5f",
-                "reference": "5198ac3d2e703fede71914633e538b5509448b5f",
+                "url": "https://api.github.com/repos/bhenk/msdata/zipball/44ca9bbe1ea105850e444e6a7dafaa5e57a49a87",
+                "reference": "44ca9bbe1ea105850e444e6a7dafaa5e57a49a87",
                 "shasum": ""
             },
             "require": {
@@ -73,6 +73,7 @@
                 "ext-mysqli": "*",
                 "php": ">=8.2"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -98,9 +99,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bhenk/msdata/issues",
-                "source": "https://github.com/bhenk/msdata/tree/1.0.1"
+                "source": "https://github.com/bhenk/msdata/tree/main"
             },
-            "time": "2023-04-08T09:20:23+00:00"
+            "time": "2023-04-09T10:50:24+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1862,7 +1863,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "bhenk/msdata": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

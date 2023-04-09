@@ -3,6 +3,8 @@
 namespace bhenk\gitzw\dao;
 
 use bhenk\msdata\abc\AbstractDao;
+use Exception;
+use function array_values;
 use function file_get_contents;
 
 class RepresentationDao extends AbstractDao {
@@ -26,5 +28,14 @@ class RepresentationDao extends AbstractDao {
      */
     public function getCreateTableStatement(): string {
         return file_get_contents(__DIR__ . "/sql/tbl_representations.sql");
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function selectByREPID(string $REPID): ?RepresentationDo {
+        $array = $this->selectWhere("REPID='" . $REPID . "'");
+        if (!empty($array)) return array_values($array)[0];
+        return null;
     }
 }

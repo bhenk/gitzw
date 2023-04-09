@@ -14,6 +14,23 @@ trait DateTrait {
         $this->date = $dateObject;
     }
 
+    /**
+     * Get the creation date of the resource
+     *
+     * Gets the creation date in the original format. If no creation date was set will return
+     * the empty string.
+     *
+     * @return string date in original format or empty string
+     */
+    public function getDate(): string {
+        if ($this->date->getDate()) {
+            $format = $this->date->getDateFormat() ?? "Y";
+            $dt = DateTimeImmutable::createFromFormat("Y-m-d", $this->date->getDate());
+            return $dt->format($format);
+        }
+        return "";
+    }
+
     public function setDate(string $date): bool {
         $date = str_replace("/", "-", $date);
         $l = strlen($date);
@@ -33,23 +50,6 @@ trait DateTrait {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Get the creation date of the resource
-     *
-     * Gets the creation date in the original format. If no creation date was set will return
-     * the empty string.
-     *
-     * @return string date in original format or empty string
-     */
-    public function getDate(): string {
-        if ($this->date->getDate()) {
-            $format = $this->date->getDateFormat() ?? "Y";
-            $dt = DateTimeImmutable::createFromFormat("Y-m-d", $this->date->getDate());
-            return $dt->format($format);
-        }
-        return "";
     }
 
 }

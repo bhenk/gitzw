@@ -30,17 +30,17 @@ class RepresentationStoreTest extends TestCase {
         $representation->setREPID("REPID_1");
         $representation->setDescription("A description");
         $representation->setSource("Nikon");
-        $result = $this->store->storeRepresentation($representation);
+        $result = $this->store->persist($representation);
         assertTrue($representation->getRepresentationDo()->equals($result->getRepresentationDo()));
         assertFalse($representation->getRepresentationDo()->isSame($result->getRepresentationDo()));
 
         $result->setDescription("A new description");
-        $this->store->storeRepresentation($result);
+        $this->store->persist($result);
 
-        $byId = $this->store->getRepresentationByID($result->getID());
+        $byId = $this->store->select($result->getID());
         assertEquals("A new description", $byId->getDescription());
 
-        $byRepId = $this->store->getRepresentationByREPID("REPID_1");
+        $byRepId = $this->store->selectByREPID("REPID_1");
         assertEquals("Nikon", $byRepId->getSource());
     }
 

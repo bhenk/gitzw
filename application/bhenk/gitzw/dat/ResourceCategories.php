@@ -8,7 +8,7 @@ enum ResourceCategories: string {
     case dry = "drypoint";
     case paint = "painting";
 
-    public static function forName(string $name): ?ResourceCategories {
+    public static function forName(?string $name): ?ResourceCategories {
         foreach (ResourceCategories::cases() as $case) {
             if ($case->name == $name) {
                 return $case;

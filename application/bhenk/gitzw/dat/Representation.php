@@ -6,7 +6,8 @@ use bhenk\gitzw\dao\RepresentationDo;
 
 class Representation extends AbstractStoredObject {
 
-    function __construct(private readonly RepresentationDo $repDo = new RepresentationDo()) {}
+    function __construct(private readonly RepresentationDo $repDo = new RepresentationDo()) {
+    }
 
     public function getID(): ?int {
         return $this->repDo->getID();

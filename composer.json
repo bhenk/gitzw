@@ -14,7 +14,7 @@
   ],
   "require": {
     "php": ">=8.2",
-    "bhenk/msdata": "^1.0"
+    "bhenk/msdata": "dev-main"
   },
   "require-dev": {
     "phpunit/phpunit": "^10.0",

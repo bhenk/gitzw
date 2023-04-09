@@ -2,17 +2,18 @@
 
 namespace bhenk\gitzw\store;
 
-use bhenk\gitzw\dao\RepresentationDao;
-use bhenk\gitzw\dao\ResourceDao;
-use bhenk\gitzw\dao\ResRepDao;
+use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dat\Representation;
 use bhenk\gitzw\dat\Resource;
 use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use function array_values;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertTrue;
 
 #[LogAttribute(false)]
@@ -25,12 +26,15 @@ class ResourceStoreTest extends TestCase {
 
     public function setUp(): void {
         $this->traitSetUp();
-        (new ResRepDao())->createTable(true);
-        (new ResourceDao())->createTable(true);
-        (new RepresentationDao())->createTable(true);
+        Dao::resourceDao()->createTable(true);
+        Dao::representationDao()->createTable(true);
+        Dao::resJoinRepDao()->createTable(true);
         $this->store = new ResourceStore();
     }
 
+    /**
+     * @throws Exception
+     */
     public function testStoreResource() {
         $resource = new Resource();
         $resource->setRESID("hnq/work/paint/2020/0001");
@@ -45,90 +49,57 @@ class ResourceStoreTest extends TestCase {
         $resource->setMedia("mixed media");
         $resource->setOrdinal(42);
         $resource->setHidden(true);
-        $result = $this->store->storeResource($resource);
+        $result = $this->store->persist($resource);
         assertTrue($resource->getResourceDo()->equals($result->getResourceDo()));
 
         $resource = $result;
         $resource->setRESID("foo/bar");
-        $result = $this->store->storeResource($resource);
+        $result = $this->store->persist($resource);
         assertTrue($resource->getResourceDo()->isSame($result->getResourceDo()));
         assertEquals("foo/bar", $result->getRESID());
 
-        $result = $this->store->getResourceById($resource->getID());
+        $result = $this->store->select($resource->getID());
         assertTrue($resource->getResourceDo()->isSame($result->getResourceDo()));
 
-        $result = $this->store->getResourceByRESID($resource->getRESID());
+        $result = $this->store->selectByRESID($resource->getRESID());
         assertTrue($resource->getResourceDo()->isSame($result->getResourceDo()));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetResourceById() {
-        assertFalse($this->store->getResourceById(-1));
+        assertFalse($this->store->select(-1));
     }
 
-    public function testRelations() {
+    /**
+     * @throws Exception
+     */
+    public function testPersistWithRelations() {
         $representation = new Representation();
-        $representation->setREPID("REPID_22");
+        $representation->setREPID("REPID_1");
         $representation->setSource("iPhone");
-        $repoStore = new RepresentationStore();
-        $representation = $repoStore->storeRepresentation($representation);
+        $representation = Store::representationStore()->persist($representation);
+        assertNotNull($representation->getID());
 
         $resource = new Resource();
-        $resource->setRESID("hnq/2");
-        $resource->addRepresentation($representation);
-        $resource = $this->store->storeResource($resource);
+        $resource->setRESID("RESID_1");
+        $relations = $resource->getRelations();
+        $relations->addRepresentation($representation);
+        $resource = Store::resourceStore()->persist($resource);
 
-        $repRel = $resource->getRepRelations()[$representation->getID()];
-        assertEquals($representation->getID(), $repRel->getRepresentationID());
-        assertEquals($resource->getID(), $repRel->getResourceID());
+        $resource = Store::resourceStore()->select($resource->getID());
+        assertEquals("RESID_1", $resource->getRESID());
+        $relations = $resource->getRelations();
+        $representation = array_values($relations->getRepresentations())[0];
+        assertEquals("REPID_1", $representation->getREPID());
 
-        $representations = $resource->getRepresentations();
-        $representation = $representations[$representation->getID()];
-        assertEquals("REPID_22", $representation->getREPID());
+        $relations->removeRepresentation($representation->getID());
+        $resource = Store::resourceStore()->persist($resource);
+        $resource = Store::resourceStore()->select($resource->getID());
+        $relations = $resource->getRelations();
+        $representations = $relations->getRepresentations();
+        assertEmpty($representations);
     }
 
-    public function testGetByRESID() {
-        $representation = new Representation();
-        $representation->setREPID("REPID_22");
-        $representation->setSource("iPhone");
-        $repoStore = new RepresentationStore();
-        $representation = $repoStore->storeRepresentation($representation);
-
-        $resource = new Resource();
-        $resource->setRESID("hnq/work");
-        $resource->addRepresentation($representation);
-        $this->store->storeResource($resource);
-
-        $resource = $this->store->getResourceByRESID("hnq/work");
-        $repo = $resource->getRepresentations()[$representation->getID()];
-        assertEquals("REPID_22", $repo->getREPID());
-        assertEquals($representation->getID(), $repo->getID());
-
-        $repRel = $resource->getRepRelations()[$representation->getID()];
-        assertEquals($resource->getID(), $repRel->getResourceID());
-
-        $resource->removeRepresentation($representation);
-        assertEmpty($resource->getRepresentations());
-        $resource = $this->store->storeResource($resource);
-        assertEmpty($resource->getRepresentations());
-        assertEmpty($resource->getRepRelations());
-    }
-
-    public function testGetById() {
-        $representation = new Representation();
-        $representation->setREPID("REPID_22");
-        $representation->setSource("iPhone");
-        $repoStore = new RepresentationStore();
-        $representation = $repoStore->storeRepresentation($representation);
-
-        $resource = new Resource();
-        $resource->setRESID("resourceAltID");
-        $resource->addRepresentation($representation);
-        $resRepDo = $resource->getRepRelations()[$representation->getID()];
-        $resRepDo->setOrdinal(44);
-        $resource = $this->store->storeResource($resource);
-
-        $resource = $this->store->getResourceById($resource->getID());
-        $resRepDo = $resource->getRepRelations()[$representation->getID()];
-        assertEquals(44, $resRepDo->getOrdinal());
-    }
 }
