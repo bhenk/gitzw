@@ -11,6 +11,7 @@ use function PHPUnit\Framework\assertContains;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
 
 class ResourceRelationsTest extends TestCase {
@@ -36,7 +37,9 @@ class ResourceRelationsTest extends TestCase {
         assertFalse($resRel->addRepresentation(new Representation()));
 
         $repr = new Representation(new RepresentationDo(42));
-        assertTrue($resRel->addRepresentation($repr));
+        $relation = $resRel->addRepresentation($repr);
+        assertEquals(42, $relation->getFkRight());
+        assertNull($relation->getFkLeft());
         $representations = $resRel->getRepresentations();
         assertEquals(1, count($representations));
         assertArrayHasKey(42, $representations);

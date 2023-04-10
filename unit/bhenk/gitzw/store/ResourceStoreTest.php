@@ -9,11 +9,12 @@ use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
 use Exception;
 use PHPUnit\Framework\TestCase;
-use function array_values;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertNotFalse;
 use function PHPUnit\Framework\assertNotNull;
+use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
 
 #[LogAttribute(false)]
@@ -82,22 +83,42 @@ class ResourceStoreTest extends TestCase {
         $representation = Store::representationStore()->persist($representation);
         assertNotNull($representation->getID());
 
+        // Create a Resource and populate properties and relations
         $resource = new Resource();
         $resource->setRESID("RESID_1");
         $relations = $resource->getRelations();
-        $relations->addRepresentation($representation);
+        $relation = $relations->addRepresentation($representation);
+        assertNotFalse($relation);
+        $relation->setOrdinal(42);
+        $relation->setDescription("Yet an other representation of this resource");
+        $relation->setPreferred(false);
+        $relation->setHidden(true);
         $resource = Store::resourceStore()->persist($resource);
 
+        // Fetch the Resource
         $resource = Store::resourceStore()->select($resource->getID());
         assertEquals("RESID_1", $resource->getRESID());
         $relations = $resource->getRelations();
-        $representation = array_values($relations->getRepresentations())[0];
+        $representation = $relations->getRepresentation($representation->getID());
         assertEquals("REPID_1", $representation->getREPID());
+        assertEquals("iPhone", $representation->getSource());
+        $relation = $relations->getRelation($representation->getID());
+        assertEquals(42, $relation->getOrdinal());
+        assertEquals("Yet an other representation of this resource", $relation->getDescription());
+        assertFalse($relation->isPreferred());
+        assertTrue(($relation->isHidden()));
 
+        // Remove the relation
         $relations->removeRepresentation($representation->getID());
+        assertTrue($relation->isDeleted());
+        assertNull($relations->getRepresentation($representation->getID()));
         $resource = Store::resourceStore()->persist($resource);
+
+        // Fetch the Resource
         $resource = Store::resourceStore()->select($resource->getID());
         $relations = $resource->getRelations();
+        assertNull($relations->getRepresentation($representation->getID()));
+        assertNull($relations->getRelation($representation->getID()));
         $representations = $relations->getRepresentations();
         assertEmpty($representations);
     }

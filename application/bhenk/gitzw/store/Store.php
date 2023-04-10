@@ -10,9 +10,9 @@ class Store {
     private static ?ResourceStore $resourceStore = null;
 
     /**
-     * @return RepresentationStore|null
+     * @return RepresentationStore
      */
-    public static function representationStore(): ?RepresentationStore {
+    public static function representationStore(): RepresentationStore {
         if (is_null(self::$representationStore)) {
             self::$representationStore = new RepresentationStore();
         }
@@ -20,9 +20,9 @@ class Store {
     }
 
     /**
-     * @return ResourceStore|null
+     * @return ResourceStore
      */
-    public static function resourceStore(): ?ResourceStore {
+    public static function resourceStore(): ResourceStore {
         if (is_null(self::$resourceStore)) {
             self::$resourceStore = new ResourceStore();
         }

@@ -5,16 +5,25 @@ namespace bhenk\gitzw\store;
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\ResourceDo;
 use bhenk\gitzw\dat\Resource;
+use bhenk\gitzw\dat\ResourceRelations;
 use Exception;
 use function array_values;
 use function count;
 use function is_null;
 
+/**
+ * Store for obtaining and persisting Resources
+ */
 class ResourceStore {
 
     /**
-     * @param Resource $resource
-     * @return Resource
+     * Persist the given Resource
+     *
+     * The {@link Resource} is inserted or updated. {@link ResourceRelations} of the Resource are
+     * inserted, updated or deleted.
+     *
+     * @param Resource $resource the Resource to persist
+     * @return Resource the Resource after persistence (includes Primary ID)
      * @throws Exception
      */
     public function persist(Resource $resource): Resource {
@@ -51,6 +60,7 @@ class ResourceStore {
     }
 
     /**
+     * Select Resource with given ID
      * @param int $ID
      * @return bool|Resource
      * @throws Exception
@@ -63,6 +73,7 @@ class ResourceStore {
     }
 
     /**
+     * Select Resource with given alternative RESID
      * @param string $RESID
      * @return bool|Resource
      * @throws Exception
