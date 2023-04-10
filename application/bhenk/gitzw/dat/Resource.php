@@ -6,7 +6,7 @@ use bhenk\gitzw\dao\ResourceDo;
 use bhenk\gitzw\model\DateTrait;
 use bhenk\gitzw\model\DimensionsTrait;
 use bhenk\gitzw\model\MultiLanguageTitleTrait;
-use bhenk\gitzw\store\Store;
+use bhenk\gitzw\model\ResourceCategories;
 use Exception;
 use function is_null;
 

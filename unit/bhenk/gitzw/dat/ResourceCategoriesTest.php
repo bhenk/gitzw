@@ -2,6 +2,7 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\model\ResourceCategories;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 

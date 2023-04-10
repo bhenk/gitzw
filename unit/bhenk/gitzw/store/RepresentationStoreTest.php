@@ -4,6 +4,7 @@ namespace bhenk\gitzw\store;
 
 use bhenk\gitzw\dao\RepresentationDao;
 use bhenk\gitzw\dat\Representation;
+use bhenk\gitzw\dat\RepresentationStore;
 use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
 use Exception;

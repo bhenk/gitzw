@@ -1,6 +1,6 @@
 <?php
 
-namespace bhenk\gitzw\dat;
+namespace bhenk\gitzw\model;
 
 enum ResourceCategories: string {
 

@@ -1,11 +1,9 @@
 <?php
 
-namespace bhenk\gitzw\store;
+namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\ResourceDo;
-use bhenk\gitzw\dat\Resource;
-use bhenk\gitzw\dat\ResourceRelations;
 use Exception;
 use function array_values;
 use function count;

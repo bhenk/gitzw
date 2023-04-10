@@ -1,10 +1,9 @@
 <?php
 
-namespace bhenk\gitzw\store;
+namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\CreatorDo;
 use bhenk\gitzw\dao\Dao;
-use bhenk\gitzw\dat\Creator;
 use bhenk\logger\log\Log;
 use Exception;
 

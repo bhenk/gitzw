@@ -4,7 +4,6 @@ namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\ResJoinRepDo;
-use bhenk\gitzw\store\Store;
 use Exception;
 use function array_keys;
 use function in_array;
@@ -15,10 +14,22 @@ class RepresentationRelations {
     /** @var ResJoinRepDo[]|null */
     private ?array $relations = null;
 
-    /** @var Resource[]|null  */
+    /** @var Resource[]|null */
     private ?array $resources = null;
 
-    function __construct(private readonly ?int $representationId) {}
+    function __construct(private readonly ?int $representationId) {
+    }
+
+    /**
+     * @param int $resourceId
+     * @return ResJoinRepDo|null
+     * @throws Exception
+     */
+    public function getRelation(int $resourceId): ?ResJoinRepDo {
+        $this->getRelations();
+        if (in_array($resourceId, array_keys($this->relations))) return $this->relations[$resourceId];
+        return null;
+    }
 
     /**
      * @return array|ResJoinRepDo[]
@@ -36,6 +47,17 @@ class RepresentationRelations {
     }
 
     /**
+     * @param int $resourceId
+     * @return Resource|null
+     * @throws Exception
+     */
+    public function getResource(int $resourceId): ?Resource {
+        $this->getResources();
+        if (in_array($resourceId, array_keys($this->resources))) return $this->resources[$resourceId];
+        return null;
+    }
+
+    /**
      * @return Resource[]
      * @throws Exception
      */
@@ -47,28 +69,6 @@ class RepresentationRelations {
             }
         }
         return $this->resources;
-    }
-
-    /**
-     * @param int $resourceId
-     * @return ResJoinRepDo|null
-     * @throws Exception
-     */
-    public function getRelation(int $resourceId): ?ResJoinRepDo {
-        $this->getRelations();
-        if (in_array($resourceId, array_keys($this->relations))) return $this->relations[$resourceId];
-        return null;
-    }
-
-    /**
-     * @param int $resourceId
-     * @return Resource|null
-     * @throws Exception
-     */
-    public function getResource(int $resourceId): ?Resource {
-        $this->getResources();
-        if (in_array($resourceId, array_keys($this->resources))) return $this->resources[$resourceId];
-        return null;
     }
 
 }

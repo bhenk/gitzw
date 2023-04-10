@@ -1,11 +1,10 @@
 <?php
 
-namespace bhenk\gitzw\store;
+namespace bhenk\gitzw\dat;
 
 use bhenk\doc2rst\log\Log;
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\RepresentationDo;
-use bhenk\gitzw\dat\Representation;
 use Exception;
 use function array_values;
 use function count;

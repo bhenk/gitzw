@@ -6,6 +6,8 @@ use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dat\Creator;
 use bhenk\gitzw\dat\Representation;
 use bhenk\gitzw\dat\Resource;
+use bhenk\gitzw\dat\ResourceStore;
+use bhenk\gitzw\dat\Store;
 use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
 use Exception;

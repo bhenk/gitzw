@@ -3,6 +3,7 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\ResourceDo;
+use bhenk\gitzw\model\ResourceCategories;
 use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
 use PHPUnit\Framework\TestCase;

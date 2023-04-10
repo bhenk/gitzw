@@ -1,6 +1,6 @@
 <?php
 
-namespace bhenk\gitzw\store;
+namespace bhenk\gitzw\dat;
 
 use function is_null;
 

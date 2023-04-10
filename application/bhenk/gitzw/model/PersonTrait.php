@@ -68,6 +68,7 @@ trait PersonTrait {
 
     /**
      * Gets the SD-Card of this Person
+     *
      * ```
      * {
      *     "@context": "http://schema.org",

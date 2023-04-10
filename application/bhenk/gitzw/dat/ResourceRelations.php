@@ -4,7 +4,6 @@ namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\ResJoinRepDo;
-use bhenk\gitzw\store\Store;
 use Exception;
 use function array_keys;
 use function in_array;
