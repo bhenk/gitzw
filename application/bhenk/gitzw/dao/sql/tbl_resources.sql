@@ -14,5 +14,6 @@ CREATE TABLE IF NOT EXISTS `tbl_resources`
     `hidden`    BOOLEAN,
     `ordinal`   INT,
     `category`  VARCHAR(10),
+    `creatorId` INT,
     PRIMARY KEY (`ID`)
 );

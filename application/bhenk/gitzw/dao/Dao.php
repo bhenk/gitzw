@@ -9,6 +9,7 @@ final class Dao {
     private static ?RepresentationDao $representationDao = null;
     private static ?ResJoinRepDao $resJoinRepDao = null;
     private static ?ResourceDao $resourceDao = null;
+    private static ?CreatorDao $creatorDao = null;
 
     /**
      * @return RepresentationDao
@@ -38,6 +39,16 @@ final class Dao {
             self::$resourceDao = new ResourceDao();
         }
         return self::$resourceDao;
+    }
+
+    /**
+     * @return CreatorDao
+     */
+    public static function creatorDao(): CreatorDao {
+        if (is_null(self::$creatorDao)) {
+            self::$creatorDao = new CreatorDao();
+        }
+        return self::$creatorDao;
     }
 
 }

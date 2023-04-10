@@ -3,6 +3,7 @@
 namespace bhenk\gitzw\store;
 
 use bhenk\gitzw\dao\Dao;
+use bhenk\gitzw\dat\Creator;
 use bhenk\gitzw\dat\Representation;
 use bhenk\gitzw\dat\Resource;
 use bhenk\logger\unit\ConsoleLoggerTrait;
@@ -30,6 +31,7 @@ class ResourceStoreTest extends TestCase {
         Dao::resourceDao()->createTable(true);
         Dao::representationDao()->createTable(true);
         Dao::resJoinRepDao()->createTable(true);
+        Dao::creatorDao()->createTable(true);
         $this->store = new ResourceStore();
     }
 
@@ -108,6 +110,11 @@ class ResourceStoreTest extends TestCase {
         assertFalse($relation->isPreferred());
         assertTrue(($relation->isHidden()));
 
+        // Fetch the Representation
+        $representation = Store::representationStore()->select($representation->getID());
+        $resource2 = $representation->getRelations()->getResource($resource->getID());
+        assertTrue($resource->getResourceDo()->isSame($resource2->getResourceDo()));
+
         // Remove the relation
         $relations->removeRepresentation($representation->getID());
         assertTrue($relation->isDeleted());
@@ -121,6 +128,32 @@ class ResourceStoreTest extends TestCase {
         assertNull($relations->getRelation($representation->getID()));
         $representations = $relations->getRepresentations();
         assertEmpty($representations);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSetCreator() {
+        $creator = new Creator();
+        $creator->setFirstname("Piet");
+        $creator = Store::creatorStore()->persist($creator);
+
+        $resource = new Resource();
+        $resource->setRESID("TEST_ADD_CREATOR");
+        $resource->setCreator($creator->getID());
+        $resource = Store::resourceStore()->persist($resource);
+
+        // Fetch resource
+        $resource2 = Store::resourceStore()->select($resource->getID());
+        $creator = $resource2->getCreator();
+        assertEquals("Piet", $creator->getFirstname());
+
+        $resource2->unsetCreator();
+        assertFalse($resource2->getCreator());
+        $resource2 = Store::resourceStore()->persist($resource2);
+
+        $resource3 = Store::resourceStore()->select($resource2->getID());
+        assertFalse($resource3->getCreator());
     }
 
 }

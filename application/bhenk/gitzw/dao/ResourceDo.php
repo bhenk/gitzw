@@ -22,7 +22,8 @@ class ResourceDo extends Entity implements MultiLanguageTitleInterface, Dimensio
                          private ?string $d_format = null,
                          private ?bool   $hidden = false,
                          private int     $ordinal = -1,
-                         private ?string $category = null
+                         private ?string $category = null,
+                         private int     $creatorId = -1
     ) {
         parent::__construct($ID);
     }
@@ -207,6 +208,20 @@ class ResourceDo extends Entity implements MultiLanguageTitleInterface, Dimensio
      */
     public function setCategory(?string $category): void {
         $this->category = $category;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCreatorId(): int {
+        return $this->creatorId;
+    }
+
+    /**
+     * @param int $creatorId
+     */
+    public function setCreatorId(int $creatorId): void {
+        $this->creatorId = $creatorId;
     }
 
 }

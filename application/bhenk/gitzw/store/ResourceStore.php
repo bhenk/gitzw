@@ -30,7 +30,7 @@ class ResourceStore {
         if (is_null($resource->getID())) {
             return $this->ingest($resource);
         } else {
-            return $this->updateResource($resource);
+            return $this->update($resource);
         }
     }
 
@@ -52,7 +52,7 @@ class ResourceStore {
      * @return Resource
      * @throws Exception
      */
-    private function updateResource(Resource $resource): Resource {
+    private function update(Resource $resource): Resource {
         Dao::resourceDao()->update($resource->getResourceDo());
         $relations = $resource->getRelations();
         $relations->persist($resource->getID());
@@ -82,6 +82,23 @@ class ResourceStore {
         $arr = Dao::resourceDao()->selectWhere("RESID='" . $RESID . "'");
         if (count($arr) == 1) return new Resource(array_values($arr)[0]);
         return false;
+    }
+
+    /**
+     * Select Resources with given IDs
+     *
+     * @param int[] $IDs Resource IDs
+     * @return Resource[] array of stored Resources
+     * @throws Exception
+     */
+    public function selectBatch(array $IDs): array {
+        $resources = [];
+        $dos = Dao::resourceDao()->selectBatch($IDs);
+        /** @var ResourceDo $do */
+        foreach ($dos as $do) {
+            $resources[$do->getID()] = new Resource($do);
+        }
+        return $resources;
     }
 
 }

@@ -4,5 +4,7 @@ CREATE TABLE IF NOT EXISTS `tbl_representations`
     `REPID`       VARCHAR(50) UNIQUE NOT NULL,
     `source`      VARCHAR(10),
     `description` VARCHAR(255),
+    `date`        DATE,
+    `d_format`    VARCHAR(10),
     PRIMARY KEY (`ID`)
 );

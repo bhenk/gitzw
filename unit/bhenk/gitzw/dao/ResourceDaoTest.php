@@ -4,7 +4,9 @@ namespace bhenk\gitzw\dao;
 
 use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 use function array_values;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsArray;
@@ -15,6 +17,9 @@ use function PHPUnit\Framework\assertTrue;
 class ResourceDaoTest extends TestCase {
     use ConsoleLoggerTrait;
 
+    /**
+     * @throws ReflectionException
+     */
     #[LogAttribute(false)]
     public function testCreateTable() {
         $dao = new ResourceDao();
@@ -24,6 +29,10 @@ class ResourceDaoTest extends TestCase {
         assertTrue($result >= 1);
     }
 
+    /**
+     * @throws ReflectionException
+     * @throws Exception
+     */
     #[LogAttribute(true)]
     public function testInsert() {
         $dao = new ResourceDao();

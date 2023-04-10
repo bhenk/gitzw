@@ -3,10 +3,19 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\RepresentationDo;
+use bhenk\gitzw\model\DateTrait;
 
+/**
+ * A Representation represents a manifestation of a Resource
+ */
 class Representation extends AbstractStoredObject {
+    use DateTrait;
+
+    private RepresentationRelations $relations;
 
     function __construct(private readonly RepresentationDo $repDo = new RepresentationDo()) {
+        $this->initDateTrait($this->repDo);
+        $this->relations = new RepresentationRelations($this->getID());
     }
 
     public function getID(): ?int {
@@ -60,6 +69,13 @@ class Representation extends AbstractStoredObject {
      */
     public function getRepresentationDo(): RepresentationDo {
         return $this->repDo;
+    }
+
+    /**
+     * @return RepresentationRelations
+     */
+    public function getRelations(): RepresentationRelations {
+        return $this->relations;
     }
 
 }

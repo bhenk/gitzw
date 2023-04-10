@@ -6,6 +6,7 @@ use bhenk\gitzw\dao\RepresentationDao;
 use bhenk\gitzw\dat\Representation;
 use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
@@ -25,6 +26,9 @@ class RepresentationStoreTest extends TestCase {
         $this->store = new RepresentationStore();
     }
 
+    /**
+     * @throws Exception
+     */
     public function testStoreRepresentation() {
         $representation = new Representation();
         $representation->setREPID("REPID_1");

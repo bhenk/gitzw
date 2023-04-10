@@ -6,7 +6,14 @@ use bhenk\gitzw\dao\ResourceDo;
 use bhenk\gitzw\model\DateTrait;
 use bhenk\gitzw\model\DimensionsTrait;
 use bhenk\gitzw\model\MultiLanguageTitleTrait;
+use bhenk\gitzw\store\Store;
+use Exception;
+use function is_null;
 
+/**
+ * A Resource in gitzwart is a work that can be represented by one or more images aka Representations
+ *
+ */
 class Resource extends AbstractStoredObject {
     use MultiLanguageTitleTrait;
     use DimensionsTrait;
@@ -104,6 +111,34 @@ class Resource extends AbstractStoredObject {
             }
         }
         return false;
+    }
+
+    /**
+     * @param int|string|Creator $creator
+     * @return bool|Creator
+     * @throws Exception
+     */
+    public function setCreator(int|string|Creator $creator): bool|Creator {
+        $creator = Store::creatorStore()->get($creator);
+        if (!$creator) return false;
+        $creatorId = $creator->getID();
+        if (is_null($creatorId)) return false;
+        ////
+        $this->resourceDo->setCreatorId($creatorId);
+        return $creator;
+    }
+
+    /**
+     * @return bool|Creator
+     * @throws Exception
+     */
+    public function getCreator(): bool|Creator {
+        if ($this->resourceDo->getCreatorId() < 1) return false;
+        return Store::creatorStore()->select($this->resourceDo->getCreatorId());
+    }
+
+    public function unsetCreator(): void {
+        $this->resourceDo->setCreatorId(-1);
     }
 
     /**

@@ -15,7 +15,7 @@ trait DateTrait {
     }
 
     /**
-     * Get the creation date of the resource
+     * Get the creation date
      *
      * Gets the creation date in the original format. If no creation date was set will return
      * the empty string.

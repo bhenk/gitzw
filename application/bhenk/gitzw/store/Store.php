@@ -8,6 +8,7 @@ class Store {
 
     private static ?RepresentationStore $representationStore = null;
     private static ?ResourceStore $resourceStore = null;
+    private static ?CreatorStore $creatorStore = null;
 
     /**
      * @return RepresentationStore
@@ -27,6 +28,13 @@ class Store {
             self::$resourceStore = new ResourceStore();
         }
         return self::$resourceStore;
+    }
+
+    public static function creatorStore(): CreatorStore {
+        if (is_null(self::$creatorStore)) {
+            self::$creatorStore = new CreatorStore();
+        }
+        return self::$creatorStore;
     }
 
 }
