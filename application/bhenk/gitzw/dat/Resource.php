@@ -6,6 +6,7 @@ use bhenk\gitzw\dao\ResJoinRepDo;
 use bhenk\gitzw\dao\ResourceDo;
 use bhenk\gitzw\model\DateTrait;
 use bhenk\gitzw\model\DimensionsTrait;
+use bhenk\gitzw\model\JsonAwareInterface;
 use bhenk\gitzw\model\MultiLanguageTitleTrait;
 use bhenk\gitzw\model\ResourceCategories;
 use Exception;
@@ -18,7 +19,7 @@ use function json_encode;
  * A Resource in gitzwart is a work that can be represented by one or more images aka Representations
  *
  */
-class Resource extends AbstractStoredObject {
+class Resource extends JsonAwareInterface {
     use MultiLanguageTitleTrait;
     use DimensionsTrait;
     use DateTrait;

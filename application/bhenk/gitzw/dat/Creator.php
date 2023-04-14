@@ -3,12 +3,13 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\CreatorDo;
+use bhenk\gitzw\model\JsonAwareInterface;
 use bhenk\gitzw\model\PersonTrait;
 use ReflectionException;
 use function json_decode;
 use function json_encode;
 
-class Creator extends AbstractStoredObject {
+class Creator extends JsonAwareInterface {
     use PersonTrait;
 
     function __construct(private readonly CreatorDo $creatorDo = new CreatorDo()) {
