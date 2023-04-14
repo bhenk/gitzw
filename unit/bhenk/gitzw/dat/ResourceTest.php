@@ -2,10 +2,12 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\dao\ResourceDo;
 use bhenk\gitzw\model\ResourceCategories;
 use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
@@ -129,6 +131,23 @@ class ResourceTest extends TestCase {
         assertEquals(ResourceCategories::dry, $this->res->getCategory());
         assertTrue($this->res->setCategory(ResourceCategories::draw));
         assertEquals(ResourceCategories::draw, $this->res->getCategory());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSerialize() {
+        $this->res->setDate("2000");
+        $this->res->setRESID("bnq/789");
+        $this->res->setHidden(true);
+        $this->res->setDimensions(42.0, 56.0);
+        $representation1 = new Representation(new RepresentationDo(20, "repr_01", "nikon"));
+        $representation2 = new Representation(new RepresentationDo(21, "repr_02", "iPhone"));
+        $this->res->getRelations()->addRepresentation($representation1);
+        $this->res->getRelations()->addRepresentation($representation2);
+        $serialized = $this->res->serialize();
+        $resource = Resource::deserialize($serialized);
+        assertEquals($serialized, $resource->serialize());
     }
 
 }

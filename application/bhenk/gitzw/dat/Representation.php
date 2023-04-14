@@ -4,6 +4,9 @@ namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\model\DateTrait;
+use ReflectionException;
+use function json_decode;
+use function json_encode;
 
 /**
  * A Representation represents a manifestation of a Resource
@@ -20,6 +23,19 @@ class Representation extends AbstractStoredObject {
 
     public function getID(): ?int {
         return $this->repDo->getID();
+    }
+
+    public function serialize(): string {
+        return json_encode(["representationDo" => $this->repDo->toArray()],
+            JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public static function deserialize(string $serialized): Representation {
+        $array = json_decode($serialized, true);
+        return new Representation(RepresentationDo::fromArray($array["representationDo"]));
     }
 
     /**

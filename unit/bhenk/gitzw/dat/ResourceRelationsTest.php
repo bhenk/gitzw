@@ -21,7 +21,7 @@ class ResourceRelationsTest extends TestCase {
      */
     public function testGetRelations() {
         $resRel = new ResourceRelations();
-        $relations = $resRel->getRelations();
+        $relations = $resRel->getRepresentationRelations();
         assertEmpty($relations);
         $representations = $resRel->getRepresentations();
         assertEmpty($representations);
@@ -44,14 +44,14 @@ class ResourceRelationsTest extends TestCase {
         assertEquals(1, count($representations));
         assertArrayHasKey(42, $representations);
         assertContains($repr, $representations);
-        $relations = $resRel->getRelations();
+        $relations = $resRel->getRepresentationRelations();
         assertEquals(1, count($relations));
         assertArrayHasKey(42, $relations);
         assertFalse($resRel->addRepresentation(42));
         assertFalse($resRel->addRepresentation($repr));
 
         assertTrue($resRel->removeRepresentation($repr));
-        assertEquals(1, count($resRel->getRelations()));
+        assertEquals(1, count($resRel->getRepresentationRelations()));
         assertEmpty($resRel->getRepresentations());
     }
 }

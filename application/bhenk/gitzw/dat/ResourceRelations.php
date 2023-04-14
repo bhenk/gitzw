@@ -16,7 +16,7 @@ use function is_null;
 class ResourceRelations {
 
     /** @var ResJoinRepDo[]|null */
-    private ?array $relations = null;
+    private ?array $representationRelations = null;
 
     /** @var Representation[]|null */
     private ?array $representations = null;
@@ -26,7 +26,9 @@ class ResourceRelations {
      *
      * @param int|null $resourceId ID of the owner object or *null* if it does not have an ID (yet)
      */
-    function __construct(private readonly ?int $resourceId = null) {
+    function __construct(private readonly ?int $resourceId = null,
+                         ?array                $representationRelations = null) {
+        $this->representationRelations = $representationRelations;
     }
 
     /**
@@ -50,10 +52,10 @@ class ResourceRelations {
         if (in_array($representationId, array_keys($this->representations))) return false;
         ////
         $this->representations[$representationId] = $representation;
-        $this->getRelations();
-        $relation = new ResJoinRepDo(null, $this->resourceId, $representationId);
-        $this->relations[$representationId] = $relation;
-        return $relation;
+        $this->getRepresentationRelations();
+        $resRep = new ResJoinRepDo(null, $this->resourceId, $representationId);
+        $this->representationRelations[$representationId] = $resRep;
+        return $resRep;
     }
 
     /**
@@ -65,29 +67,30 @@ class ResourceRelations {
     public function getRepresentations(): array {
         if (is_null($this->representations)) {
             $this->representations = [];
-            $relations = $this->getRelations();
-            if (!empty($relations)) {
-                $this->representations = Store::representationStore()->selectBatch(array_keys($relations));
+            $representationRelations = $this->getRepresentationRelations();
+            if (!empty($representationRelations)) {
+                $this->representations =
+                    Store::representationStore()->selectBatch(array_keys($representationRelations));
             }
         }
         return $this->representations;
     }
 
     /**
-     * Lazily fetch the join objects aka relations
+     * Lazily fetch the join objects aka representationRelations
      *
      * @return ResJoinRepDo[] array with Representation ID as key
      * @throws Exception
      */
-    public function getRelations(): array {
-        if (is_null($this->relations)) {
+    public function getRepresentationRelations(): array {
+        if (is_null($this->representationRelations)) {
             if (is_null($this->resourceId)) {
-                $this->relations = [];
+                $this->representationRelations = [];
             } else {
-                $this->relations = Dao::resJoinRepDao()->selectLeft($this->resourceId);
+                $this->representationRelations = Dao::resJoinRepDao()->selectLeft($this->resourceId);
             }
         }
-        return $this->relations;
+        return $this->representationRelations;
     }
 
     /**
@@ -111,9 +114,9 @@ class ResourceRelations {
         if (!in_array($representationId, array_keys($this->representations))) return false;
         ////
         unset($this->representations[$representationId]);
-        $this->getRelations();
-        if (in_array($representationId, array_keys($this->relations))) {
-            $this->relations[$representationId]->setDeleted(true);
+        $this->getRepresentationRelations();
+        if (in_array($representationId, array_keys($this->representationRelations))) {
+            $this->representationRelations[$representationId]->setDeleted(true);
         }
         return true;
     }
@@ -129,8 +132,8 @@ class ResourceRelations {
      * @throws Exception
      */
     public function persist(int $resourceId): bool {
-        if (!is_null($this->relations) and !empty($this->relations)) {
-            $this->relations = Dao::resJoinRepDao()->updateLeftJoin($resourceId, $this->relations);
+        if (!is_null($this->representationRelations) and !empty($this->representationRelations)) {
+            $this->representationRelations = Dao::resJoinRepDao()->updateLeftJoin($resourceId, $this->representationRelations);
             return true;
         }
         return false;
@@ -144,8 +147,8 @@ class ResourceRelations {
      * @throws Exception
      */
     public function getRelation(int $representationId): ?ResJoinRepDo {
-        $this->getRelations();
-        if (in_array($representationId, array_keys($this->relations))) return $this->relations[$representationId];
+        $this->getRepresentationRelations();
+        if (in_array($representationId, array_keys($this->representationRelations))) return $this->representationRelations[$representationId];
         return null;
     }
 

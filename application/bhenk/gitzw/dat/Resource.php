@@ -2,13 +2,17 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\dao\ResJoinRepDo;
 use bhenk\gitzw\dao\ResourceDo;
 use bhenk\gitzw\model\DateTrait;
 use bhenk\gitzw\model\DimensionsTrait;
 use bhenk\gitzw\model\MultiLanguageTitleTrait;
 use bhenk\gitzw\model\ResourceCategories;
 use Exception;
+use ReflectionException;
 use function is_null;
+use function json_decode;
+use function json_encode;
 
 /**
  * A Resource in gitzwart is a work that can be represented by one or more images aka Representations
@@ -21,7 +25,8 @@ class Resource extends AbstractStoredObject {
 
     private ResourceRelations $relations;
 
-    function __construct(private readonly ResourceDo $resourceDo = new ResourceDo()) {
+    function __construct(private readonly ResourceDo $resourceDo = new ResourceDo(),
+                         ?array                      $representationRelations = null) {
         $this->initTitleTrait($this->resourceDo);
         $this->initDimensionsTrait($this->resourceDo);
         $this->initDateTrait($this->resourceDo);
@@ -33,6 +38,43 @@ class Resource extends AbstractStoredObject {
      */
     public function getID(): ?int {
         return $this->resourceDo->getID();
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public static function deserialize(string $serialized): Resource {
+        $array = json_decode($serialized, true);
+        $resourceArray = $array["resource"];
+        $resourceDo = ResourceDo::fromArray($resourceArray["resourceDo"]);
+        $rels = $resourceArray["relations"];
+        $representationRelations = [];
+        foreach ($rels as $relation) {
+            $resJoinRepDo = ResJoinRepDo::fromArray($relation);
+            $representationRelations[$resJoinRepDo->getFkRight()] = $resJoinRepDo;
+        }
+        return new Resource($resourceDo, $representationRelations);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function serialize(): string {
+        $array = ["resourceDo" => $this->resourceDo->toArray()];
+        $rels = [];
+        $array["relations"] = $rels;
+        foreach ($this->relations->getRepresentationRelations() as $resJoinRepDo) {
+            $resJoinRepDo->setFkLeft($this->getID());
+            $rels[$resJoinRepDo->getFkRight()] = $resJoinRepDo->toArray();
+        }
+        return json_encode(["resource" => $array], JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
+     * @return ResourceRelations
+     */
+    public function getRelations(): ResourceRelations {
+        return $this->relations;
     }
 
     public function getRESID(): ?string {
@@ -146,12 +188,5 @@ class Resource extends AbstractStoredObject {
      */
     public function getResourceDo(): ResourceDo {
         return $this->resourceDo;
-    }
-
-    /**
-     * @return ResourceRelations
-     */
-    public function getRelations(): ResourceRelations {
-        return $this->relations;
     }
 }
