@@ -14,7 +14,7 @@ use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
 
-class ResourceRelationsTest extends TestCase {
+class WorkRelationsTest extends TestCase {
 
     /**
      * @throws Exception

@@ -4,7 +4,7 @@ namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\dao\WorkDo;
-use bhenk\gitzw\model\ResourceCategories;
+use bhenk\gitzw\model\WorkCategories;
 use bhenk\logger\log\Log;
 use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
@@ -16,7 +16,7 @@ use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
 
 #[LogAttribute(false)]
-class ResourceTest extends TestCase {
+class WorkTest extends TestCase {
     use ConsoleLoggerTrait {
         setUp as public traitSetUp;
     }
@@ -127,11 +127,11 @@ class ResourceTest extends TestCase {
         assertNull($this->res->getCategory());
         assertFalse($this->res->setCategory("foo"));
         assertTrue($this->res->setCategory("painting"));
-        assertEquals(ResourceCategories::paint, $this->res->getCategory());
+        assertEquals(WorkCategories::paint, $this->res->getCategory());
         assertTrue($this->res->setCategory("dry"));
-        assertEquals(ResourceCategories::dry, $this->res->getCategory());
-        assertTrue($this->res->setCategory(ResourceCategories::draw));
-        assertEquals(ResourceCategories::draw, $this->res->getCategory());
+        assertEquals(WorkCategories::dry, $this->res->getCategory());
+        assertTrue($this->res->setCategory(WorkCategories::draw));
+        assertEquals(WorkCategories::draw, $this->res->getCategory());
     }
 
     /**
@@ -147,8 +147,8 @@ class ResourceTest extends TestCase {
         $this->res->getRelations()->addRepresentation($representation1);
         $this->res->getRelations()->addRepresentation($representation2);
         $serialized = $this->res->serialize();
-        $resource = Work::deserialize($serialized);
-        assertEquals($serialized, $resource->serialize());
+        $work = Work::deserialize($serialized);
+        assertEquals($serialized, $work->serialize());
     }
 
 }

@@ -7,7 +7,7 @@ use ReflectionException;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
-class ResJoinRepDaoTest extends TestCase {
+class WorkHasRepDaoTest extends TestCase {
 
     /**
      * @throws ReflectionException
@@ -20,6 +20,7 @@ class ResJoinRepDaoTest extends TestCase {
 
     public function testTempAware() {
         $dao = Dao::workHasRepDao();
+        $dao->setTemp(false);
         assertEquals(WorkHasRepDao::TABLE_NAME, $dao->getTableName());
 
         $dao->setTemp(true);

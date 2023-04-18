@@ -15,19 +15,19 @@ class RepresentationRelations {
     private ?array $relations = null;
 
     /** @var Work[]|null */
-    private ?array $resources = null;
+    private ?array $works = null;
 
     function __construct(private readonly ?int $representationId) {
     }
 
     /**
-     * @param int $resourceId
+     * @param int $workId
      * @return WorkHasRepDo|null
      * @throws Exception
      */
-    public function getRelation(int $resourceId): ?WorkHasRepDo {
+    public function getRelation(int $workId): ?WorkHasRepDo {
         $this->getRelations();
-        if (in_array($resourceId, array_keys($this->relations))) return $this->relations[$resourceId];
+        if (in_array($workId, array_keys($this->relations))) return $this->relations[$workId];
         return null;
     }
 
@@ -47,13 +47,13 @@ class RepresentationRelations {
     }
 
     /**
-     * @param int $resourceId
+     * @param int $workId
      * @return Work|null
      * @throws Exception
      */
-    public function getResource(int $resourceId): ?Work {
-        $this->getResources();
-        if (in_array($resourceId, array_keys($this->resources))) return $this->resources[$resourceId];
+    public function getWork(int $workId): ?Work {
+        $this->getWorks();
+        if (in_array($workId, array_keys($this->works))) return $this->works[$workId];
         return null;
     }
 
@@ -61,14 +61,14 @@ class RepresentationRelations {
      * @return Work[]
      * @throws Exception
      */
-    public function getResources(): array {
-        if (is_null($this->resources)) {
+    public function getWorks(): array {
+        if (is_null($this->works)) {
             $relations = $this->getRelations();
             if (!empty($relations)) {
-                $this->resources = Store::workStore()->selectBatch(array_keys($relations));
+                $this->works = Store::workStore()->selectBatch(array_keys($relations));
             }
         }
-        return $this->resources;
+        return $this->works;
     }
 
 }

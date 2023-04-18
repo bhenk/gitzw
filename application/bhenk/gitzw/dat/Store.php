@@ -95,9 +95,9 @@ class Store {
     }
 
     /**
-     * Get the store for Resources
+     * Get the store for Works
      *
-     * @return WorkStore store for Resources
+     * @return WorkStore store for Works
      */
     public static function workStore(): WorkStore {
         if (is_null(self::$workStore)) {

@@ -20,7 +20,7 @@ use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
 
 #[LogAttribute(false)]
-class ResourceStoreTest extends TestCase {
+class WorkStoreTest extends TestCase {
     use ConsoleLoggerTrait {
         setUp as public traitSetUp;
     }
@@ -39,40 +39,40 @@ class ResourceStoreTest extends TestCase {
     /**
      * @throws Exception
      */
-    public function testStoreResource() {
-        $resource = new Work();
-        $resource->setRESID("hnq/work/paint/2020/0001");
-        $resource->setCategory("paint");
-        $resource->setPreferredLanguage("en");
-        $resource->setTitleEn("An English title");
-        $resource->setTitleNl("Een Nederlandse titel");
-        $resource->setDate("2020");
-        $resource->setDepth(12);
-        $resource->setHeight(10);
-        $resource->setWidth(8);
-        $resource->setMedia("mixed media");
-        $resource->setOrdinal(42);
-        $resource->setHidden(true);
-        $result = $this->store->persist($resource);
-        assertTrue($resource->getResourceDo()->equals($result->getResourceDo()));
+    public function testStoreWork() {
+        $work = new Work();
+        $work->setRESID("hnq/work/paint/2020/0001");
+        $work->setCategory("paint");
+        $work->setPreferredLanguage("en");
+        $work->setTitleEn("An English title");
+        $work->setTitleNl("Een Nederlandse titel");
+        $work->setDate("2020");
+        $work->setDepth(12);
+        $work->setHeight(10);
+        $work->setWidth(8);
+        $work->setMedia("mixed media");
+        $work->setOrdinal(42);
+        $work->setHidden(true);
+        $result = $this->store->persist($work);
+        assertTrue($work->getWorkDo()->equals($result->getWorkDo()));
 
-        $resource = $result;
-        $resource->setRESID("foo/bar");
-        $result = $this->store->persist($resource);
-        assertTrue($resource->getResourceDo()->isSame($result->getResourceDo()));
+        $work = $result;
+        $work->setRESID("foo/bar");
+        $result = $this->store->persist($work);
+        assertTrue($work->getWorkDo()->isSame($result->getWorkDo()));
         assertEquals("foo/bar", $result->getRESID());
 
-        $result = $this->store->select($resource->getID());
-        assertTrue($resource->getResourceDo()->isSame($result->getResourceDo()));
+        $result = $this->store->select($work->getID());
+        assertTrue($work->getWorkDo()->isSame($result->getWorkDo()));
 
-        $result = $this->store->selectByRESID($resource->getRESID());
-        assertTrue($resource->getResourceDo()->isSame($result->getResourceDo()));
+        $result = $this->store->selectByRESID($work->getRESID());
+        assertTrue($work->getWorkDo()->isSame($result->getWorkDo()));
     }
 
     /**
      * @throws Exception
      */
-    public function testGetResourceById() {
+    public function testGetWorkById() {
         assertFalse($this->store->select(-1));
     }
 
@@ -86,45 +86,45 @@ class ResourceStoreTest extends TestCase {
         $representation = Store::representationStore()->persist($representation);
         assertNotNull($representation->getID());
 
-        // Create a Resource and populate properties and relations
-        $resource = new Work();
-        $resource->setRESID("RESID_1");
-        $relations = $resource->getRelations();
+        // Create a Work and populate properties and relations
+        $work = new Work();
+        $work->setRESID("RESID_1");
+        $relations = $work->getRelations();
         $relation = $relations->addRepresentation($representation);
         assertNotFalse($relation);
         $relation->setOrdinal(42);
-        $relation->setDescription("Yet an other representation of this resource");
+        $relation->setDescription("Yet an other representation of this work");
         $relation->setPreferred(false);
         $relation->setHidden(true);
-        $resource = Store::workStore()->persist($resource);
+        $work = Store::workStore()->persist($work);
 
-        // Fetch the Resource
-        $resource = Store::workStore()->select($resource->getID());
-        assertEquals("RESID_1", $resource->getRESID());
-        $relations = $resource->getRelations();
+        // Fetch the Work
+        $work = Store::workStore()->select($work->getID());
+        assertEquals("RESID_1", $work->getRESID());
+        $relations = $work->getRelations();
         $representation = $relations->getRepresentation($representation->getID());
         assertEquals("REPID_1", $representation->getREPID());
         assertEquals("iPhone", $representation->getSource());
         $relation = $relations->getRelation($representation->getID());
         assertEquals(42, $relation->getOrdinal());
-        assertEquals("Yet an other representation of this resource", $relation->getDescription());
+        assertEquals("Yet an other representation of this work", $relation->getDescription());
         assertFalse($relation->isPreferred());
         assertTrue(($relation->isHidden()));
 
         // Fetch the Representation
         $representation = Store::representationStore()->select($representation->getID());
-        $resource2 = $representation->getRelations()->getResource($resource->getID());
-        assertTrue($resource->getResourceDo()->isSame($resource2->getResourceDo()));
+        $work2 = $representation->getRelations()->getWork($work->getID());
+        assertTrue($work->getWorkDo()->isSame($work2->getWorkDo()));
 
         // Remove the relation
         $relations->removeRepresentation($representation->getID());
         assertTrue($relation->isDeleted());
         assertNull($relations->getRepresentation($representation->getID()));
-        $resource = Store::workStore()->persist($resource);
+        $work = Store::workStore()->persist($work);
 
-        // Fetch the Resource
-        $resource = Store::workStore()->select($resource->getID());
-        $relations = $resource->getRelations();
+        // Fetch the Work
+        $work = Store::workStore()->select($work->getID());
+        $relations = $work->getRelations();
         assertNull($relations->getRepresentation($representation->getID()));
         assertNull($relations->getRelation($representation->getID()));
         $representations = $relations->getRepresentations();
@@ -139,22 +139,22 @@ class ResourceStoreTest extends TestCase {
         $creator->setFirstname("Piet");
         $creator = Store::creatorStore()->persist($creator);
 
-        $resource = new Work();
-        $resource->setRESID("TEST_ADD_CREATOR");
-        $resource->setCreator($creator->getID());
-        $resource = Store::workStore()->persist($resource);
+        $work = new Work();
+        $work->setRESID("TEST_ADD_CREATOR");
+        $work->setCreator($creator->getID());
+        $work = Store::workStore()->persist($work);
 
-        // Fetch resource
-        $resource2 = Store::workStore()->select($resource->getID());
-        $creator = $resource2->getCreator();
+        // Fetch work
+        $work2 = Store::workStore()->select($work->getID());
+        $creator = $work2->getCreator();
         assertEquals("Piet", $creator->getFirstname());
 
-        $resource2->unsetCreator();
-        assertFalse($resource2->getCreator());
-        $resource2 = Store::workStore()->persist($resource2);
+        $work2->unsetCreator();
+        assertFalse($work2->getCreator());
+        $work2 = Store::workStore()->persist($work2);
 
-        $resource3 = Store::workStore()->select($resource2->getID());
-        assertFalse($resource3->getCreator());
+        $work3 = Store::workStore()->select($work2->getID());
+        assertFalse($work3->getCreator());
     }
 
 
@@ -163,13 +163,13 @@ class ResourceStoreTest extends TestCase {
      */
     public function testSerialize() {
         $representations = $this->makeRepresentations();
-        $resource1 = new Work(new WorkDo(null, "RESID_01", "title01", "titel01"));
-        $resource1->getRelations()->addRepresentation($representations[1]);
-        $resource1->getRelations()->addRepresentation($representations[2]);
-        $resource2 = new Work(new WorkDo(null, "RESID_02", "title02", "titel02"));
-        $resource2->getRelations()->addRepresentation($representations[3]);
-        $resource2->getRelations()->addRepresentation($representations[2]);
-        $resources = $this->store->persistBatch([$resource1, $resource2]);
+        $work1 = new Work(new WorkDo(null, "RESID_01", "title01", "titel01"));
+        $work1->getRelations()->addRepresentation($representations[1]);
+        $work1->getRelations()->addRepresentation($representations[2]);
+        $work2 = new Work(new WorkDo(null, "RESID_02", "title02", "titel02"));
+        $work2->getRelations()->addRepresentation($representations[3]);
+        $work2->getRelations()->addRepresentation($representations[2]);
+        $works = $this->store->persistBatch([$work1, $work2]);
 
         $countArray1 = $this->store->serialize(Store::getDataStore());
         assertEquals([2, 4], array_values($countArray1));

@@ -14,7 +14,7 @@ use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertTrue;
 
 #[LogAttribute(false)]
-class ResourceDaoTest extends TestCase {
+class WorkDaoTest extends TestCase {
     use ConsoleLoggerTrait;
 
     /**

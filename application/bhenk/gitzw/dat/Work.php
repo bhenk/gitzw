@@ -7,7 +7,7 @@ use bhenk\gitzw\dao\WorkDo;
 use bhenk\gitzw\model\DateTrait;
 use bhenk\gitzw\model\DimensionsTrait;
 use bhenk\gitzw\model\MultiLanguageTitleTrait;
-use bhenk\gitzw\model\ResourceCategories;
+use bhenk\gitzw\model\WorkCategories;
 use bhenk\gitzw\model\StoredObjectInterface;
 use Exception;
 use ReflectionException;
@@ -26,11 +26,11 @@ class Work implements StoredObjectInterface {
 
     private WorkRelations $relations;
 
-    function __construct(private readonly WorkDo $resourceDo = new WorkDo(),
+    function __construct(private readonly WorkDo $workDo = new WorkDo(),
                          ?array                  $representationRelations = null) {
-        $this->initTitleTrait($this->resourceDo);
-        $this->initDimensionsTrait($this->resourceDo);
-        $this->initDateTrait($this->resourceDo);
+        $this->initTitleTrait($this->workDo);
+        $this->initDimensionsTrait($this->workDo);
+        $this->initDateTrait($this->workDo);
         $this->relations = new WorkRelations($this->getID(), $representationRelations);
     }
 
@@ -38,7 +38,7 @@ class Work implements StoredObjectInterface {
      * @return int|null
      */
     public function getID(): ?int {
-        return $this->resourceDo->getID();
+        return $this->workDo->getID();
     }
 
     /**
@@ -46,29 +46,29 @@ class Work implements StoredObjectInterface {
      */
     public static function deserialize(string $serialized): Work {
         $array = json_decode($serialized, true);
-        $resourceArray = $array["resource"];
-        $resourceDo = WorkDo::fromArray($resourceArray["resourceDo"]);
-        $rels = $resourceArray["relations"];
+        $workArray = $array["work"];
+        $workDo = WorkDo::fromArray($workArray["workDo"]);
+        $rels = $workArray["relations"];
         $representationRelations = [];
         foreach ($rels as $relation) {
             $resJoinRepDo = WorkHasRepDo::fromArray($relation);
             $representationRelations[$resJoinRepDo->getFkRight()] = $resJoinRepDo;
         }
-        return new Work($resourceDo, $representationRelations);
+        return new Work($workDo, $representationRelations);
     }
 
     /**
      * @throws Exception
      */
     public function serialize(): string {
-        $array = ["resourceDo" => $this->resourceDo->toArray()];
+        $array = ["workDo" => $this->workDo->toArray()];
         $rels = [];
         foreach ($this->relations->getRepresentationRelations() as $resJoinRepDo) {
             $resJoinRepDo->setFkLeft($this->getID());
             $rels[$resJoinRepDo->getFkRight()] = $resJoinRepDo->toArray();
         }
         $array["relations"] = $rels;
-        return json_encode(["resource" => $array], JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
+        return json_encode(["work" => $array], JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
     }
 
     /**
@@ -79,77 +79,77 @@ class Work implements StoredObjectInterface {
     }
 
     public function getRESID(): ?string {
-        return $this->resourceDo->getRESID();
+        return $this->workDo->getRESID();
     }
 
     /**
      * @param string $RESID
      */
     public function setRESID(string $RESID): void {
-        $this->resourceDo->setRESID($RESID);
+        $this->workDo->setRESID($RESID);
     }
 
     /**
      * @return string|null
      */
     public function getMedia(): ?string {
-        return $this->resourceDo->getMedia();
+        return $this->workDo->getMedia();
     }
 
     /**
      * @param string $media
      */
     public function setMedia(string $media): void {
-        $this->resourceDo->setMedia($media);
+        $this->workDo->setMedia($media);
     }
 
     /**
      * @return bool
      */
     public function isHidden(): bool {
-        return $this->resourceDo->getHidden() ?? false;
+        return $this->workDo->getHidden() ?? false;
     }
 
     /**
      * @param bool $hidden
      */
     public function setHidden(bool $hidden): void {
-        $this->resourceDo->setHidden($hidden);
+        $this->workDo->setHidden($hidden);
     }
 
     /**
      * @return int
      */
     public function getOrdinal(): int {
-        return $this->resourceDo->getOrdinal();
+        return $this->workDo->getOrdinal();
     }
 
     /**
      * @param int $ordinal
      */
     public function setOrdinal(int $ordinal): void {
-        $this->resourceDo->setOrdinal($ordinal);
+        $this->workDo->setOrdinal($ordinal);
     }
 
     /**
-     * @return ResourceCategories|null
+     * @return WorkCategories|null
      */
-    public function getCategory(): ?ResourceCategories {
-        return ResourceCategories::forName($this->resourceDo->getCategory());
+    public function getCategory(): ?WorkCategories {
+        return WorkCategories::forName($this->workDo->getCategory());
     }
 
     /**
-     * @param string|ResourceCategories $category
+     * @param string|WorkCategories $category
      * @return bool
      */
-    public function setCategory(string|ResourceCategories $category): bool {
-        if ($category instanceof ResourceCategories) {
-            $this->resourceDo->setCategory($category->name);
+    public function setCategory(string|WorkCategories $category): bool {
+        if ($category instanceof WorkCategories) {
+            $this->workDo->setCategory($category->name);
             return true;
         } else {
-            $cat = ResourceCategories::forName($category) ?? ResourceCategories::forValue($category);
+            $cat = WorkCategories::forName($category) ?? WorkCategories::forValue($category);
             if ($cat) {
-                $this->resourceDo->setCategory($cat->name);
+                $this->workDo->setCategory($cat->name);
                 return true;
             }
         }
@@ -167,7 +167,7 @@ class Work implements StoredObjectInterface {
         $creatorId = $creator->getID();
         if (is_null($creatorId)) return false;
         ////
-        $this->resourceDo->setCreatorId($creatorId);
+        $this->workDo->setCreatorId($creatorId);
         return $creator;
     }
 
@@ -176,18 +176,18 @@ class Work implements StoredObjectInterface {
      * @throws Exception
      */
     public function getCreator(): bool|Creator {
-        if ($this->resourceDo->getCreatorId() < 1) return false;
-        return Store::creatorStore()->select($this->resourceDo->getCreatorId());
+        if ($this->workDo->getCreatorId() < 1) return false;
+        return Store::creatorStore()->select($this->workDo->getCreatorId());
     }
 
     public function unsetCreator(): void {
-        $this->resourceDo->setCreatorId(-1);
+        $this->workDo->setCreatorId(-1);
     }
 
     /**
      * @return WorkDo
      */
-    public function getResourceDo(): WorkDo {
-        return $this->resourceDo;
+    public function getWorkDo(): WorkDo {
+        return $this->workDo;
     }
 }

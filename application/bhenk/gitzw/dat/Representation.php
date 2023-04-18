@@ -10,7 +10,7 @@ use function json_decode;
 use function json_encode;
 
 /**
- * A Representation represents a manifestation of a Resource
+ * A Representation represents a manifestation of a Work
  */
 class Representation implements StoredObjectInterface {
     use DateTrait;

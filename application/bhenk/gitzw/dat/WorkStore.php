@@ -12,7 +12,7 @@ use function gettype;
 use function is_null;
 
 /**
- * Store for obtaining and persisting Resources
+ * Store for obtaining and persisting Works
  */
 class WorkStore {
 
@@ -24,76 +24,76 @@ class WorkStore {
      * The {@link Work} is inserted or updated. {@link WorkRelations} of the Work are
      * inserted, updated or deleted.
      *
-     * @param Work $resource the Resource to persist
-     * @return Work the Resource after persistence (includes Primary ID)
+     * @param Work $work the Work to persist
+     * @return Work the Work after persistence (includes Primary ID)
      * @throws Exception
      */
-    public function persist(Work $resource): Work {
-        if (is_null($resource->getID())) {
-            return $this->ingest($resource);
+    public function persist(Work $work): Work {
+        if (is_null($work->getID())) {
+            return $this->ingest($work);
         } else {
-            return $this->update($resource);
+            return $this->update($work);
         }
     }
 
     /**
-     * @param Work $resource
+     * @param Work $work
      * @return Work
      * @throws Exception
      */
-    private function ingest(Work $resource): Work {
+    private function ingest(Work $work): Work {
         /** @var WorkDo $do */
-        $do = Dao::workDao()->insert($resource->getResourceDo());
-        $relations = $resource->getRelations();
+        $do = Dao::workDao()->insert($work->getWorkDo());
+        $relations = $work->getRelations();
         $relations->persist($do->getID());
         return new Work($do);
     }
 
     /**
-     * @param Work $resource
+     * @param Work $work
      * @return Work
      * @throws Exception
      */
-    private function update(Work $resource): Work {
-        Dao::workDao()->update($resource->getResourceDo());
-        $relations = $resource->getRelations();
-        $relations->persist($resource->getID());
-        return new Work($resource->getResourceDo());
+    private function update(Work $work): Work {
+        Dao::workDao()->update($work->getWorkDo());
+        $relations = $work->getRelations();
+        $relations->persist($work->getID());
+        return new Work($work->getWorkDo());
     }
 
     /**
-     * @param Work[] $resources
+     * @param Work[] $works
      * @return Work[]
      * @throws Exception
      */
-    public function persistBatch(array $resources): array {
+    public function persistBatch(array $works): array {
         $results = [];
-        foreach ($resources as $resource) {
-            if (is_null($resource->getID())) {
-                $newResource = $this->ingest($resource);
-                $results[$newResource->getID()] = $newResource;
+        foreach ($works as $work) {
+            if (is_null($work->getID())) {
+                $newWork = $this->ingest($work);
+                $results[$newWork->getID()] = $newWork;
             } else {
-                $newResource = $this->update($resource);
-                $results[$newResource->getID()] = $newResource;
+                $newWork = $this->update($work);
+                $results[$newWork->getID()] = $newWork;
             }
         }
         return $results;
     }
 
     /**
-     * @param int|string|Work $resource
+     * @param int|string|Work $work
      * @return bool|Work
      * @throws Exception
      */
-    public function get(int|string|Work $resource): bool|Work {
-        if ($resource instanceof Work) return $resource;
-        if (gettype($resource) == "integer") return $this->select($resource);
-        if (gettype($resource) == "string") return $this->selectByRESID($resource);
+    public function get(int|string|Work $work): bool|Work {
+        if ($work instanceof Work) return $work;
+        if (gettype($work) == "integer") return $this->select($work);
+        if (gettype($work) == "string") return $this->selectByRESID($work);
         return false;
     }
 
     /**
-     * Select Resource with given ID
+     * Select Work with given ID
      * @param int $ID
      * @return bool|Work
      * @throws Exception
@@ -183,9 +183,9 @@ class WorkStore {
     }
 
     /**
-     * Serialize all the Resources
+     * Serialize all the Works
      * @param string $datastore directory for serialization files
-     * @return array [count of serialized resources, count of serialized relations]
+     * @return array [count of serialized works, count of serialized relations]
      * @throws Exception
      * @noinspection DuplicatedCode
      */
@@ -200,7 +200,7 @@ class WorkStore {
         do {
             $resources = $this->selectWhere("1 = 1", $offset, $limit);
             foreach ($resources as $resource) {
-                $file = $storage . DIRECTORY_SEPARATOR . "resource_"
+                $file = $storage . DIRECTORY_SEPARATOR . "work_"
                     . sprintf("%05d", $resource->getID()) . ".json";
                 file_put_contents($file, $resource->serialize());
                 $count++;
@@ -208,14 +208,14 @@ class WorkStore {
             }
             $offset += $limit;
         } while (!empty($resources));
-        Log::info("Serialized " . $count . " Resources");
+        Log::info("Serialized " . $count . " Works");
         return [$count, $countRelations];
     }
 
     /**
-     * Deserialize from serialization files and store Resources and ResourceRelations
+     * Deserialize from serialization files and store Works and WorkRelations
      * @param string $datastore directory where to find serialization files
-     * @return array array[count of deserialized resources, count of deserialized relations]
+     * @return array array[count of deserialized works, count of deserialized relations]
      * @throws Exception
      */
     public function deserialize(string $datastore): array {
@@ -231,7 +231,7 @@ class WorkStore {
         foreach ($filenames as $filename) {
             $resource = Work::deserialize(
                 file_get_contents($storage . DIRECTORY_SEPARATOR . $filename));
-            Dao::workDao()->insert($resource->getResourceDo(), true);
+            Dao::workDao()->insert($resource->getWorkDo(), true);
             $relationCount += $resource->getRelations()->deserialize();
             $count++;
         }

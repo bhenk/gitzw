@@ -25,9 +25,9 @@ class WorkRelations {
     /**
      * Construct a WorkRelations object
      *
-     * @param int|null $resourceId ID of the owner object or *null* if it does not have an ID (yet)
+     * @param int|null $workId ID of the owner object or *null* if it does not have an ID (yet)
      */
-    function __construct(private readonly ?int $resourceId = null,
+    function __construct(private readonly ?int $workId = null,
                          ?array                $representationRelations = null) {
         $this->representationRelations = $representationRelations;
     }
@@ -54,7 +54,7 @@ class WorkRelations {
         ////
         $this->representations[$representationId] = $representation;
         $this->getRepresentationRelations();
-        $resRep = new WorkHasRepDo(null, $this->resourceId, $representationId);
+        $resRep = new WorkHasRepDo(null, $this->workId, $representationId);
         $this->representationRelations[$representationId] = $resRep;
         return $resRep;
     }
@@ -85,10 +85,10 @@ class WorkRelations {
      */
     public function getRepresentationRelations(): array {
         if (is_null($this->representationRelations)) {
-            if (is_null($this->resourceId)) {
+            if (is_null($this->workId)) {
                 $this->representationRelations = [];
             } else {
-                $this->representationRelations = Dao::workHasRepDao()->selectLeft($this->resourceId);
+                $this->representationRelations = Dao::workHasRepDao()->selectLeft($this->workId);
             }
         }
         return $this->representationRelations;
@@ -126,16 +126,16 @@ class WorkRelations {
      * Persist relations kept by this Relations Object
      *
      * This action ingests, updates and deletes relations. After a call to this method all relations
-     * kept by this ResourceRelations object are in sync with the persistence store.
+     * kept by this WorkRelations object are in sync with the persistence store.
      *
-     * @param int $resourceId ID of the owner object
+     * @param int $workId ID of the owner object
      * @return bool *true* if relations were present, *false* otherwise
      * @throws Exception
      */
-    public function persist(int $resourceId): bool {
+    public function persist(int $workId): bool {
         if (!is_null($this->representationRelations) and !empty($this->representationRelations)) {
             $this->representationRelations =
-                Dao::workHasRepDao()->updateLeftJoin($resourceId, $this->representationRelations);
+                Dao::workHasRepDao()->updateLeftJoin($workId, $this->representationRelations);
             return true;
         }
         return false;
