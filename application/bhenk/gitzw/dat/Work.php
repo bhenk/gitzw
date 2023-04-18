@@ -2,13 +2,13 @@
 
 namespace bhenk\gitzw\dat;
 
-use bhenk\gitzw\dao\WorkHasRepDo;
 use bhenk\gitzw\dao\WorkDo;
+use bhenk\gitzw\dao\WorkHasRepDo;
 use bhenk\gitzw\model\DateTrait;
 use bhenk\gitzw\model\DimensionsTrait;
 use bhenk\gitzw\model\MultiLanguageTitleTrait;
-use bhenk\gitzw\model\WorkCategories;
 use bhenk\gitzw\model\StoredObjectInterface;
+use bhenk\gitzw\model\WorkCategories;
 use Exception;
 use ReflectionException;
 use function is_null;

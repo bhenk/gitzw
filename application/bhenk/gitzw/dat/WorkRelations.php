@@ -170,9 +170,9 @@ class WorkRelations {
 
     /**
      * Function called by WorkStore
-     * @internal Not public API
      * @return int count of persisted relations
      * @throws Exception
+     * @internal Not public API
      */
     public function deserialize(): int {
         $relationCount = 0;

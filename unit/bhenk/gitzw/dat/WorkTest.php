@@ -5,7 +5,6 @@ namespace bhenk\gitzw\dat;
 use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\dao\WorkDo;
 use bhenk\gitzw\model\WorkCategories;
-use bhenk\logger\log\Log;
 use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
 use Exception;

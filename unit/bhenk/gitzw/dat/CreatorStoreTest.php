@@ -6,7 +6,6 @@ use bhenk\gitzw\dao\CreatorDo;
 use bhenk\gitzw\dao\Dao;
 use Exception;
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFileExists;
 use function PHPUnit\Framework\assertTrue;

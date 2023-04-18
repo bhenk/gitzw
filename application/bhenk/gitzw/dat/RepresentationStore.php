@@ -2,9 +2,9 @@
 
 namespace bhenk\gitzw\dat;
 
-use bhenk\logger\log\Log;
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\RepresentationDo;
+use bhenk\logger\log\Log;
 use Exception;
 use function array_values;
 use function count;

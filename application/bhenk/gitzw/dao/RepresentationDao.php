@@ -22,6 +22,13 @@ class RepresentationDao extends AbstractDao {
     }
 
     /**
+     * @throws Exception
+     */
+    public function selectByREPID(string $REPID): ?RepresentationDo {
+        $array = $this->selectWhere("REPID='" . $REPID . "'");
+        if (!empty($array)) return array_values($array)[0];
+        return null;
+    }    /**
      * @inheritDoc
      */
     public function getTableName(): string {
@@ -36,12 +43,5 @@ class RepresentationDao extends AbstractDao {
             file_get_contents(self::TABLE_DEFINITION_FILE));
     }
 
-    /**
-     * @throws Exception
-     */
-    public function selectByREPID(string $REPID): ?RepresentationDo {
-        $array = $this->selectWhere("REPID='" . $REPID . "'");
-        if (!empty($array)) return array_values($array)[0];
-        return null;
-    }
+
 }
