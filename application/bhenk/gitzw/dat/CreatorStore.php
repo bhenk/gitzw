@@ -6,8 +6,24 @@ use bhenk\gitzw\dao\CreatorDo;
 use bhenk\gitzw\dao\Dao;
 use bhenk\logger\log\Log;
 use Exception;
+use function array_diff;
+use function array_filter;
+use function array_map;
+use function file_get_contents;
+use function file_put_contents;
+use function glob;
+use function is_dir;
+use function is_null;
+use function mkdir;
+use function scandir;
+use function sprintf;
 
+/**
+ * Stores Creators
+ *
+ */
 class CreatorStore {
+    const SERIALIZATION_DIRECTORY = "creators";
 
     /**
      * Persist the given Creator
@@ -43,6 +59,34 @@ class CreatorStore {
     private function update(Creator $creator): Creator {
         Dao::creatorDao()->update($creator->getCreatorDo());
         return $creator;
+    }
+
+    /**
+     * @param Creator[] $creators
+     * @return Creator[]
+     * @throws Exception
+     */
+    public function persistBatch(array $creators): array {
+        $inserts = [];
+        $updates = [];
+        foreach ($creators as $creator) {
+            if (is_null($creator->getID())) {
+                $inserts[] = $creator->getCreatorDo();
+            } else {
+                $updates[$creator->getID()] = $creator->getCreatorDo();
+            }
+        }
+        $inserted = Dao::creatorDao()->insertBatch($inserts);
+        Dao::creatorDao()->updateBatch($updates);
+        $new_creators = [];
+        foreach ($updates as $updateDo) {
+            $new_creators[$updateDo->getID()] = new Creator($updateDo);
+        }
+        /** @var CreatorDo $insertedDo */
+        foreach ($inserted as $insertedDo) {
+            $new_creators[$insertedDo->getID()] = new Creator($insertedDo);
+        }
+        return $new_creators;
     }
 
     /**
@@ -90,6 +134,25 @@ class CreatorStore {
     }
 
     /**
+     * Select Creators with a where-clause
+     *
+     * @param string $where expression
+     * @param int $offset start index
+     * @param int $limit maximum number of creators to return
+     * @return Creator[] array of Creators or empty array if end of storage reached
+     * @throws Exception
+     */
+    public function selectWhere(string $where, int $offset = 0, int $limit = PHP_INT_MAX): array {
+        $creators = [];
+        $dos = Dao::creatorDao()->selectWhere($where, $offset, $limit);
+        /** @var CreatorDo $do */
+        foreach ($dos as $do) {
+            $creators[$do->getID()] = new Creator($do);
+        }
+        return $creators;
+    }
+
+    /**
      * Select Creators with given IDs
      *
      * @param int[] $IDs Creator IDs
@@ -106,5 +169,86 @@ class CreatorStore {
         return $creators;
     }
 
+    /**
+     * Delete a Creator
+     * @param int $ID ID of Creator
+     * @return int count of deleted Creators
+     * @throws Exception
+     */
+    public function delete(int $ID): int {
+        return Dao::creatorDao()->delete($ID);
+    }
+
+    /**
+     * Delete Creators
+     * @param array $IDs IDs of Creators to delete
+     * @return int count of deleted Creators
+     * @throws Exception
+     */
+    public function deleteBatch(array $IDs): int {
+        return Dao::creatorDao()->deleteBatch($IDs);
+    }
+
+    /**
+     * Delete Creators with a where-clause
+     * @param string $where expression
+     * @return int count of deleted Creators
+     * @throws Exception
+     */
+    public function deleteWhere(string $where): int {
+        return Dao::creatorDao()->deleteWhere($where);
+    }
+
+    /**
+     * Serialize all the Creators
+     * @param string $datastore directory for serialization files
+     * @return int count of serialized creators
+     * @throws Exception
+     * @noinspection DuplicatedCode
+     */
+    public function serialize(string $datastore): int {
+        $count = 0;
+        $offset = 0;
+        $limit = 10;
+        $storage = $datastore . DIRECTORY_SEPARATOR . self::SERIALIZATION_DIRECTORY;
+        if (!is_dir($storage)) mkdir($storage);
+        array_map('unlink', array_filter((array)glob($storage . DIRECTORY_SEPARATOR . "*")));
+        do {
+            $creators = $this->selectWhere("1 = 1", $offset, $limit);
+            foreach ($creators as $creator) {
+                $file = $storage . DIRECTORY_SEPARATOR . "creator_"
+                    . sprintf("%05d", $creator->getID()) . ".json";
+                file_put_contents($file, $creator->serialize());
+                $count++;
+            }
+            $offset += $limit;
+        } while (!empty($creators));
+        Log::info("Serialized " . $count . " Creators");
+        return $count;
+    }
+
+
+    /**
+     * Deserialize from serialization files and store Creators
+     * @param string $datastore directory where to find serialization files
+     * @return int count of deserialized creators
+     * @throws Exception
+     */
+    public function deserialize(string $datastore): int {
+        $count = 0;
+        $storage = $datastore . DIRECTORY_SEPARATOR . self::SERIALIZATION_DIRECTORY;
+        $filenames = array_diff(scandir($storage), array("..", ".", ".DS_Store"));
+        // create new table with different name: 'tbl_creators_tmp'
+        Dao::creatorDao()->setTemp(true);
+        Dao::creatorDao()->createTable(true);
+        foreach ($filenames as $filename) {
+            $creator = Creator::deserialize(
+                file_get_contents($storage . DIRECTORY_SEPARATOR . $filename));
+            Dao::creatorDao()->insert($creator->getCreatorDo(), true);
+            $count++;
+        }
+        Dao::creatorDao()->setTemp(false);
+        return $count;
+    }
 
 }

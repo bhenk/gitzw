@@ -3,8 +3,9 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\RepresentationDo;
-use bhenk\gitzw\dao\ResourceDo;
+use bhenk\gitzw\dao\WorkDo;
 use bhenk\gitzw\model\ResourceCategories;
+use bhenk\logger\log\Log;
 use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
 use Exception;
@@ -20,11 +21,11 @@ class ResourceTest extends TestCase {
         setUp as public traitSetUp;
     }
 
-    private Resource $res;
+    private Work $res;
 
     public function setUp(): void {
         $this->traitSetUp();
-        $this->res = new Resource();
+        $this->res = new Work();
     }
 
     public function testSetHeight() {
@@ -75,8 +76,8 @@ class ResourceTest extends TestCase {
     }
 
     public function test__construct() {
-        $do = new ResourceDo(25, "resid");
-        $this->res = new Resource($do);
+        $do = new WorkDo(25, "resid");
+        $this->res = new Work($do);
         assertEquals(25, $this->res->getID());
         assertEquals("resid", $this->res->getRESID());
     }
@@ -146,7 +147,7 @@ class ResourceTest extends TestCase {
         $this->res->getRelations()->addRepresentation($representation1);
         $this->res->getRelations()->addRepresentation($representation2);
         $serialized = $this->res->serialize();
-        $resource = Resource::deserialize($serialized);
+        $resource = Work::deserialize($serialized);
         assertEquals($serialized, $resource->serialize());
     }
 

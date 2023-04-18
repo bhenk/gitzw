@@ -3,7 +3,7 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\Dao;
-use bhenk\gitzw\dao\ResJoinRepDo;
+use bhenk\gitzw\dao\WorkHasRepDo;
 use Exception;
 use function array_keys;
 use function in_array;
@@ -11,10 +11,10 @@ use function is_null;
 
 class RepresentationRelations {
 
-    /** @var ResJoinRepDo[]|null */
+    /** @var WorkHasRepDo[]|null */
     private ?array $relations = null;
 
-    /** @var Resource[]|null */
+    /** @var Work[]|null */
     private ?array $resources = null;
 
     function __construct(private readonly ?int $representationId) {
@@ -22,17 +22,17 @@ class RepresentationRelations {
 
     /**
      * @param int $resourceId
-     * @return ResJoinRepDo|null
+     * @return WorkHasRepDo|null
      * @throws Exception
      */
-    public function getRelation(int $resourceId): ?ResJoinRepDo {
+    public function getRelation(int $resourceId): ?WorkHasRepDo {
         $this->getRelations();
         if (in_array($resourceId, array_keys($this->relations))) return $this->relations[$resourceId];
         return null;
     }
 
     /**
-     * @return array|ResJoinRepDo[]
+     * @return array|WorkHasRepDo[]
      * @throws Exception
      */
     public function getRelations(): array {
@@ -40,7 +40,7 @@ class RepresentationRelations {
             if (is_null($this->representationId)) {
                 $this->relations = [];
             } else {
-                $this->relations = Dao::resJoinRepDao()->selectRight($this->representationId);
+                $this->relations = Dao::workHasRepDao()->selectRight($this->representationId);
             }
         }
         return $this->relations;
@@ -48,24 +48,24 @@ class RepresentationRelations {
 
     /**
      * @param int $resourceId
-     * @return Resource|null
+     * @return Work|null
      * @throws Exception
      */
-    public function getResource(int $resourceId): ?Resource {
+    public function getResource(int $resourceId): ?Work {
         $this->getResources();
         if (in_array($resourceId, array_keys($this->resources))) return $this->resources[$resourceId];
         return null;
     }
 
     /**
-     * @return Resource[]
+     * @return Work[]
      * @throws Exception
      */
     public function getResources(): array {
         if (is_null($this->resources)) {
             $relations = $this->getRelations();
             if (!empty($relations)) {
-                $this->resources = Store::resourceStore()->selectBatch(array_keys($relations));
+                $this->resources = Store::workStore()->selectBatch(array_keys($relations));
             }
         }
         return $this->resources;

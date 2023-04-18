@@ -4,7 +4,7 @@ namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\model\DateTrait;
-use bhenk\gitzw\model\JsonAwareInterface;
+use bhenk\gitzw\model\StoredObjectInterface;
 use ReflectionException;
 use function json_decode;
 use function json_encode;
@@ -12,7 +12,7 @@ use function json_encode;
 /**
  * A Representation represents a manifestation of a Resource
  */
-class Representation extends JsonAwareInterface {
+class Representation implements StoredObjectInterface {
     use DateTrait;
 
     private RepresentationRelations $relations;

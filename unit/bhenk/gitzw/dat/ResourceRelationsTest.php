@@ -20,7 +20,7 @@ class ResourceRelationsTest extends TestCase {
      * @throws Exception
      */
     public function testGetRelations() {
-        $resRel = new ResourceRelations();
+        $resRel = new WorkRelations();
         $relations = $resRel->getRepresentationRelations();
         assertEmpty($relations);
         $representations = $resRel->getRepresentations();
@@ -31,7 +31,7 @@ class ResourceRelationsTest extends TestCase {
      * @throws Exception
      */
     public function testAddRepresentation() {
-        $resRel = new ResourceRelations();
+        $resRel = new WorkRelations();
         assertFalse($resRel->addRepresentation(-1));
         assertFalse($resRel->addRepresentation("Bingo"));
         assertFalse($resRel->addRepresentation(new Representation()));

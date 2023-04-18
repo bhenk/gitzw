@@ -2,14 +2,14 @@
 
 namespace bhenk\gitzw\model;
 
-use bhenk\gitzw\dat\Resource;
+use bhenk\gitzw\dat\Work;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 
 class DimensionsTraitTest extends TestCase {
 
     public function testDimensionsToString() {
-        $resource = new Resource();
+        $resource = new Work();
         $resource->setDimensions(2.54, 5.08, 10.16);
         $result = $resource->getDimensions();
         $expected = "3 x 5 x 10 cm. [w x h x d] 1.0 x 2.0 x 4.0 in.";

@@ -2,7 +2,7 @@
 
 namespace bhenk\gitzw\dat;
 
-use bhenk\doc2rst\log\Log;
+use bhenk\logger\log\Log;
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\RepresentationDo;
 use Exception;
@@ -15,6 +15,8 @@ use function is_null;
  * Store for obtaining and persisting Representations
  */
 class RepresentationStore {
+
+    const SERIALIZATION_DIRECTORY = "representations";
 
     /**
      * Persist the given Representation
@@ -48,6 +50,34 @@ class RepresentationStore {
     private function update(Representation $representation): Representation {
         Dao::representationDao()->update($representation->getRepresentationDo());
         return $representation;
+    }
+
+    /**
+     * @param Representation[] $representations
+     * @return Representation[]
+     * @throws Exception
+     */
+    public function persistBatch(array $representations): array {
+        $inserts = [];
+        $updates = [];
+        foreach ($representations as $representation) {
+            if (is_null($representation->getID())) {
+                $inserts[] = $representation->getRepresentationDo();
+            } else {
+                $updates[$representation->getID()] = $representation->getRepresentationDo();
+            }
+        }
+        $inserted = Dao::representationDao()->insertBatch($inserts);
+        Dao::representationDao()->updateBatch($updates);
+        $new_representations = [];
+        foreach ($updates as $updateDo) {
+            $new_representations[$updateDo->getID()] = new Representation($updateDo);
+        }
+        /** @var RepresentationDo $insertedDo */
+        foreach ($inserted as $insertedDo) {
+            $new_representations[$insertedDo->getID()] = new Representation($insertedDo);
+        }
+        return $new_representations;
     }
 
     /**
@@ -95,6 +125,25 @@ class RepresentationStore {
     }
 
     /**
+     * Select Representations with a where-clause
+     *
+     * @param string $where expression
+     * @param int $offset start index
+     * @param int $limit maximum number of representations to return
+     * @return Representation[] array of Representations or empty array if end of storage reached
+     * @throws Exception
+     */
+    public function selectWhere(string $where, int $offset = 0, int $limit = PHP_INT_MAX): array {
+        $representations = [];
+        $dos = Dao::representationDao()->selectWhere($where, $offset, $limit);
+        /** @var RepresentationDo $do */
+        foreach ($dos as $do) {
+            $representations[$do->getID()] = new Representation($do);
+        }
+        return $representations;
+    }
+
+    /**
      * Select Representations with given IDs
      *
      * @param int[] $IDs Representation IDs
@@ -109,6 +158,88 @@ class RepresentationStore {
             $representations[$do->getID()] = new Representation($do);
         }
         return $representations;
+    }
+
+    /**
+     * Delete a Representation
+     * @param int $ID ID of Representation
+     * @return int count of deleted Representations
+     * @throws Exception
+     */
+    public function delete(int $ID): int {
+        return Dao::representationDao()->delete($ID);
+    }
+
+    /**
+     * Delete Representations
+     * @param array $IDs IDs of Representations to delete
+     * @return int count of deleted Representations
+     * @throws Exception
+     */
+    public function deleteBatch(array $IDs): int {
+        return Dao::representationDao()->deleteBatch($IDs);
+    }
+
+    /**
+     * Delete Representations with a where-clause
+     * @param string $where expression
+     * @return int count of deleted Representations
+     * @throws Exception
+     */
+    public function deleteWhere(string $where): int {
+        return Dao::representationDao()->deleteWhere($where);
+    }
+
+    /**
+     * Serialize all the Representations
+     * @param string $datastore directory for serialization files
+     * @return int count of serialized representations
+     * @throws Exception
+     * @noinspection DuplicatedCode
+     */
+    public function serialize(string $datastore): int {
+        $count = 0;
+        $offset = 0;
+        $limit = 10;
+        $storage = $datastore . DIRECTORY_SEPARATOR . self::SERIALIZATION_DIRECTORY;
+        if (!is_dir($storage)) mkdir($storage);
+        array_map('unlink', array_filter((array)glob($storage . DIRECTORY_SEPARATOR . "*")));
+        do {
+            $representations = $this->selectWhere("1 = 1", $offset, $limit);
+            foreach ($representations as $representation) {
+                $file = $storage . DIRECTORY_SEPARATOR . "representation_"
+                    . sprintf("%05d", $representation->getID()) . ".json";
+                file_put_contents($file, $representation->serialize());
+                $count++;
+            }
+            $offset += $limit;
+        } while (!empty($representations));
+        Log::info("Serialized " . $count . " Representations");
+        return $count;
+    }
+
+
+    /**
+     * Deserialize from serialization files and store Representations
+     * @param string $datastore directory where to find serialization files
+     * @return int count of deserialized representations
+     * @throws Exception
+     */
+    public function deserialize(string $datastore): int {
+        $count = 0;
+        $storage = $datastore . DIRECTORY_SEPARATOR . self::SERIALIZATION_DIRECTORY;
+        $filenames = array_diff(scandir($storage), array("..", ".", ".DS_Store"));
+        // create new table with different name: 'tbl_representations_tmp'
+        Dao::representationDao()->setTemp(true);
+        Dao::representationDao()->createTable(true);
+        foreach ($filenames as $filename) {
+            $representation = Representation::deserialize(
+                file_get_contents($storage . DIRECTORY_SEPARATOR . $filename));
+            Dao::representationDao()->insert($representation->getRepresentationDo(), true);
+            $count++;
+        }
+        Dao::representationDao()->setTemp(false);
+        return $count;
     }
 
 }

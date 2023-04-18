@@ -7,7 +7,7 @@ use bhenk\gitzw\model\DimensionsInterface;
 use bhenk\gitzw\model\MultiLanguageTitleInterface;
 use bhenk\msdata\abc\Entity;
 
-class ResourceDo extends Entity implements MultiLanguageTitleInterface, DimensionsInterface, DateInterface {
+class WorkDo extends Entity implements MultiLanguageTitleInterface, DimensionsInterface, DateInterface {
 
     function __construct(?int            $ID = null,
                          private ?string $RESID = null,

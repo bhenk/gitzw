@@ -22,9 +22,9 @@ class ResourceDaoTest extends TestCase {
      */
     #[LogAttribute(false)]
     public function testCreateTable() {
-        $dao = new ResourceDao();
+        $dao = new WorkDao();
         $sql = $dao->getCreateTableStatement();
-        assertStringContainsString("tbl_resources", $sql);
+        assertStringContainsString("tbl_works", $sql);
         $result = $dao->createTable(true);
         assertTrue($result >= 1);
     }
@@ -35,10 +35,10 @@ class ResourceDaoTest extends TestCase {
      */
     #[LogAttribute(true)]
     public function testInsert() {
-        $dao = new ResourceDao();
+        $dao = new WorkDao();
         $result = $dao->createTable(true);
         assertTrue($result >= 1);
-        $rid = new ResourceDo(null,
+        $rid = new WorkDo(null,
             "hnq.work.paint.2020.0000",
             "A new work",
             "Een nieuw werk",
@@ -53,7 +53,7 @@ class ResourceDaoTest extends TestCase {
             5,
             "paint"
         );
-        $dao = new ResourceDao();
+        $dao = new WorkDao();
         $rid2 = $dao->insert($rid);
         assertTrue($rid->equals($rid2));
         $selected = $dao->selectWhere("RESID='hnq.work.paint.2020.0000'");

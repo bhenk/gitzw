@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `tbl_resources`
+CREATE TABLE IF NOT EXISTS `%tbl_name%`
 (
     `ID`        INT                NOT NULL AUTO_INCREMENT,
     `RESID`     VARCHAR(25) UNIQUE NOT NULL,

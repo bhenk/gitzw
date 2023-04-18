@@ -3,22 +3,20 @@
 namespace bhenk\gitzw\dao;
 
 use bhenk\msdata\abc\AbstractDao;
-use Exception;
-use function array_values;
 use function file_get_contents;
 use function str_replace;
 
-class RepresentationDao extends AbstractDao {
+class WorkDao extends AbstractDao {
     use TempAwareTrait;
 
-    const TABLE_NAME = "tbl_representations";
-    const TABLE_DEFINITION_FILE = __DIR__ . "/sql/tbl_representations.sql";
+    const TABLE_NAME = "tbl_works";
+    const TABLE_DEFINITION_FILE = __DIR__ . "/sql/tbl_works.sql";
 
     /**
      * @inheritDoc
      */
     public function getDataObjectName(): string {
-        return RepresentationDo::class;
+        return WorkDo::class;
     }
 
     /**
@@ -28,20 +26,8 @@ class RepresentationDao extends AbstractDao {
         return self::TABLE_NAME . $this->getTableNameExtension();
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getCreateTableStatement(): string {
         return str_replace("%tbl_name%", $this->getTableName(),
             file_get_contents(self::TABLE_DEFINITION_FILE));
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function selectByREPID(string $REPID): ?RepresentationDo {
-        $array = $this->selectWhere("REPID='" . $REPID . "'");
-        if (!empty($array)) return array_values($array)[0];
-        return null;
     }
 }

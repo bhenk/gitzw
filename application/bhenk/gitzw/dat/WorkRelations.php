@@ -3,26 +3,27 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\Dao;
-use bhenk\gitzw\dao\ResJoinRepDo;
+use bhenk\gitzw\dao\WorkHasRepDo;
 use Exception;
 use function array_keys;
+use function count;
 use function in_array;
 use function is_null;
 
 /**
- * The ResourceRelations object keeps track of relations the owner {@link Resource} has to
+ * The WorkRelations object keeps track of relations the owner {@link Work} has to
  * other objects.
  */
-class ResourceRelations {
+class WorkRelations {
 
-    /** @var ResJoinRepDo[]|null */
+    /** @var WorkHasRepDo[]|null */
     private ?array $representationRelations = null;
 
     /** @var Representation[]|null */
     private ?array $representations = null;
 
     /**
-     * Construct a ResourceRelations object
+     * Construct a WorkRelations object
      *
      * @param int|null $resourceId ID of the owner object or *null* if it does not have an ID (yet)
      */
@@ -40,10 +41,10 @@ class ResourceRelations {
      *
      * @param int|string|Representation $representation Representation ID (int), Representation REPID (string)
      *    or Representation (object)
-     * @return bool|ResJoinRepDo relation data object if representation successfully added, *false* otherwise
+     * @return bool|WorkHasRepDo relation data object if representation successfully added, *false* otherwise
      * @throws Exception
      */
-    public function addRepresentation(int|string|Representation $representation): bool|ResJoinRepDo {
+    public function addRepresentation(int|string|Representation $representation): bool|WorkHasRepDo {
         $representation = Store::representationStore()->get($representation);
         if (!$representation) return false;
         $representationId = $representation->getID();
@@ -53,7 +54,7 @@ class ResourceRelations {
         ////
         $this->representations[$representationId] = $representation;
         $this->getRepresentationRelations();
-        $resRep = new ResJoinRepDo(null, $this->resourceId, $representationId);
+        $resRep = new WorkHasRepDo(null, $this->resourceId, $representationId);
         $this->representationRelations[$representationId] = $resRep;
         return $resRep;
     }
@@ -79,7 +80,7 @@ class ResourceRelations {
     /**
      * Lazily fetch the join objects aka representationRelations
      *
-     * @return ResJoinRepDo[] array with Representation ID as key
+     * @return WorkHasRepDo[] array with Representation ID as key
      * @throws Exception
      */
     public function getRepresentationRelations(): array {
@@ -87,7 +88,7 @@ class ResourceRelations {
             if (is_null($this->resourceId)) {
                 $this->representationRelations = [];
             } else {
-                $this->representationRelations = Dao::resJoinRepDao()->selectLeft($this->resourceId);
+                $this->representationRelations = Dao::workHasRepDao()->selectLeft($this->resourceId);
             }
         }
         return $this->representationRelations;
@@ -133,7 +134,8 @@ class ResourceRelations {
      */
     public function persist(int $resourceId): bool {
         if (!is_null($this->representationRelations) and !empty($this->representationRelations)) {
-            $this->representationRelations = Dao::resJoinRepDao()->updateLeftJoin($resourceId, $this->representationRelations);
+            $this->representationRelations =
+                Dao::workHasRepDao()->updateLeftJoin($resourceId, $this->representationRelations);
             return true;
         }
         return false;
@@ -143,10 +145,10 @@ class ResourceRelations {
      * Get the relation data object that relates the Representation with the given ID
      *
      * @param int $representationId ID of the Representation
-     * @return ResJoinRepDo|null relation data object or *null* if relation not present
+     * @return WorkHasRepDo|null relation data object or *null* if relation not present
      * @throws Exception
      */
-    public function getRelation(int $representationId): ?ResJoinRepDo {
+    public function getRelation(int $representationId): ?WorkHasRepDo {
         $this->getRepresentationRelations();
         if (in_array($representationId, array_keys($this->representationRelations))) return $this->representationRelations[$representationId];
         return null;
@@ -164,5 +166,20 @@ class ResourceRelations {
         if (in_array($representationId, array_keys($this->representations)))
             return $this->representations[$representationId];
         return null;
+    }
+
+    /**
+     * Function called by WorkStore
+     * @internal Not public API
+     * @return int count of persisted relations
+     * @throws Exception
+     */
+    public function deserialize(): int {
+        $relationCount = 0;
+        if (!is_null($this->representationRelations) and !empty($this->representationRelations)) {
+            $inserted = Dao::workHasRepDao()->insertBatch($this->representationRelations, null, true);
+            $relationCount = count($inserted);
+        }
+        return $relationCount;
     }
 }

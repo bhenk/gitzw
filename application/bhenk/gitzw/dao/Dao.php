@@ -7,8 +7,8 @@ use function is_null;
 final class Dao {
 
     private static ?RepresentationDao $representationDao = null;
-    private static ?ResJoinRepDao $resJoinRepDao = null;
-    private static ?ResourceDao $resourceDao = null;
+    private static ?WorkHasRepDao $workHasRepDao = null;
+    private static ?WorkDao $workDao = null;
     private static ?CreatorDao $creatorDao = null;
 
     /**
@@ -22,23 +22,23 @@ final class Dao {
     }
 
     /**
-     * @return ResJoinRepDao
+     * @return WorkHasRepDao
      */
-    public static function resJoinRepDao(): ResJoinRepDao {
-        if (is_null(self::$resJoinRepDao)) {
-            self::$resJoinRepDao = new ResJoinRepDao();
+    public static function workHasRepDao(): WorkHasRepDao {
+        if (is_null(self::$workHasRepDao)) {
+            self::$workHasRepDao = new WorkHasRepDao();
         }
-        return self::$resJoinRepDao;
+        return self::$workHasRepDao;
     }
 
     /**
-     * @return ResourceDao|null
+     * @return WorkDao|null
      */
-    public static function resourceDao(): ?ResourceDao {
-        if (is_null(self::$resourceDao)) {
-            self::$resourceDao = new ResourceDao();
+    public static function workDao(): ?WorkDao {
+        if (is_null(self::$workDao)) {
+            self::$workDao = new WorkDao();
         }
-        return self::$resourceDao;
+        return self::$workDao;
     }
 
     /**

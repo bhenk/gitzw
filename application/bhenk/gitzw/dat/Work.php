@@ -2,13 +2,13 @@
 
 namespace bhenk\gitzw\dat;
 
-use bhenk\gitzw\dao\ResJoinRepDo;
-use bhenk\gitzw\dao\ResourceDo;
+use bhenk\gitzw\dao\WorkHasRepDo;
+use bhenk\gitzw\dao\WorkDo;
 use bhenk\gitzw\model\DateTrait;
 use bhenk\gitzw\model\DimensionsTrait;
-use bhenk\gitzw\model\JsonAwareInterface;
 use bhenk\gitzw\model\MultiLanguageTitleTrait;
 use bhenk\gitzw\model\ResourceCategories;
+use bhenk\gitzw\model\StoredObjectInterface;
 use Exception;
 use ReflectionException;
 use function is_null;
@@ -16,22 +16,22 @@ use function json_decode;
 use function json_encode;
 
 /**
- * A Resource in gitzwart is a work that can be represented by one or more images aka Representations
+ * A Work in gitzwart is something that can be represented by one or more images aka Representations
  *
  */
-class Resource extends JsonAwareInterface {
+class Work implements StoredObjectInterface {
     use MultiLanguageTitleTrait;
     use DimensionsTrait;
     use DateTrait;
 
-    private ResourceRelations $relations;
+    private WorkRelations $relations;
 
-    function __construct(private readonly ResourceDo $resourceDo = new ResourceDo(),
-                         ?array                      $representationRelations = null) {
+    function __construct(private readonly WorkDo $resourceDo = new WorkDo(),
+                         ?array                  $representationRelations = null) {
         $this->initTitleTrait($this->resourceDo);
         $this->initDimensionsTrait($this->resourceDo);
         $this->initDateTrait($this->resourceDo);
-        $this->relations = new ResourceRelations($this->getID());
+        $this->relations = new WorkRelations($this->getID(), $representationRelations);
     }
 
     /**
@@ -44,17 +44,17 @@ class Resource extends JsonAwareInterface {
     /**
      * @throws ReflectionException
      */
-    public static function deserialize(string $serialized): Resource {
+    public static function deserialize(string $serialized): Work {
         $array = json_decode($serialized, true);
         $resourceArray = $array["resource"];
-        $resourceDo = ResourceDo::fromArray($resourceArray["resourceDo"]);
+        $resourceDo = WorkDo::fromArray($resourceArray["resourceDo"]);
         $rels = $resourceArray["relations"];
         $representationRelations = [];
         foreach ($rels as $relation) {
-            $resJoinRepDo = ResJoinRepDo::fromArray($relation);
+            $resJoinRepDo = WorkHasRepDo::fromArray($relation);
             $representationRelations[$resJoinRepDo->getFkRight()] = $resJoinRepDo;
         }
-        return new Resource($resourceDo, $representationRelations);
+        return new Work($resourceDo, $representationRelations);
     }
 
     /**
@@ -63,18 +63,18 @@ class Resource extends JsonAwareInterface {
     public function serialize(): string {
         $array = ["resourceDo" => $this->resourceDo->toArray()];
         $rels = [];
-        $array["relations"] = $rels;
         foreach ($this->relations->getRepresentationRelations() as $resJoinRepDo) {
             $resJoinRepDo->setFkLeft($this->getID());
             $rels[$resJoinRepDo->getFkRight()] = $resJoinRepDo->toArray();
         }
+        $array["relations"] = $rels;
         return json_encode(["resource" => $array], JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
     }
 
     /**
-     * @return ResourceRelations
+     * @return WorkRelations
      */
-    public function getRelations(): ResourceRelations {
+    public function getRelations(): WorkRelations {
         return $this->relations;
     }
 
@@ -185,9 +185,9 @@ class Resource extends JsonAwareInterface {
     }
 
     /**
-     * @return ResourceDo
+     * @return WorkDo
      */
-    public function getResourceDo(): ResourceDo {
+    public function getResourceDo(): WorkDo {
         return $this->resourceDo;
     }
 }

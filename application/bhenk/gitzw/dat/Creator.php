@@ -3,13 +3,13 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\CreatorDo;
-use bhenk\gitzw\model\JsonAwareInterface;
 use bhenk\gitzw\model\PersonTrait;
+use bhenk\gitzw\model\StoredObjectInterface;
 use ReflectionException;
 use function json_decode;
 use function json_encode;
 
-class Creator extends JsonAwareInterface {
+class Creator implements StoredObjectInterface {
     use PersonTrait;
 
     function __construct(private readonly CreatorDo $creatorDo = new CreatorDo()) {
@@ -26,12 +26,12 @@ class Creator extends JsonAwareInterface {
         return new Creator(CreatorDo::fromArray($array["creatorDo"]));
     }
 
-    public function getID(): ?int {
-        return $this->creatorDo->getID();
-    }
-
     public function serialize(): string {
         return json_encode(["creatorDo" => $this->creatorDo->toArray()], JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
+    }
+
+    public function getID(): ?int {
+        return $this->creatorDo->getID();
     }
 
     /**

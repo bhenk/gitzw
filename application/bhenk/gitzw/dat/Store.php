@@ -27,43 +27,22 @@ class Store {
     const STORE_DIR = "store";
 
     private static ?RepresentationStore $representationStore = null;
-    private static ?ResourceStore $resourceStore = null;
+    private static ?WorkStore $workStore = null;
     private static ?CreatorStore $creatorStore = null;
 
     /**
-     * Get the store for Representations
-     *
-     * @return RepresentationStore store for Representations
+     * @return int[] counts of serialized business objects
+     * @throws Exception
      */
-    public static function representationStore(): RepresentationStore {
-        if (is_null(self::$representationStore)) {
-            self::$representationStore = new RepresentationStore();
-        }
-        return self::$representationStore;
-    }
-
-    /**
-     * Get the store for Resources
-     *
-     * @return ResourceStore store for Resources
-     */
-    public static function resourceStore(): ResourceStore {
-        if (is_null(self::$resourceStore)) {
-            self::$resourceStore = new ResourceStore();
-        }
-        return self::$resourceStore;
-    }
-
-    /**
-     * Get the store for Creators
-     *
-     * @return CreatorStore store for Creators
-     */
-    public static function creatorStore(): CreatorStore {
-        if (is_null(self::$creatorStore)) {
-            self::$creatorStore = new CreatorStore();
-        }
-        return self::$creatorStore;
+    public static function serialize(): array {
+        $counts = [];
+        $datastore = self::getDataStore();
+        $counts["creators"] = self::creatorStore()->serialize($datastore);
+        $counts["representations"] = self::representationStore()->serialize($datastore);
+        $countArray = self::workStore()->serialize($datastore);
+        $counts["works"] = $countArray[0];
+        $counts["work_relations"] = $countArray[1];
+        return $counts;
     }
 
     /**
@@ -90,5 +69,57 @@ class Store {
         Log::error($msg);
         throw new Exception($msg);
     }
+
+    /**
+     * Get the store for Creators
+     *
+     * @return CreatorStore store for Creators
+     */
+    public static function creatorStore(): CreatorStore {
+        if (is_null(self::$creatorStore)) {
+            self::$creatorStore = new CreatorStore();
+        }
+        return self::$creatorStore;
+    }
+
+    /**
+     * Get the store for Representations
+     *
+     * @return RepresentationStore store for Representations
+     */
+    public static function representationStore(): RepresentationStore {
+        if (is_null(self::$representationStore)) {
+            self::$representationStore = new RepresentationStore();
+        }
+        return self::$representationStore;
+    }
+
+    /**
+     * Get the store for Resources
+     *
+     * @return WorkStore store for Resources
+     */
+    public static function workStore(): WorkStore {
+        if (is_null(self::$workStore)) {
+            self::$workStore = new WorkStore();
+        }
+        return self::$workStore;
+    }
+
+    /**
+     * @return int[] counts of deserialized business objects
+     * @throws Exception
+     */
+    public static function deserialize(): array {
+        $counts = [];
+        $datastore = self::getDataStore();
+        $counts["creators"] = self::creatorStore()->deserialize($datastore);
+        $counts["representations"] = self::representationStore()->deserialize($datastore);
+        $countArray = self::workStore()->deserialize($datastore);
+        $counts["works"] = $countArray[0];
+        $counts["work_relations"] = $countArray[1];
+        return $counts;
+    }
+
 
 }

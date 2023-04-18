@@ -4,20 +4,23 @@ namespace bhenk\gitzw\dao;
 
 use bhenk\msdata\abc\AbstractJoinDao;
 
-class ResJoinRepDao extends AbstractJoinDao {
+class WorkHasRepDao extends AbstractJoinDao {
+    use TempAwareTrait;
+
+    const TABLE_NAME = "tbl_work_repr";
 
     /**
      * @inheritDoc
      */
     public function getTableName(): string {
-        return "tbl_res_rep";
+        return self::TABLE_NAME . $this->getTableNameExtension();
     }
 
     /**
      * @inheritDoc
      */
     public function getDataObjectName(): string {
-        return ResJoinRepDo::class;
+        return WorkHasRepDo::class;
     }
 
 }

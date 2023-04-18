@@ -4,7 +4,7 @@ namespace bhenk\gitzw\dao;
 
 use bhenk\msdata\abc\Join;
 
-class ResJoinRepDo extends Join {
+class WorkHasRepDo extends Join {
 
     public function __construct(
         ?int            $ID = null,
