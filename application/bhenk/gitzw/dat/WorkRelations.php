@@ -17,7 +17,7 @@ use function is_null;
 class WorkRelations {
 
     /** @var WorkHasRepDo[]|null */
-    private ?array $representationRelations = null;
+    private ?array $representationRelations;
 
     /** @var Representation[]|null */
     private ?array $representations = null;
@@ -26,6 +26,7 @@ class WorkRelations {
      * Construct a WorkRelations object
      *
      * @param int|null $workId ID of the owner object or *null* if it does not have an ID (yet)
+     * @param WorkHasRepDo[]|null $representationRelations
      */
     function __construct(private readonly ?int $workId = null,
                          ?array                $representationRelations = null) {

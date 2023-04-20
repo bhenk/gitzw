@@ -15,5 +15,6 @@ CREATE TABLE IF NOT EXISTS `%tbl_name%`
     `ordinal`   INT,
     `category`  VARCHAR(10),
     `creatorId` INT,
+    FOREIGN KEY (creatorId) REFERENCES tbl_creators (ID),
     PRIMARY KEY (`ID`)
 );

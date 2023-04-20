@@ -5,6 +5,7 @@ namespace bhenk\gitzw\dat;
 use bhenk\gitzw\dao\CreatorDo;
 use bhenk\gitzw\model\PersonTrait;
 use bhenk\gitzw\model\StoredObjectInterface;
+use Exception;
 use ReflectionException;
 use function json_decode;
 use function json_encode;
@@ -41,5 +42,15 @@ class Creator implements StoredObjectInterface {
         return $this->creatorDo;
     }
 
+    /**
+     * Get Works by this Creator
+     * @param int $offset start index
+     * @param int $limit max number of Works to return
+     * @return array<int, Work> array of Works or empty array if end of storage reached
+     * @throws Exception
+     */
+    public function getWorks(int $offset = 0, int $limit = PHP_INT_MAX): array {
+        return Store::workStore()->selectByCreator($this, $offset, $limit);
+    }
 
 }

@@ -3,8 +3,9 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\RepresentationDo;
+use bhenk\logger\unit\LogAttribute;
+use bhenk\TestCaseDb;
 use Exception;
-use PHPUnit\Framework\TestCase;
 use function count;
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertContains;
@@ -14,7 +15,8 @@ use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
 
-class WorkRelationsTest extends TestCase {
+#[LogAttribute(false)]
+class WorkRelationsTest extends TestCaseDb {
 
     /**
      * @throws Exception

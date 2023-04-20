@@ -2,15 +2,9 @@
 
 namespace bhenk\gitzw\dat;
 
-use bhenk\gitzw\dao\Dao;
-use bhenk\gitzw\dao\RepresentationDo;
-use bhenk\gitzw\dao\WorkDo;
-use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
+use bhenk\TestCaseDb;
 use Exception;
-use PHPUnit\Framework\TestCase;
-use function array_keys;
-use function array_values;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
@@ -20,21 +14,7 @@ use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
 
 #[LogAttribute(false)]
-class WorkStoreTest extends TestCase {
-    use ConsoleLoggerTrait {
-        setUp as public traitSetUp;
-    }
-
-    private WorkStore $store;
-
-    public function setUp(): void {
-        $this->traitSetUp();
-        Dao::workDao()->createTable(true);
-        Dao::representationDao()->createTable(true);
-        Dao::workHasRepDao()->createTable(true);
-        Dao::creatorDao()->createTable(true);
-        $this->store = new WorkStore();
-    }
+class WorkStoreTest extends TestCaseDb {
 
     /**
      * @throws Exception
@@ -53,19 +33,19 @@ class WorkStoreTest extends TestCase {
         $work->setMedia("mixed media");
         $work->setOrdinal(42);
         $work->setHidden(true);
-        $result = $this->store->persist($work);
+        $result = Store::workStore()->persist($work);
         assertTrue($work->getWorkDo()->equals($result->getWorkDo()));
 
         $work = $result;
         $work->setRESID("foo/bar");
-        $result = $this->store->persist($work);
+        $result = Store::workStore()->persist($work);
         assertTrue($work->getWorkDo()->isSame($result->getWorkDo()));
         assertEquals("foo/bar", $result->getRESID());
 
-        $result = $this->store->select($work->getID());
+        $result = Store::workStore()->select($work->getID());
         assertTrue($work->getWorkDo()->isSame($result->getWorkDo()));
 
-        $result = $this->store->selectByRESID($work->getRESID());
+        $result = Store::workStore()->selectByRESID($work->getRESID());
         assertTrue($work->getWorkDo()->isSame($result->getWorkDo()));
     }
 
@@ -73,7 +53,7 @@ class WorkStoreTest extends TestCase {
      * @throws Exception
      */
     public function testGetWorkById() {
-        assertFalse($this->store->select(-1));
+        assertFalse(Store::workStore()->select(-1));
     }
 
     /**
@@ -155,44 +135,6 @@ class WorkStoreTest extends TestCase {
 
         $work3 = Store::workStore()->select($work2->getID());
         assertFalse($work3->getCreator());
-    }
-
-
-    /**
-     * @throws Exception
-     */
-    public function testSerialize() {
-        $representations = $this->makeRepresentations();
-        $work1 = new Work(new WorkDo(null, "RESID_01", "title01", "titel01"));
-        $work1->getRelations()->addRepresentation($representations[1]);
-        $work1->getRelations()->addRepresentation($representations[2]);
-        $work2 = new Work(new WorkDo(null, "RESID_02", "title02", "titel02"));
-        $work2->getRelations()->addRepresentation($representations[3]);
-        $work2->getRelations()->addRepresentation($representations[2]);
-        $works = $this->store->persistBatch([$work1, $work2]);
-
-        $countArray1 = $this->store->serialize(Store::getDataStore());
-        assertEquals([2, 4], array_values($countArray1));
-
-        $countArray2 = $this->store->deserialize(Store::getDataStore());
-        assertEquals($countArray1, $countArray2);
-    }
-
-    /**
-     * @return Representation[]
-     * @throws Exception
-     */
-    private function makeRepresentations(): array {
-        Dao::representationDao()->createTable(true);
-        $rep1 = new Representation(new RepresentationDo(null, "REPID_01", "iPhone"));
-        $rep1->setDate("1998");
-        $rep2 = new Representation(new RepresentationDo(null, "REPID_02", "Nikon"));
-        $rep2->setDate("1998-06");
-        $rep3 = new Representation(new RepresentationDo(null, "REPID_03", "unknown"));
-        $rep3->setDate("1998-07-15");
-        $persisted = Store::representationStore()->persistBatch([$rep1, $rep2, $rep3]);
-        assertEquals([1, 2, 3], array_keys($persisted));
-        return $persisted;
     }
 
 }

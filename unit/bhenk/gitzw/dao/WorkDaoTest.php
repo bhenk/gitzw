@@ -2,10 +2,9 @@
 
 namespace bhenk\gitzw\dao;
 
-use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
+use bhenk\TestCaseDb;
 use Exception;
-use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use function array_values;
 use function PHPUnit\Framework\assertEquals;
@@ -14,8 +13,7 @@ use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertTrue;
 
 #[LogAttribute(false)]
-class WorkDaoTest extends TestCase {
-    use ConsoleLoggerTrait;
+class WorkDaoTest extends TestCaseDb {
 
     /**
      * @throws ReflectionException
@@ -25,20 +23,16 @@ class WorkDaoTest extends TestCase {
         $dao = new WorkDao();
         $sql = $dao->getCreateTableStatement();
         assertStringContainsString("tbl_works", $sql);
-        $result = $dao->createTable(true);
+        $result = $dao->createTable();
         assertTrue($result >= 1);
     }
 
     /**
-     * @throws ReflectionException
      * @throws Exception
      */
     #[LogAttribute(true)]
     public function testInsert() {
-        $dao = new WorkDao();
-        $result = $dao->createTable(true);
-        assertTrue($result >= 1);
-        $rid = new WorkDo(null,
+        $do = new WorkDo(null,
             "hnq.work.paint.2020.0000",
             "A new work",
             "Een nieuw werk",
@@ -53,14 +47,13 @@ class WorkDaoTest extends TestCase {
             5,
             "paint"
         );
-        $dao = new WorkDao();
-        $rid2 = $dao->insert($rid);
-        assertTrue($rid->equals($rid2));
-        $selected = $dao->selectWhere("RESID='hnq.work.paint.2020.0000'");
+        $do2 = Dao::workDao()->insert($do);
+        assertTrue($do->equals($do2));
+        $selected = Dao::workDao()->selectWhere("RESID='hnq.work.paint.2020.0000'");
         assertEquals(1, count($selected));
         assertIsArray($selected);
-        $rid3 = array_values($selected)[0];
-        assertTrue($rid2->isSame($rid3));
+        $do3 = array_values($selected)[0];
+        assertTrue($do2->isSame($do3));
     }
 
 }

@@ -238,16 +238,12 @@ class CreatorStore {
         $count = 0;
         $storage = $datastore . DIRECTORY_SEPARATOR . self::SERIALIZATION_DIRECTORY;
         $filenames = array_diff(scandir($storage), array("..", ".", ".DS_Store"));
-        // create new table with different name: 'tbl_creators_tmp'
-        Dao::creatorDao()->setTemp(true);
-        Dao::creatorDao()->createTable(true);
         foreach ($filenames as $filename) {
             $creator = Creator::deserialize(
                 file_get_contents($storage . DIRECTORY_SEPARATOR . $filename));
             Dao::creatorDao()->insert($creator->getCreatorDo(), true);
             $count++;
         }
-        Dao::creatorDao()->setTemp(false);
         return $count;
     }
 

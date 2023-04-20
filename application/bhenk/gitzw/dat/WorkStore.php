@@ -71,13 +71,33 @@ class WorkStore {
         foreach ($works as $work) {
             if (is_null($work->getID())) {
                 $newWork = $this->ingest($work);
-                $results[$newWork->getID()] = $newWork;
             } else {
                 $newWork = $this->update($work);
-                $results[$newWork->getID()] = $newWork;
             }
+            $results[$newWork->getID()] = $newWork;
         }
         return $results;
+    }
+
+    /**
+     * Select Works by Creator
+     * @param int|string|Creator $creator creatorID, CRID or Creator
+     * @param int $offset start index
+     * @param int $limit max number of Works to return
+     * @return array<int, Work> array of Works or empty array if end of storage reached
+     * @throws Exception
+     */
+    public function selectByCreator(int|string|Creator $creator,
+                                    int                $offset = 0,
+                                    int                $limit = PHP_INT_MAX): array {
+        $c = Store::creatorStore()->get($creator);
+        if ($c) {
+            $creatorID = $c->getID();
+            if (!is_null($creatorID)) {
+                return $this->selectWhere("creatorId=" . $creatorID, $offset, $limit);
+            }
+        }
+        return [];
     }
 
     /**
@@ -106,7 +126,7 @@ class WorkStore {
     }
 
     /**
-     * Select Resource with given alternative RESID
+     * Select Work with given alternative RESID
      * @param string $RESID
      * @return bool|Work
      * @throws Exception
@@ -118,11 +138,11 @@ class WorkStore {
     }
 
     /**
-     * Select Resources with a where-clause
+     * Select Works with a where-clause
      * @param string $where expression
      * @param int $offset start index
-     * @param int $limit max number of Resources to return
-     * @return array<int, Work> array of Resources or empty array if end of storage reached
+     * @param int $limit max number of Works to return
+     * @return array<int, Work> array of Works or empty array if end of storage reached
      * @throws Exception
      */
     public function selectWhere(string $where, int $offset = 0, int $limit = PHP_INT_MAX): array {
@@ -136,10 +156,10 @@ class WorkStore {
     }
 
     /**
-     * Select Resources with given IDs
+     * Select Works with given IDs
      *
-     * @param int[] $IDs Resource IDs
-     * @return Work[] array of stored Resources
+     * @param int[] $IDs Work IDs
+     * @return Work[] array of stored Works
      * @throws Exception
      */
     public function selectBatch(array $IDs): array {
@@ -153,8 +173,8 @@ class WorkStore {
     }
 
     /**
-     * Delete a Resource
-     * @param int $ID ID of Resource
+     * Delete a Work
+     * @param int $ID ID of Work
      * @return int rows affected
      * @throws Exception
      */
@@ -163,9 +183,9 @@ class WorkStore {
     }
 
     /**
-     * Delete Resources
-     * @param array $IDs IDs of Resources to delete
-     * @return int count of deleted Resources
+     * Delete Works
+     * @param array $IDs IDs of Works to delete
+     * @return int count of deleted Works
      * @throws Exception
      */
     public function deleteBatch(array $IDs): int {
@@ -173,9 +193,9 @@ class WorkStore {
     }
 
     /**
-     * Delete Resources with a where-clause
+     * Delete Works with a where-clause
      * @param string $where expression
-     * @return int count of deleted Resources
+     * @return int count of deleted Works
      * @throws Exception
      */
     public function deleteWhere(string $where): int {
@@ -223,11 +243,6 @@ class WorkStore {
         $relationCount = 0;
         $storage = $datastore . DIRECTORY_SEPARATOR . self::SERIALIZATION_DIRECTORY;
         $filenames = array_diff(scandir($storage), array("..", ".", ".DS_Store"));
-        // create new table with different name: 'tbl_resources_tmp'
-        Dao::workDao()->setTemp(true);
-        Dao::workDao()->createTable(true);
-        Dao::workHasRepDao()->setTemp(true);
-        Dao::workHasRepDao()->createTable(true);
         foreach ($filenames as $filename) {
             $resource = Work::deserialize(
                 file_get_contents($storage . DIRECTORY_SEPARATOR . $filename));
@@ -235,8 +250,6 @@ class WorkStore {
             $relationCount += $resource->getRelations()->deserialize();
             $count++;
         }
-        Dao::workDao()->setTemp(false);
-        Dao::workHasRepDao()->setTemp(false);
         return [$count, $relationCount];
     }
 

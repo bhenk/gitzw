@@ -2,6 +2,7 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\dao\Dao;
 use bhenk\logger\log\Log;
 use Exception;
 use function dirname;
@@ -52,7 +53,6 @@ class Store {
      * @throws Exception if data store directory not found
      */
     public static function getDataStore(): string {
-        $dir = dirname(__DIR__);
         for ($i = 1; $i < 20; $i++) {
             $dir = dirname(__DIR__, $i);
             $data_dir = $dir . DIRECTORY_SEPARATOR . self::DATA_DIR;
@@ -111,6 +111,16 @@ class Store {
      * @throws Exception
      */
     public static function deserialize(): array {
+        Dao::workHasRepDao()->dropTable();
+        Dao::workDao()->dropTable();
+        Dao::creatorDao()->dropTable();
+        Dao::representationDao()->dropTable();
+
+        Dao::creatorDao()->createTable();
+        Dao::representationDao()->createTable();
+        Dao::workDao()->createTable();
+        Dao::workHasRepDao()->createTable();
+
         $counts = [];
         $datastore = self::getDataStore();
         $counts["creators"] = self::creatorStore()->deserialize($datastore);

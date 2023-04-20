@@ -23,7 +23,7 @@ class WorkDo extends Entity implements MultiLanguageTitleInterface, DimensionsIn
                          private ?bool   $hidden = false,
                          private int     $ordinal = -1,
                          private ?string $category = null,
-                         private int     $creatorId = -1
+                         private ?int    $creatorId = null
     ) {
         parent::__construct($ID);
     }
@@ -211,16 +211,16 @@ class WorkDo extends Entity implements MultiLanguageTitleInterface, DimensionsIn
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getCreatorId(): int {
+    public function getCreatorId(): ?int {
         return $this->creatorId;
     }
 
     /**
-     * @param int $creatorId
+     * @param int|null $creatorId
      */
-    public function setCreatorId(int $creatorId): void {
+    public function setCreatorId(?int $creatorId): void {
         $this->creatorId = $creatorId;
     }
 

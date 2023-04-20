@@ -9,7 +9,6 @@ use function file_get_contents;
 use function str_replace;
 
 class RepresentationDao extends AbstractDao {
-    use TempAwareTrait;
 
     const TABLE_NAME = "tbl_representations";
     const TABLE_DEFINITION_FILE = __DIR__ . "/sql/tbl_representations.sql";
@@ -28,11 +27,13 @@ class RepresentationDao extends AbstractDao {
         $array = $this->selectWhere("REPID='" . $REPID . "'");
         if (!empty($array)) return array_values($array)[0];
         return null;
-    }    /**
+    }
+
+    /**
      * @inheritDoc
      */
     public function getTableName(): string {
-        return self::TABLE_NAME . $this->getTableNameExtension();
+        return self::TABLE_NAME;
     }
 
     /**

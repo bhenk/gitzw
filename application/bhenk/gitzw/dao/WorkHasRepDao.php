@@ -3,17 +3,19 @@
 namespace bhenk\gitzw\dao;
 
 use bhenk\msdata\abc\AbstractJoinDao;
+use function file_get_contents;
+use function str_replace;
 
 class WorkHasRepDao extends AbstractJoinDao {
-    use TempAwareTrait;
 
     const TABLE_NAME = "tbl_work_repr";
+    const TABLE_DEFINITION_FILE = __DIR__ . "/sql/tbl_work_repr.sql";
 
     /**
      * @inheritDoc
      */
     public function getTableName(): string {
-        return self::TABLE_NAME . $this->getTableNameExtension();
+        return self::TABLE_NAME;
     }
 
     /**
@@ -21,6 +23,14 @@ class WorkHasRepDao extends AbstractJoinDao {
      */
     public function getDataObjectName(): string {
         return WorkHasRepDo::class;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCreateTableStatement(): string {
+        return str_replace("%tbl_name%", $this->getTableName(),
+            file_get_contents(self::TABLE_DEFINITION_FILE));
     }
 
 }

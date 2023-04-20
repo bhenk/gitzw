@@ -176,12 +176,12 @@ class Work implements StoredObjectInterface {
      * @throws Exception
      */
     public function getCreator(): bool|Creator {
-        if ($this->workDo->getCreatorId() < 1) return false;
+        if (is_null($this->workDo->getCreatorId())) return false;
         return Store::creatorStore()->select($this->workDo->getCreatorId());
     }
 
     public function unsetCreator(): void {
-        $this->workDo->setCreatorId(-1);
+        $this->workDo->setCreatorId(null);
     }
 
     /**
