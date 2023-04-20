@@ -132,6 +132,7 @@ class WorkRelations {
      * @param int $workId ID of the owner object
      * @return bool *true* if relations were present, *false* otherwise
      * @throws Exception
+     * @internal
      */
     public function persist(int $workId): bool {
         if (!is_null($this->representationRelations) and !empty($this->representationRelations)) {
@@ -151,7 +152,8 @@ class WorkRelations {
      */
     public function getRelation(int $representationId): ?WorkHasRepDo {
         $this->getRepresentationRelations();
-        if (in_array($representationId, array_keys($this->representationRelations))) return $this->representationRelations[$representationId];
+        if (in_array($representationId, array_keys($this->representationRelations)))
+            return $this->representationRelations[$representationId];
         return null;
     }
 

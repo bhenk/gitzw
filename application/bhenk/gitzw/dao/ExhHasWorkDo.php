@@ -11,7 +11,7 @@ class ExhHasWorkDo extends Join {
                          ?int            $FK_RIGHT = null,
                          bool            $deleted = false,
                          private int     $ordinal = -1,
-                         private ?int    $reprID = null,
+                         private ?string $reprIDs = null,
                          private ?string $description = null,
                          private bool    $hidden = false,
     ) {
@@ -33,17 +33,17 @@ class ExhHasWorkDo extends Join {
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getReprID(): ?int {
-        return $this->reprID;
+    public function getReprIDs(): ?string {
+        return $this->reprIDs;
     }
 
     /**
-     * @param int|null $reprID
+     * @param string|null $reprIDs
      */
-    public function setReprID(?int $reprID): void {
-        $this->reprID = $reprID;
+    public function setReprIDs(?string $reprIDs): void {
+        $this->reprIDs = $reprIDs;
     }
 
     /**
