@@ -11,7 +11,9 @@ use bhenk\TestCaseDb;
 use Exception;
 use function array_keys;
 use function array_values;
+use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertFileExists;
 use function PHPUnit\Framework\assertTrue;
 
@@ -115,13 +117,17 @@ class StoreTest extends TestCaseDb {
      */
     private function makeWorks(array $representations, array $creators): array {
         $work1 = new Work(new WorkDo(null, "RESID_01", "title01", "titel01"));
-        $work1->getRelations()->addRepresentation($representations[1]);
-        $work1->getRelations()->addRepresentation($representations[2]);
+        if (!empty($representations)) {
+            $work1->getRelations()->addRepresentation($representations[1]);
+            $work1->getRelations()->addRepresentation($representations[2]);
+        }
         $work1->setDate("2021-12-09");
         $work1->setCreator($creators[2]);
         $work2 = new Work(new WorkDo(null, "RESID_02", "title02", "titel02"));
-        $work2->getRelations()->addRepresentation($representations[3]);
-        $work2->getRelations()->addRepresentation($representations[2]);
+        if (!empty($representations)) {
+            $work2->getRelations()->addRepresentation($representations[3]);
+            $work2->getRelations()->addRepresentation($representations[2]);
+        }
         $work2->setCreator($creators[1]);
         return Store::workStore()->persistBatch([$work1, $work2]);
     }
@@ -129,16 +135,86 @@ class StoreTest extends TestCaseDb {
     /**
      * @throws Exception
      */
-    public function testDelete() {
+    public function testDeleteCreator() {
         $creators = $this->makeCreators();
         $representations = $this->makeRepresentations();
-        $works = $this->makeWorks($representations, $creators);
+        $this->makeWorks($representations, $creators);
 
         $creator = Store::creatorStore()->selectByCRID("CRID_02");
         $work = $creator->getWorks()[1];
         assertEquals($creator, $work->getCreator());
         assertEquals("RESID_01", $work->getRESID());
-        $this->expectException(Exception::class);
+        $exception_thrown = false;
+        try {
+            Store::creatorStore()->delete($creator->getID());
+        } catch (Exception) {
+            $exception_thrown = true;
+        }
+        assertTrue($exception_thrown);
+
+        $work->setCreator(null);
+        Store::workStore()->persist($work);
         Store::creatorStore()->delete($creator->getID());
+        assertFalse(Store::creatorStore()->selectByCRID("CRID_02"));
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testDeleteWorkWithCreator() {
+        $creators = $this->makeCreators();
+        $representations = [];
+        $this->makeWorks($representations, $creators);
+
+        $work = Store::workStore()->selectByRESID("RESID_01");
+        $creator = $work->getCreator();
+        assertEquals("CRID_02", $creator->getCRID());
+        $count = Store::workStore()->delete($work->getID());
+        assertEquals(1, $count);
+        assertEmpty($creator->getWorks());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testDeleteRepresentation() {
+        $creators = $this->makeCreators();
+        $representations = $this->makeRepresentations();
+        $this->makeWorks($representations, $creators);
+
+        $representation1 = Store::representationStore()->select(1);
+        $works = $representation1->getRelations()->getWorks();
+        assertEquals(1, count($works));
+        $work = $works[1];
+        assertEquals(Store::representationStore()->select(1),
+            $work->getRelations()->getRepresentation(1));
+
+        $exception_thrown = false;
+        try {
+            Store::representationStore()->delete(1);
+        } catch (Exception) {
+            $exception_thrown = true;
+        }
+        assertTrue($exception_thrown);
+        $work->getRelations()->removeRepresentation(1);
+        Store::workStore()->persist($work);
+        Store::representationStore()->delete(1);
+        assertFalse(Store::representationStore()->select(1));
+    }
+
+    public function testDeleteWorkWithRepresentation() {
+        $creators = $this->makeCreators();
+        $representations = $this->makeRepresentations();
+        $this->makeWorks($representations, $creators);
+
+        $work = Store::workStore()->select(1);
+        $representation = $work->getRelations()->getRepresentation(1);
+        assertEquals("REPID_01", $representation->getREPID());
+        assertEquals(1, $representation->getRelations()->getWork(1)->getID());
+
+        assertEquals(1, Store::workStore()->delete(1));
+        $representation = Store::representationStore()->select(1);
+        assertEmpty($representation->getRelations()->getWorks());
+    }
+
 }

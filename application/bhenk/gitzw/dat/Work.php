@@ -157,11 +157,15 @@ class Work implements StoredObjectInterface {
     }
 
     /**
-     * @param int|string|Creator $creator
+     * @param int|string|Creator|null $creator
      * @return bool|Creator
      * @throws Exception
      */
-    public function setCreator(int|string|Creator $creator): bool|Creator {
+    public function setCreator(int|string|Creator|null $creator): bool|Creator {
+        if (is_null($creator)) {
+            $this->workDo->setCreatorId(null);
+            return true;
+        }
         $creator = Store::creatorStore()->get($creator);
         if (!$creator) return false;
         $creatorId = $creator->getID();

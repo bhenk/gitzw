@@ -111,15 +111,19 @@ class Store {
      * @throws Exception
      */
     public static function deserialize(): array {
+        Dao::exhHasWorkDao()->dropTable();
         Dao::workHasRepDao()->dropTable();
         Dao::workDao()->dropTable();
         Dao::creatorDao()->dropTable();
         Dao::representationDao()->dropTable();
+        Dao::exhibitionDao()->dropTable();
 
+        Dao::exhibitionDao()->createTable();
         Dao::creatorDao()->createTable();
         Dao::representationDao()->createTable();
         Dao::workDao()->createTable();
         Dao::workHasRepDao()->createTable();
+        Dao::exhHasWorkDao()->createTable();
 
         $counts = [];
         $datastore = self::getDataStore();

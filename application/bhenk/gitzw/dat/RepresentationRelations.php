@@ -66,6 +66,8 @@ class RepresentationRelations {
             $relations = $this->getRelations();
             if (!empty($relations)) {
                 $this->works = Store::workStore()->selectBatch(array_keys($relations));
+            } else {
+                $this->works = [];
             }
         }
         return $this->works;

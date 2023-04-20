@@ -31,15 +31,20 @@ class TestCaseDb extends TestCase {
             "database" => "gitzw_test",     // required
         ];
         MysqlConnector::get()->setConfiguration($configuration);
+
+        Dao::exhHasWorkDao()->dropTable();
         Dao::workHasRepDao()->dropTable();
+        Dao::exhibitionDao()->dropTable();
         Dao::workDao()->dropTable();
         Dao::creatorDao()->dropTable();
         Dao::representationDao()->dropTable();
 
         Dao::creatorDao()->createTable();
         Dao::workDao()->createTable();
+        Dao::exhibitionDao()->createTable();
         Dao::representationDao()->createTable();
         Dao::workHasRepDao()->createTable();
+        Dao::exhHasWorkDao()->createTable();
 
         $this->consoleSetUp();
         Log::debug("Database is " . $configuration["database"]);

@@ -173,23 +173,34 @@ class WorkStore {
     }
 
     /**
-     * Delete a Work
-     * @param int $ID ID of Work
-     * @return int rows affected
-     * @throws Exception
-     */
-    public function delete(int $ID): int {
-        return Dao::workDao()->delete($ID);
-    }
-
-    /**
      * Delete Works
-     * @param array $IDs IDs of Works to delete
+     * @param array $works IDs, RESIDs or Works to delete
      * @return int count of deleted Works
      * @throws Exception
      */
-    public function deleteBatch(array $IDs): int {
-        return Dao::workDao()->deleteBatch($IDs);
+    public function deleteBatch(array $works): int {
+        $count = 0;
+        foreach ($works as $work) {
+            $count += $this->delete($work);
+        }
+        return $count;
+    }
+
+    /**
+     * Delete a Work
+     * @param int|string|Work $work
+     * @return int rows affected
+     * @throws Exception
+     */
+    public function delete(int|string|Work $work): int {
+        $work = $this->get($work);
+        if ($work) {
+            if (!is_null($work->getID())) {
+                Dao::workHasRepDao()->deleteWhere("FK_LEFT=" . $work->getID());
+                return Dao::workDao()->delete($work->getID());
+            }
+        }
+        return 0;
     }
 
     /**
@@ -199,7 +210,8 @@ class WorkStore {
      * @throws Exception
      */
     public function deleteWhere(string $where): int {
-        return Dao::workDao()->deleteWhere($where);
+        $works = Dao::workDao()->selectWhere($where);
+        return $this->deleteBatch($works);
     }
 
     /**

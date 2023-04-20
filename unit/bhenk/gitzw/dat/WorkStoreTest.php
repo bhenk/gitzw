@@ -117,6 +117,7 @@ class WorkStoreTest extends TestCaseDb {
     public function testSetCreator() {
         $creator = new Creator();
         $creator->setFirstname("Piet");
+        $creator->setCRID("CRID_42");
         $creator = Store::creatorStore()->persist($creator);
 
         $work = new Work();
