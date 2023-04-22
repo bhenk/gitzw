@@ -14,23 +14,20 @@ use function is_null;
  * The WorkRelations object keeps track of relations the owner {@link Work} has to
  * other objects.
  */
-class WorkRelations {
+class WorkRelations extends RelateToRep {
 
     /** @var WorkHasRepDo[]|null */
-    private ?array $representationRelations;
-
-    /** @var Representation[]|null */
-    private ?array $representations = null;
+    private ?array $repRelations;
 
     /**
      * Construct a WorkRelations object
      *
-     * @param int|null $workId ID of the owner object or *null* if it does not have an ID (yet)
-     * @param WorkHasRepDo[]|null $representationRelations
+     * @param int|null $workID ID of the owner object or *null* if it does not have an ID (yet)
+     * @param WorkHasRepDo[]|null $repRelations
      */
-    function __construct(private readonly ?int $workId = null,
-                         ?array                $representationRelations = null) {
-        $this->representationRelations = $representationRelations;
+    function __construct(private readonly ?int $workID = null,
+                         ?array                $repRelations = null) {
+        $this->repRelations = $repRelations;
     }
 
     /**
@@ -46,81 +43,49 @@ class WorkRelations {
      * @throws Exception
      */
     public function addRepresentation(int|string|Representation $representation): bool|WorkHasRepDo {
-        $representation = Store::representationStore()->get($representation);
+        $this->addMessage(false);
+        $representation = $this->applyAddRule($representation);
         if (!$representation) return false;
-        $representationId = $representation->getID();
-        if (is_null($representationId)) return false;
-        $this->getRepresentations();
-        if (in_array($representationId, array_keys($this->representations))) return false;
         ////
-        $this->representations[$representationId] = $representation;
-        $this->getRepresentationRelations();
-        $resRep = new WorkHasRepDo(null, $this->workId, $representationId);
-        $this->representationRelations[$representationId] = $resRep;
-        return $resRep;
+        $this->doAddRepr($representation);
+        $this->getRepRelations();
+        $workHasRep = new WorkHasRepDo(null, $this->workID, $representation->getID());
+        $this->repRelations[$representation->getID()] = $workHasRep;
+        return $workHasRep;
     }
 
     /**
-     * Lazily fetch the related Representations
-     *
-     * @return Representation[] array with Representation ID as key
-     * @throws Exception
-     */
-    public function getRepresentations(): array {
-        if (is_null($this->representations)) {
-            $this->representations = [];
-            $representationRelations = $this->getRepresentationRelations();
-            if (!empty($representationRelations)) {
-                $this->representations =
-                    Store::representationStore()->selectBatch(array_keys($representationRelations));
-            }
-        }
-        return $this->representations;
-    }
-
-    /**
-     * Lazily fetch the join objects aka representationRelations
+     * Lazily fetch the join objects aka repRelations
      *
      * @return WorkHasRepDo[] array with Representation ID as key
      * @throws Exception
      */
-    public function getRepresentationRelations(): array {
-        if (is_null($this->representationRelations)) {
-            if (is_null($this->workId)) {
-                $this->representationRelations = [];
+    public function getRepRelations(): array {
+        if (is_null($this->repRelations)) {
+            if (is_null($this->workID)) {
+                $this->repRelations = [];
             } else {
-                $this->representationRelations = Dao::workHasRepDao()->selectLeft($this->workId);
+                $this->repRelations = Dao::workHasRepDao()->selectLeft($this->workID);
             }
         }
-        return $this->representationRelations;
+        return $this->repRelations;
     }
 
     /**
-     * Remove a {@link Representation}
-     *
-     * The {@link $representation} can be the Representation ID (int), the Representation REPID (string)
-     * or the Representation (Object) itself. Only Representations that are persisted and are
-     * related can be removed.
-     *
-     * @param int|string|Representation $representation Representation ID (int), Representation REPID (string)
-     *    or Representation (object)
-     * @return bool *true* if representation successfully removed, *false* otherwise
+     * @inheritdoc
+     * @param Representation $representation
+     * @return bool
      * @throws Exception
      */
-    public function removeRepresentation(int|string|Representation $representation): bool {
-        $representation = Store::representationStore()->get($representation);
-        if (!$representation) return false;
-        $representationId = $representation->getID();
-        if (is_null($representationId)) return false;
-        $this->getRepresentations();
-        if (!in_array($representationId, array_keys($this->representations))) return false;
-        ////
-        unset($this->representations[$representationId]);
-        $this->getRepresentationRelations();
-        if (in_array($representationId, array_keys($this->representationRelations))) {
-            $this->representationRelations[$representationId]->setDeleted(true);
+    public function removeAllowed(Representation $representation): bool {
+        $exhHasReps = $representation->getRelations()->getExhibitionRelations();
+        if (empty($exhHasReps)) {
+            return true;
+        } else {
+            $this->addMessage("Representation:" . $representation->getID()
+                . " has " . count($exhHasReps) . " Exhibitions and cannot be removed");
+            return false;
         }
-        return true;
     }
 
     /**
@@ -135,9 +100,9 @@ class WorkRelations {
      * @internal
      */
     public function persist(int $workId): bool {
-        if (!is_null($this->representationRelations) and !empty($this->representationRelations)) {
-            $this->representationRelations =
-                Dao::workHasRepDao()->updateLeftJoin($workId, $this->representationRelations);
+        if (!is_null($this->repRelations) and !empty($this->repRelations)) {
+            $this->repRelations =
+                Dao::workHasRepDao()->updateLeftJoin($workId, $this->repRelations);
             return true;
         }
         return false;
@@ -151,23 +116,9 @@ class WorkRelations {
      * @throws Exception
      */
     public function getRelation(int $representationId): ?WorkHasRepDo {
-        $this->getRepresentationRelations();
-        if (in_array($representationId, array_keys($this->representationRelations)))
-            return $this->representationRelations[$representationId];
-        return null;
-    }
-
-    /**
-     * Get the Representation with the given Representation ID
-     *
-     * @param int $representationId ID of the Representation
-     * @return Representation|null Representation or *null* if no such representation
-     * @throws Exception
-     */
-    public function getRepresentation(int $representationId): ?Representation {
-        $this->getRepresentations();
-        if (in_array($representationId, array_keys($this->representations)))
-            return $this->representations[$representationId];
+        $this->getRepRelations();
+        if (in_array($representationId, array_keys($this->repRelations)))
+            return $this->repRelations[$representationId];
         return null;
     }
 
@@ -179,8 +130,8 @@ class WorkRelations {
      */
     public function deserialize(): int {
         $relationCount = 0;
-        if (!is_null($this->representationRelations) and !empty($this->representationRelations)) {
-            $inserted = Dao::workHasRepDao()->insertBatch($this->representationRelations, null, true);
+        if (!is_null($this->repRelations) and !empty($this->repRelations)) {
+            $inserted = Dao::workHasRepDao()->insertBatch($this->repRelations, null, true);
             $relationCount = count($inserted);
         }
         return $relationCount;

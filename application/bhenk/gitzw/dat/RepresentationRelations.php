@@ -3,6 +3,7 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\Dao;
+use bhenk\gitzw\dao\ExhHasRepDo;
 use bhenk\gitzw\dao\WorkHasRepDo;
 use Exception;
 use function array_keys;
@@ -12,12 +13,25 @@ use function is_null;
 class RepresentationRelations {
 
     /** @var WorkHasRepDo[]|null */
-    private ?array $relations = null;
+    private ?array $workRelations = null;
+
+    /** @var ExhHasRepDo[]|null */
+    private ?array $exhibitionRelations = null;
 
     /** @var Work[]|null */
     private ?array $works = null;
 
+    /** @var Exhibition[]|null */
+    private ?array $exhibitions = null;
+
     function __construct(private readonly ?int $representationId) {
+    }
+
+    public function resetRelations(): void {
+        $this->workRelations = null;
+        $this->works = null;
+        $this->exhibitionRelations = null;
+        $this->exhibitions = null;
     }
 
     /**
@@ -25,9 +39,9 @@ class RepresentationRelations {
      * @return WorkHasRepDo|null
      * @throws Exception
      */
-    public function getRelation(int $workId): ?WorkHasRepDo {
-        $this->getRelations();
-        if (in_array($workId, array_keys($this->relations))) return $this->relations[$workId];
+    public function getWorkRelation(int $workId): ?WorkHasRepDo {
+        $this->getWorkRelations();
+        if (in_array($workId, array_keys($this->workRelations))) return $this->workRelations[$workId];
         return null;
     }
 
@@ -35,15 +49,42 @@ class RepresentationRelations {
      * @return array|WorkHasRepDo[]
      * @throws Exception
      */
-    public function getRelations(): array {
-        if (is_null($this->relations)) {
+    public function getWorkRelations(): array {
+        if (is_null($this->workRelations)) {
             if (is_null($this->representationId)) {
-                $this->relations = [];
+                $this->workRelations = [];
             } else {
-                $this->relations = Dao::workHasRepDao()->selectRight($this->representationId);
+                $this->workRelations = Dao::workHasRepDao()->selectRight($this->representationId);
             }
         }
-        return $this->relations;
+        return $this->workRelations;
+    }
+
+    /**
+     * @param int $exhibitionID
+     * @return ExhHasRepDo|null
+     * @throws Exception
+     */
+    public function getExhibitionRelation(int $exhibitionID): ?ExhHasRepDo {
+        $this->getExhibitionRelations();
+        if (in_array($exhibitionID, array_keys($this->exhibitionRelations)))
+            return $this->exhibitionRelations[$exhibitionID];
+        return null;
+    }
+
+    /**
+     * @return ExhHasRepDo[]|null
+     * @throws Exception
+     */
+    public function getExhibitionRelations(): ?array {
+        if (is_null($this->exhibitionRelations)) {
+            if (is_null($this->representationId)) {
+                $this->exhibitionRelations = [];
+            } else {
+                $this->exhibitionRelations = Dao::exhHasRepDao()->selectRight($this->representationId);
+            }
+        }
+        return $this->exhibitionRelations;
     }
 
     /**
@@ -63,7 +104,7 @@ class RepresentationRelations {
      */
     public function getWorks(): array {
         if (is_null($this->works)) {
-            $relations = $this->getRelations();
+            $relations = $this->getWorkRelations();
             if (!empty($relations)) {
                 $this->works = Store::workStore()->selectBatch(array_keys($relations));
             } else {
@@ -71,6 +112,33 @@ class RepresentationRelations {
             }
         }
         return $this->works;
+    }
+
+    /**
+     * @param int $exhibitionID
+     * @return Exhibition|null
+     * @throws Exception
+     */
+    public function getExhibition(int $exhibitionID): ?Exhibition {
+        $this->getExhibitions();
+        if (in_array($exhibitionID, array_keys($this->exhibitions))) return $this->exhibitions[$exhibitionID];
+        return null;
+    }
+
+    /**
+     * @return array|Exhibition[]
+     * @throws Exception
+     */
+    public function getExhibitions(): array {
+        if (is_null($this->exhibitions)) {
+            $relations = $this->getExhibitionRelations();
+            if (!empty($relations)) {
+                $this->exhibitions = Store::exhibitionStore()->selectBatch(array_keys($relations));
+            } else {
+                $this->exhibitions = [];
+            }
+        }
+        return $this->exhibitions;
     }
 
 }

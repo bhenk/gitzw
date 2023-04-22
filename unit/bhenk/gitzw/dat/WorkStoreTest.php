@@ -2,9 +2,15 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\dao\ExhibitionDo;
+use bhenk\gitzw\dao\RepresentationDo;
+use bhenk\gitzw\dao\WorkDo;
+use bhenk\gitzw\dao\WorkHasRepDo;
 use bhenk\logger\unit\LogAttribute;
 use bhenk\TestCaseDb;
 use Exception;
+use function array_values;
+use function implode;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
@@ -136,6 +142,62 @@ class WorkStoreTest extends TestCaseDb {
 
         $work3 = Store::workStore()->select($work2->getID());
         assertFalse($work3->getCreator());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRemoveRepresentationWithExhibitions() {
+        $representation = new Representation(new RepresentationDo(null, "REPID_k"));
+        $representation = Store::representationStore()->persist($representation);
+        $work = new Work(new WorkDo(null, "RESID_X"));
+        $work->getRelations()->addRepresentation($representation);
+        $work = Store::workStore()->persist($work);
+        $exhibition = new Exhibition(new ExhibitionDo(null, "EXHID+Y"));
+        $exhibition->getRelations()->addRepresentation($representation);
+        $exhibition = Store::exhibitionStore()->persist($exhibition);
+
+        assertFalse($work->getRelations()->removeRepresentation($representation));
+        assertEquals("Representation:1 has 1 Exhibitions and cannot be removed",
+            $work->getRelations()->getLastMessage());
+
+        assertTrue($exhibition->getRelations()->removeRepresentation($representation));
+        assertFalse($exhibition->getRelations()->getLastMessage());
+        Store::exhibitionStore()->persist($exhibition);
+
+        assertTrue($work->getRelations()->removeRepresentation($representation));
+        assertFalse($work->getRelations()->getLastMessage());
+        assertEmpty($work->getRelations()->getRepresentations());
+        /** @var WorkHasRepDo $workHasRepDo */
+        $workHasRepDo = array_values($work->getRelations()->getRepRelations())[0];
+        assertTrue($workHasRepDo->isDeleted());
+
+        $work = Store::workStore()->persist($work);
+        assertEmpty($work->getRelations()->getRepresentations());
+        assertEmpty($work->getRelations()->getRepRelations());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testDeleteWorkWithRepresentationWithExhibition() {
+        $representation = new Representation(new RepresentationDo(null, "REPID_k"));
+        $representation = Store::representationStore()->persist($representation);
+        $work = new Work(new WorkDo(null, "RESID_X"));
+        $work->getRelations()->addRepresentation($representation);
+        $work = Store::workStore()->persist($work);
+        $exhibition = new Exhibition(new ExhibitionDo(null, "EXHID+Y"));
+        $exhibition->getRelations()->addRepresentation($representation);
+        $exhibition = Store::exhibitionStore()->persist($exhibition);
+
+        assertEquals(0, Store::workStore()->delete($work));
+        assertEquals("Work:1 has 1 Exhibition and cannot be deleted", Store::workStore()->getLastMessage());
+
+        $exhibition->getRelations()->removeRepresentation($representation);
+        Store::exhibitionStore()->persist($exhibition);
+        $work = Store::workStore()->select(1);
+        assertEquals(1, Store::workStore()->delete($work),
+            implode(PHP_EOL . "- ", Store::workStore()->getMessages()));
     }
 
 }

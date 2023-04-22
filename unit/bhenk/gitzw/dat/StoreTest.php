@@ -3,6 +3,7 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\CreatorDo;
+use bhenk\gitzw\dao\ExhibitionDo;
 use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\dao\WorkDo;
 use bhenk\gitzw\dao\WorkHasRepDo;
@@ -37,6 +38,7 @@ class StoreTest extends TestCaseDb {
         $creators1 = $this->makeCreators();
         $representations1 = $this->makeRepresentations();
         $works1 = $this->makeWorks($representations1, $creators1);
+        $exhibitions1 = $this->makeExhibitions($representations1);
         // serialize
         $counts = Store::serialize();
         $filename = Store::getDataStore() . DIRECTORY_SEPARATOR . "creators"
@@ -58,7 +60,12 @@ class StoreTest extends TestCaseDb {
             assertTrue($cre1->isSame($cre2));
         }
         $representations2 = Store::representationStore()->selectBatch(array_keys($representations1));
-        assertEquals($representations1, $representations2);
+        for ($i = 1; $i < 3; $i++) {
+            $rep_do1 = $representations1[$i]->getRepresentationDo();
+            $rep_do2 = $representations2[$i]->getRepresentationDo();
+            assertTrue($rep_do1->isSame($rep_do2));
+        }
+
 
         $works2 = Store::workStore()->selectBatch(array_keys($works1));
         for ($i = 1; $i < 3; $i++) {
@@ -66,8 +73,8 @@ class StoreTest extends TestCaseDb {
             $wodo2 = $works2[$i]->getWorkDo();
             assertTrue($wodo1->isSame($wodo2));
 
-            $relations1 = $works1[$i]->getRelations()->getRepresentationRelations();
-            $relations2 = $works2[$i]->getRelations()->getRepresentationRelations();
+            $relations1 = $works1[$i]->getRelations()->getRepRelations();
+            $relations2 = $works2[$i]->getRelations()->getRepRelations();
             for ($j = 0; $j < 2; $j++) {
                 /** @var WorkHasRepDo $whr1 */
                 $whr1 = array_values($relations1)[$j];
@@ -79,6 +86,15 @@ class StoreTest extends TestCaseDb {
         $creator = Store::creatorStore()->selectByCRID("CRID_02");
         $works = $creator->getWorks();
         assertEquals($creator, $works[1]->getCreator());
+
+        $exhibition1 = Store::exhibitionStore()->select(1);
+        assertEquals("2020", $exhibition1->getDate());
+        $reps = $exhibition1->getRelations()->getRepresentations();
+        assertEquals(2, count($reps));
+        assertEquals("REPID_01", $exhibition1->getRelations()->getRepresentation(1)->getREPID());
+
+        $exhibition2 = Store::exhibitionStore()->select(2);
+        assertEquals("2020-12", $exhibition2->getDate());
     }
 
     /**
@@ -135,6 +151,21 @@ class StoreTest extends TestCaseDb {
     /**
      * @throws Exception
      */
+    private function makeExhibitions(array $representations): array {
+        $exhibition1 = new Exhibition(new ExhibitionDo(null, "EXHID_01", "6 x 7"));
+        $exhibition1->getRelations()->addRepresentation($representations[1]);
+        $exhibition1->getRelations()->addRepresentation($representations[3]);
+        $exhibition1->setDate("2020");
+
+        $exhibition2 = new Exhibition(new ExhibitionDo(null, "EXHID_02", "The White Aeroplane"));
+        $exhibition2->getRelations()->addRepresentation($representations[2]);
+        $exhibition2->setDate("2020-12");
+        return Store::exhibitionStore()->persistBatch([$exhibition1, $exhibition2]);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testDeleteCreator() {
         $creators = $this->makeCreators();
         $representations = $this->makeRepresentations();
@@ -144,17 +175,13 @@ class StoreTest extends TestCaseDb {
         $work = $creator->getWorks()[1];
         assertEquals($creator, $work->getCreator());
         assertEquals("RESID_01", $work->getRESID());
-        $exception_thrown = false;
-        try {
-            Store::creatorStore()->delete($creator->getID());
-        } catch (Exception) {
-            $exception_thrown = true;
-        }
-        assertTrue($exception_thrown);
+        assertEquals(0, Store::creatorStore()->delete($creator->getID()));
+        assertEquals("Creator:2 has 1 Works and cannot be deleted", Store::creatorStore()->getLastMessage());
 
         $work->setCreator(null);
         Store::workStore()->persist($work);
-        Store::creatorStore()->delete($creator->getID());
+        assertEquals(1, Store::creatorStore()->delete($creator->getID()));
+        assertFalse(Store::creatorStore()->getLastMessage());
         assertFalse(Store::creatorStore()->selectByCRID("CRID_02"));
     }
 
@@ -189,16 +216,14 @@ class StoreTest extends TestCaseDb {
         assertEquals(Store::representationStore()->select(1),
             $work->getRelations()->getRepresentation(1));
 
-        $exception_thrown = false;
-        try {
-            Store::representationStore()->delete(1);
-        } catch (Exception) {
-            $exception_thrown = true;
-        }
-        assertTrue($exception_thrown);
+        $result = Store::representationStore()->delete(1);
+        assertEquals(0, $result);
+        assertEquals("Representation:1 is owned by 1 Works and cannot be deleted",
+            Store::representationStore()->getLastMessage());
+
         $work->getRelations()->removeRepresentation(1);
         Store::workStore()->persist($work);
-        Store::representationStore()->delete(1);
+        assertEquals(1, Store::representationStore()->delete(1));
         assertFalse(Store::representationStore()->select(1));
     }
 

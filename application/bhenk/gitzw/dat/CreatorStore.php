@@ -23,6 +23,8 @@ use function sprintf;
  *
  */
 class CreatorStore {
+    use RulesTrait;
+
     const SERIALIZATION_DIRECTORY = "creators";
 
     /**
@@ -171,22 +173,15 @@ class CreatorStore {
 
     /**
      * Delete a Creator
-     * @param int $ID ID of Creator
+     * @param int|string|Creator $creator
      * @return int count of deleted Creators
      * @throws Exception
      */
-    public function delete(int $ID): int {
-        return Dao::creatorDao()->delete($ID);
-    }
-
-    /**
-     * Delete Creators
-     * @param array $IDs IDs of Creators to delete
-     * @return int count of deleted Creators
-     * @throws Exception
-     */
-    public function deleteBatch(array $IDs): int {
-        return Dao::creatorDao()->deleteBatch($IDs);
+    public function delete(int|string|Creator $creator): int {
+        $this->resetMessages();
+        $creator = $this->creatorCanBeDeleted($creator);
+        if (!$creator) return 0;
+        return Dao::creatorDao()->delete($creator->getID());
     }
 
     /**
@@ -196,7 +191,27 @@ class CreatorStore {
      * @throws Exception
      */
     public function deleteWhere(string $where): int {
-        return Dao::creatorDao()->deleteWhere($where);
+        $creators = Store::creatorStore()->selectWhere($where);
+        return $this->deleteBatch($creators);
+    }
+
+    /**
+     * Delete Creators
+     *
+     * This method filters Creators before deletion on rules for creator deletion
+     *
+     * @param int[]|string[]|Creator[] $creators can be mixed array
+     * @return int count of deleted Creators
+     * @throws Exception
+     */
+    public function deleteBatch(array $creators): int {
+        $this->resetMessages();
+        $IDs = [];
+        foreach ($creators as $creator) {
+            $creator = $this->creatorCanBeDeleted($creator);
+            if ($creator) $IDs[] = $creator->getID();
+        }
+        return Dao::creatorDao()->deleteBatch($IDs);
     }
 
     /**

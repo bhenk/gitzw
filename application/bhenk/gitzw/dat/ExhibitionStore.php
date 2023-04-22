@@ -116,7 +116,7 @@ class ExhibitionStore {
         $exhibition = $this->get($exhibition);
         if ($exhibition) {
             if (!is_null($exhibition->getID())) {
-                Dao::exhHasWorkDao()->deleteWhere("FK_LEFT=" . $exhibition->getID());
+                Dao::exhHasRepDao()->deleteWhere("FK_LEFT=" . $exhibition->getID());
                 return Dao::exhibitionDao()->delete($exhibition->getID());
             }
         }
@@ -185,7 +185,7 @@ class ExhibitionStore {
      * @throws Exception
      */
     public function deleteWhere(string $where): int {
-        $exhibitions = Dao::exhibitionDao()->selectWhere($where);
+        $exhibitions = Store::exhibitionStore()->selectWhere($where);
         return $this->deleteBatch($exhibitions);
     }
 
@@ -211,7 +211,7 @@ class ExhibitionStore {
                     . sprintf("%05d", $resource->getID()) . ".json";
                 file_put_contents($file, $resource->serialize());
                 $count++;
-                $countRelations += count($resource->getRelations()->getWorkRelations());
+                $countRelations += count($resource->getRelations()->getRepRelations());
             }
             $offset += $limit;
         } while (!empty($resources));

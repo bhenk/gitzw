@@ -15,6 +15,7 @@ use function is_null;
  * Store for obtaining and persisting Works
  */
 class WorkStore {
+    use RulesTrait;
 
     const SERIALIZATION_DIRECTORY = "works";
 
@@ -179,9 +180,10 @@ class WorkStore {
      * @throws Exception
      */
     public function deleteBatch(array $works): int {
+        $this->resetMessages();
         $count = 0;
         foreach ($works as $work) {
-            $count += $this->delete($work);
+            $count += $this->delete($work, false);
         }
         return $count;
     }
@@ -189,18 +191,16 @@ class WorkStore {
     /**
      * Delete a Work
      * @param int|string|Work $work
+     * @param bool $resetMessages
      * @return int rows affected
      * @throws Exception
      */
-    public function delete(int|string|Work $work): int {
-        $work = $this->get($work);
-        if ($work) {
-            if (!is_null($work->getID())) {
-                Dao::workHasRepDao()->deleteWhere("FK_LEFT=" . $work->getID());
-                return Dao::workDao()->delete($work->getID());
-            }
-        }
-        return 0;
+    public function delete(int|string|Work $work, bool $resetMessages = true): int {
+        if ($resetMessages) $this->resetMessages();
+        $work = $this->workCanBeDeleted($work);
+        if (!$work) return 0;
+        Dao::workHasRepDao()->deleteWhere("FK_LEFT=" . $work->getID());
+        return Dao::workDao()->delete($work->getID());
     }
 
     /**
@@ -210,7 +210,7 @@ class WorkStore {
      * @throws Exception
      */
     public function deleteWhere(string $where): int {
-        $works = Dao::workDao()->selectWhere($where);
+        $works = Store::workStore()->selectWhere($where);
         return $this->deleteBatch($works);
     }
 
@@ -236,7 +236,7 @@ class WorkStore {
                     . sprintf("%05d", $resource->getID()) . ".json";
                 file_put_contents($file, $resource->serialize());
                 $count++;
-                $countRelations += count($resource->getRelations()->getRepresentationRelations());
+                $countRelations += count($resource->getRelations()->getRepRelations());
             }
             $offset += $limit;
         } while (!empty($resources));

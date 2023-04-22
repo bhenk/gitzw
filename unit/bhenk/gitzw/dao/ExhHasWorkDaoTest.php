@@ -16,9 +16,9 @@ class ExhHasWorkDaoTest extends TestCase {
      * @throws ReflectionException
      */
     public function testGetCreateTableStatement() {
-        $statement = Dao::exhHasWorkDao()->getCreateTableStatement();
+        $statement = Dao::exhHasRepDao()->getCreateTableStatement();
         Log::debug("statement: ", [$statement]);
-        self::assertStringContainsString(ExhHasWorkDao::TABLE_NAME, $statement);
+        self::assertStringContainsString(ExhHasRepDao::TABLE_NAME, $statement);
     }
 
 }

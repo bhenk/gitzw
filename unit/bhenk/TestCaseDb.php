@@ -32,7 +32,7 @@ class TestCaseDb extends TestCase {
         ];
         MysqlConnector::get()->setConfiguration($configuration);
 
-        Dao::exhHasWorkDao()->dropTable();
+        Dao::exhHasRepDao()->dropTable();
         Dao::workHasRepDao()->dropTable();
         Dao::exhibitionDao()->dropTable();
         Dao::workDao()->dropTable();
@@ -44,7 +44,7 @@ class TestCaseDb extends TestCase {
         Dao::exhibitionDao()->createTable();
         Dao::representationDao()->createTable();
         Dao::workHasRepDao()->createTable();
-        Dao::exhHasWorkDao()->createTable();
+        Dao::exhHasRepDao()->createTable();
 
         $this->consoleSetUp();
         Log::debug("Database is " . $configuration["database"]);

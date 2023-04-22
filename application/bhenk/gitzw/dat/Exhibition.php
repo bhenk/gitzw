@@ -2,7 +2,7 @@
 
 namespace bhenk\gitzw\dat;
 
-use bhenk\gitzw\dao\ExhHasWorkDo;
+use bhenk\gitzw\dao\ExhHasRepDo;
 use bhenk\gitzw\dao\ExhibitionDo;
 use bhenk\gitzw\model\DateTrait;
 use bhenk\gitzw\model\MultiLanguageTitleTrait;
@@ -40,13 +40,13 @@ class Exhibition implements StoredObjectInterface {
         $array = json_decode($serialized, true);
         $exhibitionArray = $array["exhibition"];
         $exhibitionDo = ExhibitionDo::fromArray($exhibitionArray["exhibitionDo"]);
-        $rels = $exhibitionArray["relations"];
-        $workRelations = [];
+        $rels = $exhibitionArray["exhHasRep"];
+        $repRelations = [];
         foreach ($rels as $relation) {
-            $exhHasWorkDo = ExhHasWorkDo::fromArray($relation);
-            $workRelations[$exhHasWorkDo->getFkRight()] = $exhHasWorkDo;
+            $exhHasWorkDo = ExhHasRepDo::fromArray($relation);
+            $repRelations[$exhHasWorkDo->getFkRight()] = $exhHasWorkDo;
         }
-        return new Exhibition($exhibitionDo, $workRelations);
+        return new Exhibition($exhibitionDo, $repRelations);
     }
 
     /**
@@ -56,11 +56,11 @@ class Exhibition implements StoredObjectInterface {
     public function serialize(): string {
         $array = ["exhibitionDo" => $this->exhibitionDo->toArray()];
         $rels = [];
-        foreach ($this->relations->getWorkRelations() as $exhHasWork) {
-            $exhHasWork->setFkLeft($this->getID());
-            $rels[$exhHasWork->getFkRight()] = $exhHasWork->toArray();
+        foreach ($this->relations->getRepRelations() as $exhHasRepDo) {
+            $exhHasRepDo->setFkLeft($this->getID());
+            $rels[$exhHasRepDo->getFkRight()] = $exhHasRepDo->toArray();
         }
-        $array["relations"] = $rels;
+        $array["exhHasRep"] = $rels;
         return json_encode(["exhibition" => $array], JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
     }
 

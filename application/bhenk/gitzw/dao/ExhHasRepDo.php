@@ -4,14 +4,13 @@ namespace bhenk\gitzw\dao;
 
 use bhenk\msdata\abc\Join;
 
-class ExhHasWorkDo extends Join {
+class ExhHasRepDo extends Join {
 
     function __construct(?int            $ID = null,
                          ?int            $FK_LEFT = null,
                          ?int            $FK_RIGHT = null,
                          bool            $deleted = false,
                          private int     $ordinal = -1,
-                         private ?string $reprIDs = null,
                          private ?string $description = null,
                          private bool    $hidden = false,
     ) {
@@ -30,20 +29,6 @@ class ExhHasWorkDo extends Join {
      */
     public function setOrdinal(int $ordinal): void {
         $this->ordinal = $ordinal;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getReprIDs(): ?string {
-        return $this->reprIDs;
-    }
-
-    /**
-     * @param string|null $reprIDs
-     */
-    public function setReprIDs(?string $reprIDs): void {
-        $this->reprIDs = $reprIDs;
     }
 
     /**

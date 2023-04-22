@@ -11,7 +11,7 @@ final class Dao {
     private static ?WorkDao $workDao = null;
     private static ?CreatorDao $creatorDao = null;
     private static ?ExhibitionDao $exhibitionDao = null;
-    private static ?ExhHasWorkDao $exhHasWorkDao = null;
+    private static ?ExhHasRepDao $exhHasRepDao = null;
 
     /**
      * @return RepresentationDao
@@ -64,13 +64,13 @@ final class Dao {
     }
 
     /**
-     * @return ExhHasWorkDao|null
+     * @return ExhHasRepDao|null
      */
-    public static function exhHasWorkDao(): ?ExhHasWorkDao {
-        if (is_null(self::$exhHasWorkDao)) {
-            self::$exhHasWorkDao = new ExhHasWorkDao();
+    public static function exhHasRepDao(): ?ExhHasRepDao {
+        if (is_null(self::$exhHasRepDao)) {
+            self::$exhHasRepDao = new ExhHasRepDao();
         }
-        return self::$exhHasWorkDao;
+        return self::$exhHasRepDao;
     }
 
 }

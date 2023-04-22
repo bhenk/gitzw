@@ -48,7 +48,7 @@ class Work implements StoredObjectInterface {
         $array = json_decode($serialized, true);
         $workArray = $array["work"];
         $workDo = WorkDo::fromArray($workArray["workDo"]);
-        $rels = $workArray["relations"];
+        $rels = $workArray["workHasRep"];
         $representationRelations = [];
         foreach ($rels as $relation) {
             $resJoinRepDo = WorkHasRepDo::fromArray($relation);
@@ -63,11 +63,11 @@ class Work implements StoredObjectInterface {
     public function serialize(): string {
         $array = ["workDo" => $this->workDo->toArray()];
         $rels = [];
-        foreach ($this->relations->getRepresentationRelations() as $resJoinRepDo) {
+        foreach ($this->relations->getRepRelations() as $resJoinRepDo) {
             $resJoinRepDo->setFkLeft($this->getID());
             $rels[$resJoinRepDo->getFkRight()] = $resJoinRepDo->toArray();
         }
-        $array["relations"] = $rels;
+        $array["workHasRep"] = $rels;
         return json_encode(["work" => $array], JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
     }
 

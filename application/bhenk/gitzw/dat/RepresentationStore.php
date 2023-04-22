@@ -15,6 +15,7 @@ use function is_null;
  * Store for obtaining and persisting Representations
  */
 class RepresentationStore {
+    use RulesTrait;
 
     const SERIALIZATION_DIRECTORY = "representations";
 
@@ -162,32 +163,55 @@ class RepresentationStore {
 
     /**
      * Delete a Representation
-     * @param int $ID ID of Representation
+     * @param int|string|Representation $representation
      * @return int count of deleted Representations
      * @throws Exception
      */
-    public function delete(int $ID): int {
-        return Dao::representationDao()->delete($ID);
-    }
-
-    /**
-     * Delete Representations
-     * @param array $IDs IDs of Representations to delete
-     * @return int count of deleted Representations
-     * @throws Exception
-     */
-    public function deleteBatch(array $IDs): int {
-        return Dao::representationDao()->deleteBatch($IDs);
+    public function delete(int|string|Representation $representation): int {
+        $this->resetMessages();
+        $representation = $this->representationCanBeDeleted($representation);
+        if ($representation) {
+            Log::info("Delete Representation:" . $representation->getID());
+            return Dao::representationDao()->delete($representation->getID());
+        }
+        return 0;
     }
 
     /**
      * Delete Representations with a where-clause
+     *
+     * This method filters Representations that can be deleted.
+     *
+     * See {@link RulesTrait::getLastMessage()} for reasons.
+     *
      * @param string $where expression
      * @return int count of deleted Representations
      * @throws Exception
      */
     public function deleteWhere(string $where): int {
-        return Dao::representationDao()->deleteWhere($where);
+        $representations = $this->selectWhere($where);
+        return $this->deleteBatch($representations);
+    }
+
+    /**
+     * Delete Representations
+     *
+     * This method filters Representations that can be deleted.
+     *
+     * See {@link RulesTrait::getLastMessage()} for reasons.
+     *
+     * @param int[]|string[]|Representation[] $representations Representations to delete
+     * @return int count of deleted Representations
+     * @throws Exception
+     */
+    public function deleteBatch(array $representations): int {
+        $this->resetMessages();
+        $IDs = [];
+        foreach ($representations as $representation) {
+            $representation = $this->representationCanBeDeleted($representation);
+            if ($representation) $IDs[] = $representation->getID();
+        }
+        return Dao::representationDao()->deleteBatch($IDs);
     }
 
     /**

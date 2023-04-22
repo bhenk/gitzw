@@ -6,10 +6,10 @@ use bhenk\msdata\abc\AbstractJoinDao;
 use function file_get_contents;
 use function str_replace;
 
-class ExhHasWorkDao extends AbstractJoinDao {
+class ExhHasRepDao extends AbstractJoinDao {
 
-    const TABLE_NAME = "tbl_exh_work";
-    const TABLE_DEFINITION_FILE = __DIR__ . "/sql/tbl_exh_work.sql";
+    const TABLE_NAME = "tbl_exh_rep";
+    const TABLE_DEFINITION_FILE = __DIR__ . "/sql/tbl_exh_rep.sql";
 
     /**
      * @inheritDoc
@@ -22,7 +22,7 @@ class ExhHasWorkDao extends AbstractJoinDao {
      * @inheritDoc
      */
     public function getDataObjectName(): string {
-        return ExhHasWorkDo::class;
+        return ExhHasRepDo::class;
     }
 
     /**

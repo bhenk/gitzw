@@ -30,6 +30,7 @@ class Store {
     private static ?RepresentationStore $representationStore = null;
     private static ?WorkStore $workStore = null;
     private static ?CreatorStore $creatorStore = null;
+    private static ?ExhibitionStore $exhibitionStore = null;
 
     /**
      * @return int[] counts of serialized business objects
@@ -40,9 +41,12 @@ class Store {
         $datastore = self::getDataStore();
         $counts["creators"] = self::creatorStore()->serialize($datastore);
         $counts["representations"] = self::representationStore()->serialize($datastore);
-        $countArray = self::workStore()->serialize($datastore);
-        $counts["works"] = $countArray[0];
-        $counts["work_relations"] = $countArray[1];
+        $countWorks = self::workStore()->serialize($datastore);
+        $counts["works"] = $countWorks[0];
+        $counts["work_relations"] = $countWorks[1];
+        $countExhibitions = self::exhibitionStore()->serialize($datastore);
+        $counts["exhibitions"] = $countExhibitions[0];
+        $counts["exhibition_relations"] = $countExhibitions[1];
         return $counts;
     }
 
@@ -107,11 +111,21 @@ class Store {
     }
 
     /**
+     * @return ExhibitionStore|null
+     */
+    public static function exhibitionStore(): ?ExhibitionStore {
+        if (is_null(self::$exhibitionStore)) {
+            self::$exhibitionStore = new ExhibitionStore();
+        }
+        return self::$exhibitionStore;
+    }
+
+    /**
      * @return int[] counts of deserialized business objects
      * @throws Exception
      */
     public static function deserialize(): array {
-        Dao::exhHasWorkDao()->dropTable();
+        Dao::exhHasRepDao()->dropTable();
         Dao::workHasRepDao()->dropTable();
         Dao::workDao()->dropTable();
         Dao::creatorDao()->dropTable();
@@ -123,17 +137,19 @@ class Store {
         Dao::representationDao()->createTable();
         Dao::workDao()->createTable();
         Dao::workHasRepDao()->createTable();
-        Dao::exhHasWorkDao()->createTable();
+        Dao::exhHasRepDao()->createTable();
 
         $counts = [];
         $datastore = self::getDataStore();
         $counts["creators"] = self::creatorStore()->deserialize($datastore);
         $counts["representations"] = self::representationStore()->deserialize($datastore);
-        $countArray = self::workStore()->deserialize($datastore);
-        $counts["works"] = $countArray[0];
-        $counts["work_relations"] = $countArray[1];
+        $countWorks = self::workStore()->deserialize($datastore);
+        $counts["works"] = $countWorks[0];
+        $counts["work_relations"] = $countWorks[1];
+        $countExhibitions = self::exhibitionStore()->deserialize($datastore);
+        $counts["exhibitions"] = $countExhibitions[0];
+        $counts["exhibition_relations"] = $countExhibitions[1];
         return $counts;
     }
-
 
 }
