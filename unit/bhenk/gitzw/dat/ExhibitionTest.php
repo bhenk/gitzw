@@ -26,7 +26,8 @@ class ExhibitionTest extends TestCaseDb {
 
         $representation = Store::representationStore()->persist($representation);
         assertFalse($exhibition->getRelations()->addRepresentation($representation));
-        assertEquals("Representation not related to a Work", $exhibition->getRelations()->getLastMessage());
+        assertEquals("Representation:1 not related to a Work and cannot be added to Exhibition:",
+            $exhibition->getRelations()->getLastMessage());
 
         $work = new Work(new WorkDo(null, "RESID_D"));
         $do = $work->getRelations()->addRepresentation($representation);

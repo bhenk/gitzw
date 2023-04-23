@@ -10,6 +10,9 @@ use function array_keys;
 use function in_array;
 use function is_null;
 
+/**
+ * Keeps track of work and exhibition relations for the owner Representation
+ */
 class RepresentationRelations {
 
     /** @var WorkHasRepDo[]|null */
@@ -27,6 +30,14 @@ class RepresentationRelations {
     function __construct(private readonly ?int $representationId) {
     }
 
+    /**
+     * Reset relations
+     *
+     * Forces this object to nullify works, work relations, exhibitions and exhibition relations,
+     * effectively forcing it to fetch said collections anew from database when requested.
+     *
+     * @return void
+     */
     public function resetRelations(): void {
         $this->workRelations = null;
         $this->works = null;
@@ -35,8 +46,10 @@ class RepresentationRelations {
     }
 
     /**
-     * @param int $workId
-     * @return WorkHasRepDo|null
+     * Get the work relation for the given Work ID
+     *
+     * @param int $workId ID of Work
+     * @return WorkHasRepDo|null work relation or *null* if no such relation exists
      * @throws Exception
      */
     public function getWorkRelation(int $workId): ?WorkHasRepDo {
@@ -46,7 +59,8 @@ class RepresentationRelations {
     }
 
     /**
-     * @return array|WorkHasRepDo[]
+     * Get all work relations of the owner Representation
+     * @return array|WorkHasRepDo[] array<workID, WorkHasRepDo> with workID as key
      * @throws Exception
      */
     public function getWorkRelations(): array {
@@ -61,8 +75,9 @@ class RepresentationRelations {
     }
 
     /**
-     * @param int $exhibitionID
-     * @return ExhHasRepDo|null
+     * Get the exhibition relation for the given Exhibition ID
+     * @param int $exhibitionID ID of Exhibition
+     * @return ExhHasRepDo|null exhibition relation or *null* if no such relation exists
      * @throws Exception
      */
     public function getExhibitionRelation(int $exhibitionID): ?ExhHasRepDo {
@@ -73,10 +88,12 @@ class RepresentationRelations {
     }
 
     /**
-     * @return ExhHasRepDo[]|null
+     * Get all exhibition relations of the owner Representation
+     *
+     * @return ExhHasRepDo[] array<exhibitionID, ExhHasRepDo> with exhibitionID as key
      * @throws Exception
      */
-    public function getExhibitionRelations(): ?array {
+    public function getExhibitionRelations(): array {
         if (is_null($this->exhibitionRelations)) {
             if (is_null($this->representationId)) {
                 $this->exhibitionRelations = [];
@@ -88,8 +105,9 @@ class RepresentationRelations {
     }
 
     /**
-     * @param int $workId
-     * @return Work|null
+     * Get the Work with the given ID related to this Representation
+     * @param int $workId ID of Work
+     * @return Work|null Work or *null* if no relation exists
      * @throws Exception
      */
     public function getWork(int $workId): ?Work {
@@ -99,7 +117,8 @@ class RepresentationRelations {
     }
 
     /**
-     * @return Work[]
+     * Get all Works related to this Representation
+     * @return Work[] array<workId, Work> with workId as key
      * @throws Exception
      */
     public function getWorks(): array {
@@ -115,8 +134,9 @@ class RepresentationRelations {
     }
 
     /**
-     * @param int $exhibitionID
-     * @return Exhibition|null
+     * Get the Exhibition with the given ID related to this Representation
+     * @param int $exhibitionID ID of Exhibition
+     * @return Exhibition|null Exhibition or *null* if no relation exists
      * @throws Exception
      */
     public function getExhibition(int $exhibitionID): ?Exhibition {
@@ -126,7 +146,8 @@ class RepresentationRelations {
     }
 
     /**
-     * @return array|Exhibition[]
+     * Get all Exhibitions related to this Representation
+     * @return array|Exhibition[] array<exhibitionId, Exhibition> with exhibitionId as key
      * @throws Exception
      */
     public function getExhibitions(): array {

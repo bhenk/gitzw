@@ -33,48 +33,6 @@ class Store {
     private static ?ExhibitionStore $exhibitionStore = null;
 
     /**
-     * @return int[] counts of serialized business objects
-     * @throws Exception
-     */
-    public static function serialize(): array {
-        $counts = [];
-        $datastore = self::getDataStore();
-        $counts["creators"] = self::creatorStore()->serialize($datastore);
-        $counts["representations"] = self::representationStore()->serialize($datastore);
-        $countWorks = self::workStore()->serialize($datastore);
-        $counts["works"] = $countWorks[0];
-        $counts["work_relations"] = $countWorks[1];
-        $countExhibitions = self::exhibitionStore()->serialize($datastore);
-        $counts["exhibitions"] = $countExhibitions[0];
-        $counts["exhibition_relations"] = $countExhibitions[1];
-        return $counts;
-    }
-
-    /**
-     * Get the data store directory for (de)serialization
-     *
-     * @return string data store directory
-     * @throws Exception if data store directory not found
-     */
-    public static function getDataStore(): string {
-        for ($i = 1; $i < 20; $i++) {
-            $dir = dirname(__DIR__, $i);
-            $data_dir = $dir . DIRECTORY_SEPARATOR . self::DATA_DIR;
-            if (is_dir($data_dir)) {
-                $store_dir = $data_dir . DIRECTORY_SEPARATOR . self::STORE_DIR;
-                if (!is_dir($store_dir)) {
-                    mkdir($store_dir);
-                }
-                Log::debug("Data store directory found after " . $i . " iterations", [$store_dir]);
-                return $store_dir;
-            }
-        }
-        $msg = "Data store directory 'data/store' not found";
-        Log::error($msg);
-        throw new Exception($msg);
-    }
-
-    /**
      * Get the store for Creators
      *
      * @return CreatorStore store for Creators
@@ -118,6 +76,48 @@ class Store {
             self::$exhibitionStore = new ExhibitionStore();
         }
         return self::$exhibitionStore;
+    }
+
+    /**
+     * Get the data store directory for (de)serialization
+     *
+     * @return string data store directory
+     * @throws Exception if data store directory not found
+     */
+    public static function getDataStore(): string {
+        for ($i = 1; $i < 20; $i++) {
+            $dir = dirname(__DIR__, $i);
+            $data_dir = $dir . DIRECTORY_SEPARATOR . self::DATA_DIR;
+            if (is_dir($data_dir)) {
+                $store_dir = $data_dir . DIRECTORY_SEPARATOR . self::STORE_DIR;
+                if (!is_dir($store_dir)) {
+                    mkdir($store_dir);
+                }
+                Log::debug("Data store directory found after " . $i . " iterations", [$store_dir]);
+                return $store_dir;
+            }
+        }
+        $msg = "Data store directory 'data/store' not found";
+        Log::error($msg);
+        throw new Exception($msg);
+    }
+
+    /**
+     * @return int[] counts of serialized business objects
+     * @throws Exception
+     */
+    public static function serialize(): array {
+        $counts = [];
+        $datastore = self::getDataStore();
+        $counts["creators"] = self::creatorStore()->serialize($datastore);
+        $counts["representations"] = self::representationStore()->serialize($datastore);
+        $countWorks = self::workStore()->serialize($datastore);
+        $counts["works"] = $countWorks[0];
+        $counts["work_relations"] = $countWorks[1];
+        $countExhibitions = self::exhibitionStore()->serialize($datastore);
+        $counts["exhibitions"] = $countExhibitions[0];
+        $counts["exhibition_relations"] = $countExhibitions[1];
+        return $counts;
     }
 
     /**

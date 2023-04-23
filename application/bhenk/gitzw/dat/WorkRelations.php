@@ -14,7 +14,7 @@ use function is_null;
  * The WorkRelations object keeps track of relations the owner {@link Work} has to
  * other objects.
  */
-class WorkRelations extends RelateToRep {
+class WorkRelations extends RepresentationOwner {
 
     /** @var WorkHasRepDo[]|null */
     private ?array $repRelations;
@@ -30,6 +30,10 @@ class WorkRelations extends RelateToRep {
         $this->repRelations = $repRelations;
     }
 
+    public function getOwnerID(): ?string {
+        return $this->workID;
+    }
+
     /**
      * Add a {@link Representation}
      *
@@ -43,8 +47,8 @@ class WorkRelations extends RelateToRep {
      * @throws Exception
      */
     public function addRepresentation(int|string|Representation $representation): bool|WorkHasRepDo {
-        $this->addMessage(false);
-        $representation = $this->applyAddRule($representation);
+        $this->resetMessages();
+        $representation = $this->workCanAddRepresentation($representation);
         if (!$representation) return false;
         ////
         $this->doAddRepr($representation);
@@ -52,6 +56,13 @@ class WorkRelations extends RelateToRep {
         $workHasRep = new WorkHasRepDo(null, $this->workID, $representation->getID());
         $this->repRelations[$representation->getID()] = $workHasRep;
         return $workHasRep;
+    }
+
+    public function removeRepresentation(Representation|int|string $representation): bool {
+        $this->resetMessages();
+        $representation = $this->workCanRemoveRepresentation($representation);
+        if (!$representation) return false;
+        return parent::removeRepresentation($representation);
     }
 
     /**
@@ -69,23 +80,6 @@ class WorkRelations extends RelateToRep {
             }
         }
         return $this->repRelations;
-    }
-
-    /**
-     * @inheritdoc
-     * @param Representation $representation
-     * @return bool
-     * @throws Exception
-     */
-    public function removeAllowed(Representation $representation): bool {
-        $exhHasReps = $representation->getRelations()->getExhibitionRelations();
-        if (empty($exhHasReps)) {
-            return true;
-        } else {
-            $this->addMessage("Representation:" . $representation->getID()
-                . " has " . count($exhHasReps) . " Exhibitions and cannot be removed");
-            return false;
-        }
     }
 
     /**

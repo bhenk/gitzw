@@ -34,9 +34,9 @@ final class Dao {
     }
 
     /**
-     * @return WorkDao|null
+     * @return WorkDao
      */
-    public static function workDao(): ?WorkDao {
+    public static function workDao(): WorkDao {
         if (is_null(self::$workDao)) {
             self::$workDao = new WorkDao();
         }
@@ -54,9 +54,9 @@ final class Dao {
     }
 
     /**
-     * @return ExhibitionDao|null
+     * @return ExhibitionDao
      */
-    public static function exhibitionDao(): ?ExhibitionDao {
+    public static function exhibitionDao(): ExhibitionDao {
         if (is_null(self::$exhibitionDao)) {
             self::$exhibitionDao = new ExhibitionDao();
         }
@@ -64,9 +64,9 @@ final class Dao {
     }
 
     /**
-     * @return ExhHasRepDao|null
+     * @return ExhHasRepDao
      */
-    public static function exhHasRepDao(): ?ExhHasRepDao {
+    public static function exhHasRepDao(): ExhHasRepDao {
         if (is_null(self::$exhHasRepDao)) {
             self::$exhHasRepDao = new ExhHasRepDao();
         }

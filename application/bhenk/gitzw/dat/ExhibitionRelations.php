@@ -13,7 +13,7 @@ use function is_null;
 /**
  * The ExhibitionRelations object keeps track of the relations the owner Exhibition has to other objects
  */
-class ExhibitionRelations extends RelateToRep {
+class ExhibitionRelations extends RepresentationOwner {
 
     /** @var array<int, ExhHasRepDo>|null */
     private ?array $repRelations;
@@ -30,6 +30,14 @@ class ExhibitionRelations extends RelateToRep {
     }
 
     /**
+     * Get the ID of the Exhibition that owns these relations
+     * @return string|null
+     */
+    public function getOwnerId(): ?string {
+        return $this->exhibitionID;
+    }
+
+    /**
      * Add a Representation to this Exhibition
      *
      * Only Representations that are persisted and that are related to at least one Work can be added.
@@ -42,18 +50,26 @@ class ExhibitionRelations extends RelateToRep {
      */
     public function addRepresentation(int|string|Representation $representation): bool|ExhHasRepDo {
         $this->resetMessages();
-        $representation = $this->applyAddRule($representation);
+        $representation = $this->exhibitionCanAddRepresentation($representation);
         if (!$representation) return false;
-        if (empty($representation->getRelations()->getWorks())) {
-            $this->addMessage("Representation not related to a Work");
-            return false;
-        }
         ////
         $this->doAddRepr($representation);
         $this->getRepRelations();
         $exhHasRep = new ExhHasRepDo(null, $this->exhibitionID, $representation->getID());
         $this->repRelations[$representation->getID()] = $exhHasRep;
         return $exhHasRep;
+    }
+
+    /**
+     * @param Representation|int|string $representation
+     * @return bool
+     * @throws Exception
+     */
+    public function removeRepresentation(Representation|int|string $representation): bool {
+        $this->resetMessages();
+        $representation = $this->exhibitionCanRemoveRepresentation($representation);
+        if (!$representation) return false;
+        return parent::removeRepresentation($representation);
     }
 
     /**
@@ -70,10 +86,6 @@ class ExhibitionRelations extends RelateToRep {
             }
         }
         return $this->repRelations;
-    }
-
-    public function removeAllowed(Representation $representation): bool {
-        return true;
     }
 
     /**
