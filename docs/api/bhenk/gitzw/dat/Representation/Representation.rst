@@ -64,6 +64,39 @@ Representation
 ----
 
 
+.. _bhenk\gitzw\dat\Representation::Constants:
+
+Constants
++++++++++
+
+
+.. _bhenk\gitzw\dat\Representation::IMG_DIR:
+
+Representation::IMG_DIR
+-----------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+
+
+
+.. code-block:: php
+
+   string(6) "images" 
+
+
+
+
+----
+
+
 .. _bhenk\gitzw\dat\Representation::Constructor:
 
 Constructor
@@ -416,6 +449,64 @@ Representation::getRelations
 
 
 | :tag6:`return` :ref:`bhenk\gitzw\dat\RepresentationRelations`
+
+
+----
+
+
+.. _bhenk\gitzw\dat\Representation::getFilename:
+
+Representation::getFilename
+---------------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+**Get the filename of this Representation or** *null* **if not yet set**
+
+
+.. code-block:: php
+
+   public function getFilename(): string|bool
+
+
+| :tag6:`return` string | bool
+| :tag6:`throws` `Exception <https://www.php.net/manual/en/class.exception.php>`_
+
+
+----
+
+
+.. _bhenk\gitzw\dat\Representation::getExifData:
+
+Representation::getExifData
+---------------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+**Get Exif Data of this Representation or** *false* **if no file**
+
+
+.. code-block:: php
+
+   public function getExifData(): array|bool
+
+
+| :tag6:`return` array | bool
+| :tag6:`throws` `Exception <https://www.php.net/manual/en/class.exception.php>`_
 
 
 ----

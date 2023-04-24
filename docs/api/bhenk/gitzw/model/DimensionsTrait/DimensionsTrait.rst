@@ -346,4 +346,57 @@ DimensionsTrait::getDepth
 
 ----
 
+
+.. _bhenk\gitzw\model\DimensionsTrait::getDimExtra:
+
+DimensionsTrait::getDimExtra
+----------------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+.. code-block:: php
+
+   public function getDimExtra(): ?string
+
+
+| :tag6:`return` ?\ string
+
+
+----
+
+
+.. _bhenk\gitzw\model\DimensionsTrait::setDimExtra:
+
+DimensionsTrait::setDimExtra
+----------------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+.. code-block:: php
+
+   public function setDimExtra(
+         Parameter #0 [ <required> ?string $extra ]
+    ): void
+
+
+| :tag6:`param` ?\ string :param:`$extra`
+| :tag6:`return` void
+
+
+----
+
 :block:`no datestamp` 

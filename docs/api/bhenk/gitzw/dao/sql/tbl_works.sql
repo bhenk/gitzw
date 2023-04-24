@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `%tbl_name%`
     `width`     FLOAT,
     `height`    FLOAT,
     `depth`     FLOAT,
+    `dim_extra` VARCHAR(255),
     `date`      DATE,
     `d_format`  VARCHAR(10),
     `hidden`    BOOLEAN,

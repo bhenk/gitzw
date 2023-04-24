@@ -2,10 +2,13 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\model\DateTrait;
 use bhenk\gitzw\model\StoredObjectInterface;
+use Exception;
 use ReflectionException;
+use function exif_read_data;
 use function json_decode;
 use function json_encode;
 
@@ -14,6 +17,8 @@ use function json_encode;
  */
 class Representation implements StoredObjectInterface {
     use DateTrait;
+
+    const IMG_DIR = "images";
 
     private RepresentationRelations $relations;
 
@@ -93,6 +98,26 @@ class Representation implements StoredObjectInterface {
      */
     public function getRelations(): RepresentationRelations {
         return $this->relations;
+    }
+
+    /**
+     * Get the filename of this Representation or *null* if not yet set
+     * @return bool|string
+     * @throws Exception
+     */
+    public function getFilename(): bool|string {
+        if (is_null($this->repDo->getREPID())) return false;
+        return Store::getDataDirectory() . DIRECTORY_SEPARATOR
+            . self::IMG_DIR . DIRECTORY_SEPARATOR . $this->repDo->getREPID();
+    }
+
+    /**
+     * Get Exif Data of this Representation or *false* if no file
+     * @return bool|array
+     * @throws Exception
+     */
+    public function getExifData(): bool|array {
+        return exif_read_data($this->getFilename(), 0, true);
     }
 
 }

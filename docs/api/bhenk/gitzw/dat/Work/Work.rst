@@ -1254,6 +1254,59 @@ Work::getDepth
 ----
 
 
+.. _bhenk\gitzw\dat\Work::getDimExtra:
+
+Work::getDimExtra
+-----------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+.. code-block:: php
+
+   public function getDimExtra(): ?string
+
+
+| :tag6:`return` ?\ string
+
+
+----
+
+
+.. _bhenk\gitzw\dat\Work::setDimExtra:
+
+Work::setDimExtra
+-----------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+.. code-block:: php
+
+   public function setDimExtra(
+         Parameter #0 [ <required> ?string $extra ]
+    ): void
+
+
+| :tag6:`param` ?\ string :param:`$extra`
+| :tag6:`return` void
+
+
+----
+
+
 .. _bhenk\gitzw\dat\Work::initDateTrait:
 
 Work::initDateTrait

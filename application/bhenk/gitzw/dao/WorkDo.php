@@ -18,6 +18,7 @@ class WorkDo extends Entity implements MultiLanguageTitleInterface, DimensionsIn
                          private float   $width = -1,
                          private float   $height = -1,
                          private float   $depth = -1,
+                         private ?string $dim_extra = null,
                          private ?string $date = null,
                          private ?string $d_format = null,
                          private ?bool   $hidden = false,
@@ -140,6 +141,20 @@ class WorkDo extends Entity implements MultiLanguageTitleInterface, DimensionsIn
      */
     public function setDepth(float $depth): void {
         $this->depth = $depth;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDimExtra(): ?string {
+        return $this->dim_extra;
+    }
+
+    /**
+     * @param string|null $dim_extra
+     */
+    public function setDimExtra(?string $dim_extra): void {
+        $this->dim_extra = $dim_extra;
     }
 
     /**

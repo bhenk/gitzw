@@ -224,4 +224,57 @@ DimensionsInterface::getDepth
 
 ----
 
+
+.. _bhenk\gitzw\model\DimensionsInterface::setDimExtra:
+
+DimensionsInterface::setDimExtra
+--------------------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ================= 
+   predicates public | abstract 
+   ========== ================= 
+
+
+.. code-block:: php
+
+   public abstract function setDimExtra(
+         Parameter #0 [ <required> ?string $dim_extra ]
+    ): void
+
+
+| :tag6:`param` ?\ string :param:`$dim_extra`
+| :tag6:`return` void
+
+
+----
+
+
+.. _bhenk\gitzw\model\DimensionsInterface::getDimExtra:
+
+DimensionsInterface::getDimExtra
+--------------------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ================= 
+   predicates public | abstract 
+   ========== ================= 
+
+
+.. code-block:: php
+
+   public abstract function getDimExtra(): ?string
+
+
+| :tag6:`return` ?\ string
+
+
+----
+
 :block:`no datestamp` 

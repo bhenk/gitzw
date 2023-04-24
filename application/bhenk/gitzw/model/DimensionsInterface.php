@@ -16,4 +16,8 @@ interface DimensionsInterface {
 
     public function getDepth(): float;
 
+    public function setDimExtra(?string $dim_extra): void;
+
+    public function getDimExtra(): ?string;
+
 }

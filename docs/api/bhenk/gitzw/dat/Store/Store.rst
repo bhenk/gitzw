@@ -318,6 +318,35 @@ Store::nextEXHID
 ----
 
 
+.. _bhenk\gitzw\dat\Store::getDataDirectory:
+
+Store::getDataDirectory
+-----------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== =============== 
+   predicates public | static 
+   ========== =============== 
+
+
+
+
+
+.. code-block:: php
+
+   public static function getDataDirectory(): string
+
+
+| :tag6:`return` string
+| :tag6:`throws` `Exception <https://www.php.net/manual/en/class.exception.php>`_
+
+
+----
+
+
 .. _bhenk\gitzw\dat\Store::getDataStore:
 
 Store::getDataStore

@@ -66,6 +66,8 @@ trait DateTrait {
      */
     public static function rearrangeDate(string $date): string|bool {
         $date = str_replace("/", "-", $date);
+        $date = str_replace(":", "-", $date);
+        $date = substr($date, 0, 10);
         if (strlen($date) == 4) {
             $dt = DateTimeImmutable::createFromFormat("Y", $date);
             if ($dt) return $date;

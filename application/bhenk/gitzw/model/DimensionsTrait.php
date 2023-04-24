@@ -2,6 +2,7 @@
 
 namespace bhenk\gitzw\model;
 
+use function is_null;
 use function number_format;
 
 trait DimensionsTrait {
@@ -36,7 +37,7 @@ trait DimensionsTrait {
         $w = $this->getWidth();
         $h = $this->getHeight();
         $d = $this->getDepth();
-        // 150 x 160 cm. [w x h] 59.1 x 63.0 in.
+        // 150 x 160 cm. [w x h] 59.1 x 63.0 in. [dim_extra]
         if ($w <= 0 and $h <= 0 and $d <= 0) return "";
         $cm = "";
         $dim = "[";
@@ -71,7 +72,8 @@ trait DimensionsTrait {
             $in .= " in.";
         }
         $dim .= "] ";
-        return $cm . $dim . $in;
+        $extra = is_null($this->getDimExtra()) ? "" : " " . $this->getDimExtra();
+        return $cm . $dim . $in . $extra;
     }
 
     public function getWidth(): float {
@@ -84,6 +86,14 @@ trait DimensionsTrait {
 
     public function getDepth(): float {
         return $this->dims->getDepth();
+    }
+
+    public function getDimExtra(): ?string {
+        return $this->dims->getDimExtra();
+    }
+
+    public function setDimExtra(?string $extra): void {
+        $this->dims->setDimExtra($extra);
     }
 
 }

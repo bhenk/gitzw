@@ -94,14 +94,15 @@ WorkDo::__construct
          Parameter #6 [ <optional> float $width = -1.0 ]
          Parameter #7 [ <optional> float $height = -1.0 ]
          Parameter #8 [ <optional> float $depth = -1.0 ]
-         Parameter #9 [ <optional> ?string $date = NULL ]
-         Parameter #10 [ <optional> ?string $d_format = NULL ]
-         Parameter #11 [ <optional> ?bool $hidden = false ]
-         Parameter #12 [ <optional> int $ordinal = -1 ]
-         Parameter #13 [ <optional> ?string $category = NULL ]
-         Parameter #14 [ <optional> ?int $creatorId = NULL ]
-         Parameter #15 [ <optional> ?string $types = NULL ]
-         Parameter #16 [ <optional> ?string $location = NULL ]
+         Parameter #9 [ <optional> ?string $dim_extra = NULL ]
+         Parameter #10 [ <optional> ?string $date = NULL ]
+         Parameter #11 [ <optional> ?string $d_format = NULL ]
+         Parameter #12 [ <optional> ?bool $hidden = false ]
+         Parameter #13 [ <optional> int $ordinal = -1 ]
+         Parameter #14 [ <optional> ?string $category = NULL ]
+         Parameter #15 [ <optional> ?int $creatorId = NULL ]
+         Parameter #16 [ <optional> ?string $types = NULL ]
+         Parameter #17 [ <optional> ?string $location = NULL ]
     )
 
 
@@ -114,6 +115,7 @@ WorkDo::__construct
 | :tag5:`param` float :param:`$width`
 | :tag5:`param` float :param:`$height`
 | :tag5:`param` float :param:`$depth`
+| :tag5:`param` ?\ string :param:`$dim_extra`
 | :tag5:`param` ?\ string :param:`$date`
 | :tag5:`param` ?\ string :param:`$d_format`
 | :tag5:`param` ?\ bool :param:`$hidden`
@@ -611,6 +613,67 @@ WorkDo::setDepth
 
 
 | :tag6:`param` float :param:`$depth`
+| :tag6:`return` void
+
+
+----
+
+
+.. _bhenk\gitzw\dao\WorkDo::getDimExtra:
+
+WorkDo::getDimExtra
+-------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ========================================================= 
+   predicates public                                                    
+   implements :ref:`bhenk\gitzw\model\DimensionsInterface::getDimExtra` 
+   ========== ========================================================= 
+
+
+
+
+
+.. code-block:: php
+
+   public function getDimExtra(): ?string
+
+
+| :tag6:`return` ?\ string
+
+
+----
+
+
+.. _bhenk\gitzw\dao\WorkDo::setDimExtra:
+
+WorkDo::setDimExtra
+-------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ========================================================= 
+   predicates public                                                    
+   implements :ref:`bhenk\gitzw\model\DimensionsInterface::setDimExtra` 
+   ========== ========================================================= 
+
+
+
+
+
+.. code-block:: php
+
+   public function setDimExtra(
+         Parameter #0 [ <required> ?string $dim_extra ]
+    ): void
+
+
+| :tag6:`param` ?\ string :param:`$dim_extra`
 | :tag6:`return` void
 
 

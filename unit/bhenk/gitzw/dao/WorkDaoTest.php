@@ -41,6 +41,7 @@ class WorkDaoTest extends TestCaseDb {
             20.42,
             42.3,
             -1,
+            "2 panels, 20 x 40 cm. each",
             "1978-01-01",
             "YYYY",
             false,
