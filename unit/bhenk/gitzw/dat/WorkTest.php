@@ -54,7 +54,7 @@ class WorkTest extends TestCase {
         assertTrue($this->res->setDate("2020-04-07"));
         assertEquals("2020-04-07", $this->res->getDate());
 
-        assertFalse($this->res->setDate("07-04-2020"));
+        assertTrue($this->res->setDate("07-04-2020"));
     }
 
     public function testSetHidden() {

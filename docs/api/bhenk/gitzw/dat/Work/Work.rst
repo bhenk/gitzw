@@ -663,6 +663,65 @@ Work::unsetCreator
 ----
 
 
+.. _bhenk\gitzw\dat\Work::getTypes:
+
+Work::getTypes
+--------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+
+
+
+.. code-block:: php
+
+   public function getTypes(): array
+
+
+| :tag6:`return` array
+
+
+----
+
+
+.. _bhenk\gitzw\dat\Work::setTypes:
+
+Work::setTypes
+--------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+
+
+
+.. code-block:: php
+
+   public function setTypes(
+         Parameter #0 [ <required> array $types ]
+    ): void
+
+
+| :tag6:`param` array :param:`$types`
+| :tag6:`return` void
+
+
+----
+
+
 .. _bhenk\gitzw\dat\Work::getWorkDo:
 
 Work::getWorkDo
@@ -1279,6 +1338,41 @@ Work::setDate
 
 | :tag6:`param` string :param:`$date`
 | :tag6:`return` bool
+
+
+----
+
+
+.. _bhenk\gitzw\dat\Work::rearrangeDate:
+
+Work::rearrangeDate
+-------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== =============== 
+   predicates public | static 
+   ========== =============== 
+
+
+**Rearranges date**
+
+
+Rearranges *d-m-Y* to *Y-m-d* and *m-Y* to *Y-m*.
+
+
+
+.. code-block:: php
+
+   public static function rearrangeDate(
+         Parameter #0 [ <required> string $date ]
+    ): string|bool
+
+
+| :tag6:`param` string :param:`$date`
+| :tag6:`return` string | bool  - *Y-m-d*, *Y-m* or *Y*, returns *false* if illegible
 
 
 ----

@@ -11,6 +11,8 @@ use bhenk\gitzw\model\StoredObjectInterface;
 use bhenk\gitzw\model\WorkCategories;
 use Exception;
 use ReflectionException;
+use function explode;
+use function implode;
 use function is_null;
 use function json_decode;
 use function json_encode;
@@ -186,6 +188,27 @@ class Work implements StoredObjectInterface {
 
     public function unsetCreator(): void {
         $this->workDo->setCreatorId(null);
+    }
+
+    /**
+     * @return array
+     */
+    public function getTypes(): array {
+        if (is_null($this->workDo->getTypes())) {
+            return [];
+        }
+        return explode(";", $this->workDo->getTypes());
+    }
+
+    /**
+     * @param array $types
+     */
+    public function setTypes(array $types): void {
+        if (empty($types)) {
+            $this->workDo->setTypes(null);
+        } else {
+            $this->workDo->setTypes(implode(";", $types));
+        }
     }
 
     /**

@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS `%tbl_name%`
     `subtitle`    VARCHAR(255),
     `date`        DATE,
     `d_format`    VARCHAR(10),
-    `description` VARCHAR(255),
+    `description` VARCHAR(1020),
     PRIMARY KEY (`ID`)
 );

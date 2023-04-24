@@ -4,6 +4,7 @@ namespace bhenk\gitzw\dat;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
+use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertTrue;
 
@@ -19,6 +20,7 @@ class CreatorTest extends TestCase {
         $creator->setDescription("Piet loves to go fishing");
         $creator->setSameAs(["https://fishingpro.com/piet", "https://fishingrots.com/Pietersen"]);
         assertStringContainsString('"name": "Piet van Pietersen",', $creator->getSDCard());
+        assertEquals("xfz", $creator->getShortCRID());
     }
 
     /**

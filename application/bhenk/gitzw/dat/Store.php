@@ -3,12 +3,18 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\Dao;
+use bhenk\gitzw\model\WorkCategories;
 use bhenk\logger\log\Log;
 use Exception;
 use function dirname;
+use function end;
+use function intval;
 use function is_dir;
 use function is_null;
 use function mkdir;
+use function str_pad;
+use function strrpos;
+use function substr;
 
 /**
  * Persistence of business objects
@@ -76,6 +82,44 @@ class Store {
             self::$exhibitionStore = new ExhibitionStore();
         }
         return self::$exhibitionStore;
+    }
+
+    /**
+     * Get the next RESID for new Work
+     * @param int|string|Creator $creator
+     * @param WorkCategories $cat
+     * @param int $year
+     * @return bool|string
+     * @throws Exception
+     */
+    public static function nextRESID(int|string|Creator $creator, WorkCategories $cat, int $year): bool|string {
+        $creator = self::creatorStore()->get($creator);
+        if (!$creator) return false;
+        $resids = self::workStore()->selectRESIDsWhere($year, $cat, $creator->getShortCRID());
+        $number = "0000";
+        if (!empty($resids)) {
+            $last = end($resids);
+            $next_number = intval(substr($last, strrpos($last, ".") + 1)) + 1;
+            $number = str_pad($next_number, 4, '0', STR_PAD_LEFT);
+        }
+        return $creator->getShortCRID() . ".work." . $cat->name . "." . $year . "." . $number;
+    }
+
+    /**
+     * Get the next EXHID
+     * @param int $year
+     * @return string
+     * @throws Exception
+     */
+    public static function nextEXHID(int $year): string {
+        $exhids = self::exhibitionStore()->selectEXHIDsWhere($year);
+        $number = "0000";
+        if (!empty($exhids)) {
+            $last = end($exhids);
+            $next_number = intval(substr($last, strrpos($last, ".") + 1)) + 1;
+            $number = str_pad($next_number, 4, '0', STR_PAD_LEFT);
+        }
+        return "gitzw.exh.$year.$number";
     }
 
     /**

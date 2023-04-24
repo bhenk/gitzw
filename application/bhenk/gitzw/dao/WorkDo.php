@@ -23,7 +23,9 @@ class WorkDo extends Entity implements MultiLanguageTitleInterface, DimensionsIn
                          private ?bool   $hidden = false,
                          private int     $ordinal = -1,
                          private ?string $category = null,
-                         private ?int    $creatorId = null
+                         private ?int    $creatorId = null,
+                         private ?string $types = null,
+                         private ?string $location = null
     ) {
         parent::__construct($ID);
     }
@@ -222,6 +224,34 @@ class WorkDo extends Entity implements MultiLanguageTitleInterface, DimensionsIn
      */
     public function setCreatorId(?int $creatorId): void {
         $this->creatorId = $creatorId;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTypes(): ?string {
+        return $this->types;
+    }
+
+    /**
+     * @param string|null $types
+     */
+    public function setTypes(?string $types): void {
+        $this->types = $types;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLocation(): ?string {
+        return $this->location;
+    }
+
+    /**
+     * @param string|null $location
+     */
+    public function setLocation(?string $location): void {
+        $this->location = $location;
     }
 
 }

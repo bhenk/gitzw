@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `%tbl_name%`
     `FK_LEFT`     INT,
     `FK_RIGHT`    INT,
     `deleted`     BOOLEAN,
-    `description` VARCHAR(255),
+    `description` VARCHAR(510),
     `hidden`      BOOLEAN,
     `preferred`   BOOLEAN,
     `ordinal`     INT,

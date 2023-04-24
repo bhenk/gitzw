@@ -51,7 +51,10 @@ else
 fi
 
 phpunit --bootstrap unit/bootstrap.php unit
-checkSuccess $? "phpunit: PHPUnit tests              "
+checkSuccess $? "phpunit: PHPUnit unit tests         "
+
+phpunit --bootstrap unit/bootstrap.php unit_ro
+checkSuccess $? "phpunit: PHPUnit unit_ro tests      "
 
 ./doc2rst.phar -q docs
 checkSuccess $? "doc2rst: install configuration files"

@@ -190,6 +190,24 @@ class ExhibitionStore {
     }
 
     /**
+     * Select EXHIDS for given year
+     * @param int $year
+     * @return array
+     * @throws Exception
+     */
+    public function selectEXHIDsWhere(int $year): array {
+        // Select EXHID from tbl_exhibitions where EXHID like 'gitzw.exh.2020.%' order by EXHID;
+        $sql = /** @lang text */
+            "SELECT EXHID from " . Dao::exhibitionDao()->getTableName()
+            . " WHERE EXHID like 'gitzw.exh.$year.%' ORDER BY EXHID;";
+        $exhids = [];
+        foreach (Dao::exhibitionDao()->execute($sql) as $row) {
+            $exhids[] = $row["EXHID"];
+        }
+        return $exhids;
+    }
+
+    /**
      * Serialize all the Exhibitions
      * @param string $datastore directory for serialization files
      * @return array [count of serialized exhibitions, count of serialized relations]

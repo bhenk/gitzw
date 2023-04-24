@@ -4,6 +4,7 @@ namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\WorkDo;
+use bhenk\gitzw\model\WorkCategories;
 use bhenk\logger\log\Log;
 use Exception;
 use function array_values;
@@ -212,6 +213,27 @@ class WorkStore {
     public function deleteWhere(string $where): int {
         $works = Store::workStore()->selectWhere($where);
         return $this->deleteBatch($works);
+    }
+
+    /**
+     * @param int $year
+     * @param WorkCategories $cat
+     * @param string $owner
+     * @return array
+     * @throws Exception
+     */
+    public function selectRESIDsWhere(int           $year,
+                                     WorkCategories $cat,
+                                     string         $owner = "hnq"): array {
+        // Select RESID from tbl_works where RESID like 'hnq.work.draw.2020.%' order by RESID;
+        $sql = /** @lang text */
+            "SELECT RESID from " . Dao::workDao()->getTableName()
+            . " where RESID like '$owner.work.$cat->name.$year.%' order by RESID;";
+        $resids = [];
+        foreach (Dao::workDao()->execute($sql) as $row) {
+            $resids[] = $row["RESID"];
+        }
+        return $resids;
     }
 
     /**

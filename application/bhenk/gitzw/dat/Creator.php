@@ -7,8 +7,11 @@ use bhenk\gitzw\model\PersonTrait;
 use bhenk\gitzw\model\StoredObjectInterface;
 use Exception;
 use ReflectionException;
+use function is_null;
 use function json_decode;
 use function json_encode;
+use function strpos;
+use function substr;
 
 class Creator implements StoredObjectInterface {
     use PersonTrait;
@@ -33,6 +36,12 @@ class Creator implements StoredObjectInterface {
 
     public function getID(): ?int {
         return $this->creatorDo->getID();
+    }
+
+    public function getShortCRID(): ?string {
+        $crid = $this->creatorDo->getCRID();
+        if (is_null($crid)) return null;
+        return substr($crid, strrpos($crid, "/") + 1);
     }
 
     /**

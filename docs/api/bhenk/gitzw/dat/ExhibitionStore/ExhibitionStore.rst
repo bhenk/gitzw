@@ -430,6 +430,38 @@ ExhibitionStore::deleteWhere
 ----
 
 
+.. _bhenk\gitzw\dat\ExhibitionStore::selectEXHIDsWhere:
+
+ExhibitionStore::selectEXHIDsWhere
+----------------------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+**Select EXHIDS for given year**
+
+
+.. code-block:: php
+
+   public function selectEXHIDsWhere(
+         Parameter #0 [ <required> int $year ]
+    ): array
+
+
+| :tag6:`param` int :param:`$year`
+| :tag6:`return` array
+| :tag6:`throws` `Exception <https://www.php.net/manual/en/class.exception.php>`_
+
+
+----
+
+
 .. _bhenk\gitzw\dat\ExhibitionStore::serialize:
 
 ExhibitionStore::serialize

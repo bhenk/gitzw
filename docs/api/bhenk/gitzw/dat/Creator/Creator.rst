@@ -185,6 +185,31 @@ Creator::getID
 ----
 
 
+.. _bhenk\gitzw\dat\Creator::getShortCRID:
+
+Creator::getShortCRID
+---------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+.. code-block:: php
+
+   public function getShortCRID(): ?string
+
+
+| :tag6:`return` ?\ string
+
+
+----
+
+
 .. _bhenk\gitzw\dat\Creator::getCreatorDo:
 
 Creator::getCreatorDo

@@ -753,4 +753,37 @@ Default: the returned Entity[] array has Entity IDs as keys.
 
 ----
 
+
+.. _bhenk\gitzw\dao\CreatorDao::execute:
+
+CreatorDao::execute
+-------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ============== ===================================================== 
+   predicates     public                                                
+   inherited from `AbstractDao::execute <http://bhenkmsdata.rtfd.io/>`_ 
+   ============== ===================================================== 
+
+
+**Execute the given query**
+
+
+.. code-block:: php
+
+   public function execute(
+         Parameter #0 [ <required> string $sql ]
+    ): array|bool
+
+
+| :tag6:`param` string :param:`$sql`
+| :tag6:`return` array | bool  - result rows in array; bool if result is boolean
+| :tag6:`throws` `Exception <https://www.php.net/manual/en/class.exception.php>`_
+
+
+----
+
 :block:`no datestamp` 

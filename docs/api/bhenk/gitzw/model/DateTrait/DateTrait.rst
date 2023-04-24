@@ -153,4 +153,39 @@ DateTrait::setDate
 
 ----
 
+
+.. _bhenk\gitzw\model\DateTrait::rearrangeDate:
+
+DateTrait::rearrangeDate
+------------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== =============== 
+   predicates public | static 
+   ========== =============== 
+
+
+**Rearranges date**
+
+
+Rearranges *d-m-Y* to *Y-m-d* and *m-Y* to *Y-m*.
+
+
+
+.. code-block:: php
+
+   public static function rearrangeDate(
+         Parameter #0 [ <required> string $date ]
+    ): string|bool
+
+
+| :tag6:`param` string :param:`$date`
+| :tag6:`return` string | bool  - *Y-m-d*, *Y-m* or *Y*, returns *false* if illegible
+
+
+----
+
 :block:`no datestamp` 

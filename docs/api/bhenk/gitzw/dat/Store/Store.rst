@@ -250,6 +250,74 @@ Store::exhibitionStore
 ----
 
 
+.. _bhenk\gitzw\dat\Store::nextRESID:
+
+Store::nextRESID
+----------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== =============== 
+   predicates public | static 
+   ========== =============== 
+
+
+**Get the next RESID for new Work**
+
+
+.. code-block:: php
+
+   public static function nextRESID(
+         Parameter #0 [ <required> bhenk\gitzw\dat\Creator|string|int $creator ]
+         Parameter #1 [ <required> bhenk\gitzw\model\WorkCategories $cat ]
+         Parameter #2 [ <required> int $year ]
+    ): string|bool
+
+
+| :tag6:`param` :ref:`bhenk\gitzw\dat\Creator` | string | int :param:`$creator`
+| :tag6:`param` :ref:`bhenk\gitzw\model\WorkCategories` :param:`$cat`
+| :tag6:`param` int :param:`$year`
+| :tag6:`return` string | bool
+| :tag6:`throws` `Exception <https://www.php.net/manual/en/class.exception.php>`_
+
+
+----
+
+
+.. _bhenk\gitzw\dat\Store::nextEXHID:
+
+Store::nextEXHID
+----------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== =============== 
+   predicates public | static 
+   ========== =============== 
+
+
+**Get the next EXHID**
+
+
+.. code-block:: php
+
+   public static function nextEXHID(
+         Parameter #0 [ <required> int $year ]
+    ): string
+
+
+| :tag6:`param` int :param:`$year`
+| :tag6:`return` string
+| :tag6:`throws` `Exception <https://www.php.net/manual/en/class.exception.php>`_
+
+
+----
+
+
 .. _bhenk\gitzw\dat\Store::getDataStore:
 
 Store::getDataStore

@@ -469,6 +469,42 @@ WorkStore::deleteWhere
 ----
 
 
+.. _bhenk\gitzw\dat\WorkStore::selectRESIDsWhere:
+
+WorkStore::selectRESIDsWhere
+----------------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+
+
+
+.. code-block:: php
+
+   public function selectRESIDsWhere(
+         Parameter #0 [ <required> int $year ]
+         Parameter #1 [ <required> bhenk\gitzw\model\WorkCategories $cat ]
+         Parameter #2 [ <optional> string $owner = 'hnq' ]
+    ): array
+
+
+| :tag6:`param` int :param:`$year`
+| :tag6:`param` :ref:`bhenk\gitzw\model\WorkCategories` :param:`$cat`
+| :tag6:`param` string :param:`$owner`
+| :tag6:`return` array
+| :tag6:`throws` `Exception <https://www.php.net/manual/en/class.exception.php>`_
+
+
+----
+
+
 .. _bhenk\gitzw\dat\WorkStore::serialize:
 
 WorkStore::serialize

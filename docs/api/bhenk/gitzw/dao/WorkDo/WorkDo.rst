@@ -100,6 +100,8 @@ WorkDo::__construct
          Parameter #12 [ <optional> int $ordinal = -1 ]
          Parameter #13 [ <optional> ?string $category = NULL ]
          Parameter #14 [ <optional> ?int $creatorId = NULL ]
+         Parameter #15 [ <optional> ?string $types = NULL ]
+         Parameter #16 [ <optional> ?string $location = NULL ]
     )
 
 
@@ -118,6 +120,8 @@ WorkDo::__construct
 | :tag5:`param` int :param:`$ordinal`
 | :tag5:`param` ?\ string :param:`$category`
 | :tag5:`param` ?\ int :param:`$creatorId`
+| :tag5:`param` ?\ string :param:`$types`
+| :tag5:`param` ?\ string :param:`$location`
 
 
 ----
@@ -965,6 +969,124 @@ WorkDo::setCreatorId
 
 
 | :tag6:`param` ?\ int :param:`$creatorId`
+| :tag6:`return` void
+
+
+----
+
+
+.. _bhenk\gitzw\dao\WorkDo::getTypes:
+
+WorkDo::getTypes
+----------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+
+
+
+.. code-block:: php
+
+   public function getTypes(): ?string
+
+
+| :tag6:`return` ?\ string
+
+
+----
+
+
+.. _bhenk\gitzw\dao\WorkDo::setTypes:
+
+WorkDo::setTypes
+----------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+
+
+
+.. code-block:: php
+
+   public function setTypes(
+         Parameter #0 [ <required> ?string $types ]
+    ): void
+
+
+| :tag6:`param` ?\ string :param:`$types`
+| :tag6:`return` void
+
+
+----
+
+
+.. _bhenk\gitzw\dao\WorkDo::getLocation:
+
+WorkDo::getLocation
+-------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+
+
+
+.. code-block:: php
+
+   public function getLocation(): ?string
+
+
+| :tag6:`return` ?\ string
+
+
+----
+
+
+.. _bhenk\gitzw\dao\WorkDo::setLocation:
+
+WorkDo::setLocation
+-------------------
+
+.. table::
+   :widths: auto
+   :align: left
+
+   ========== ====== 
+   predicates public 
+   ========== ====== 
+
+
+
+
+
+.. code-block:: php
+
+   public function setLocation(
+         Parameter #0 [ <required> ?string $location ]
+    ): void
+
+
+| :tag6:`param` ?\ string :param:`$location`
 | :tag6:`return` void
 
 

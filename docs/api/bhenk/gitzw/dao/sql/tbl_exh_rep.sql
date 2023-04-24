@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `%tbl_name%`
     `FK_RIGHT`    INT,
     `deleted`     BOOLEAN,
     `ordinal`     INT,
-    `description` VARCHAR(255),
+    `description` VARCHAR(510),
     `hidden`      BOOLEAN,
     FOREIGN KEY (FK_LEFT) REFERENCES tbl_exhibitions (ID),
     FOREIGN KEY (FK_RIGHT) REFERENCES tbl_representations (ID),
