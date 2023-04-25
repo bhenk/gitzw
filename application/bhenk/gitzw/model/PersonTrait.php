@@ -6,6 +6,7 @@ use function explode;
 use function implode;
 use function is_null;
 use function json_encode;
+use function str_replace;
 use function trim;
 
 trait PersonTrait {
@@ -127,6 +128,10 @@ trait PersonTrait {
         if (!is_null($this->getPrefixes())) $fullName .= " " . $this->getPrefixes();
         if (!is_null($this->getLastname())) $fullName .= " " . $this->getLastname();
         return trim($fullName);
+    }
+
+    public function getUriName(): string {
+        return str_replace(" ", "-", $this->getFullName());
     }
 
     /**

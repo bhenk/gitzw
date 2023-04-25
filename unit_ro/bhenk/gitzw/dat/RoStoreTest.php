@@ -3,15 +3,13 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\model\WorkCategories;
-use bhenk\logger\unit\ConsoleLoggerTrait;
 use bhenk\logger\unit\LogAttribute;
+use bhenk\TestCaseRo;
 use Exception;
-use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 
 #[LogAttribute(false)]
-class RoStoreTest extends TestCase {
-    use ConsoleLoggerTrait;
+class RoStoreTest extends TestCaseRo {
 
     /**
      * @throws Exception

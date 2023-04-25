@@ -10,7 +10,6 @@ use ReflectionException;
 use function is_null;
 use function json_decode;
 use function json_encode;
-use function strpos;
 use function substr;
 
 class Creator implements StoredObjectInterface {

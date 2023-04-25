@@ -13,13 +13,35 @@ services:
       MYSQL_PASSWORD: user
     ports:
       - "3306:3306"
-
     volumes:
       - ./init:/docker-entrypoint-initdb.d
       - ../../../mysql/data/cosql:/var/lib/mysql
+    networks:
+      - gitzw
+
 
   adminer:
     image: adminer
     restart: "no"
     ports:
       - "8080:8080"
+    networks:
+      - gitzw
+
+  php:
+    image: gitzw-php:8.2
+    restart: "no"
+    volumes:
+      - ../public_html:/var/www/html
+      - ../application:/var/www/application
+      - ../config:/var/www/config
+      - ../data:/var/www/data
+      - ../logs:/var/www/logs
+      - ../vendor:/var/www/vendor
+    ports:
+      - "8081:80"
+    networks:
+      - gitzw
+
+networks:
+  gitzw:

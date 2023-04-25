@@ -3,7 +3,6 @@
 namespace bhenk\gitzw\model;
 
 use DateTimeImmutable;
-use RuntimeException;
 use function str_replace;
 use function strlen;
 use function strpos;

@@ -9,6 +9,7 @@ use Exception;
 use function array_diff;
 use function array_filter;
 use function array_map;
+use function array_values;
 use function file_get_contents;
 use function file_put_contents;
 use function glob;
@@ -17,6 +18,7 @@ use function is_null;
 use function mkdir;
 use function scandir;
 use function sprintf;
+use function str_contains;
 
 /**
  * Stores Creators
@@ -212,6 +214,21 @@ class CreatorStore {
             if ($creator) $IDs[] = $creator->getID();
         }
         return Dao::creatorDao()->deleteBatch($IDs);
+    }
+
+    /**
+     * Select a creator by name
+     *
+     * Discovers name in *CRID* or *url*
+     * @param string $name
+     * @return bool|Creator
+     * @throws Exception
+     */
+    public function selectByName(string $name): bool|Creator {
+        $where = "CRID='http://gitzw.art/$name'";
+        if (str_contains($name, "-")) $where = "url='https://gitzw.art/$name'";
+        $creators = $this->selectWhere($where);
+        return array_values($creators)[0] ?? false;
     }
 
     /**

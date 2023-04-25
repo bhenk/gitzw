@@ -23,3 +23,5 @@
 /.idea/inspectionProfiles/Project_Default.xml
 /data/
 /transit/
+/public_html/no_index.html
+/.idea/webResources.xml

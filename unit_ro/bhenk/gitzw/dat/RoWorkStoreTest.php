@@ -3,11 +3,13 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\model\WorkCategories;
+use bhenk\logger\unit\LogAttribute;
+use bhenk\TestCaseRo;
 use Exception;
-use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertStringStartsWith;
 
-class RoWorkStoreTest extends TestCase {
+#[LogAttribute(false)]
+class RoWorkStoreTest extends TestCaseRo {
 
     /**
      * @throws Exception

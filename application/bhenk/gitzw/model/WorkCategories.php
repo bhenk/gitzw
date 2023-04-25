@@ -26,4 +26,8 @@ enum WorkCategories: string {
         return null;
     }
 
+    public static function get(string $s): ?WorkCategories {
+        return self::forValue($s) ?? self::forName($s);
+    }
+
 }

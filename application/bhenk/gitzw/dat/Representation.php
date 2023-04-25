@@ -2,7 +2,6 @@
 
 namespace bhenk\gitzw\dat;
 
-use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\model\DateTrait;
 use bhenk\gitzw\model\StoredObjectInterface;
