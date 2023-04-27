@@ -2,6 +2,7 @@
 
 namespace bhenk\gitzw\ctrl;
 
+use bhenk\gitzw\base\Site;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\model\WorkCategories;
 use Exception;
@@ -39,6 +40,8 @@ class WorkPageControl {
         }
 
         echo "<h1>" . self::class . "</h1>";
+
+        echo "<h2>" . $work->getRESID() . "</h2>";
         echo $work->getTitles() . "<br/>";
         $representations = $work->getRelations()->getRepresentations();
         echo "<h3>Representations</h3>";

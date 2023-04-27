@@ -2,6 +2,7 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\base\Env;
 use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\model\DateTrait;
 use bhenk\gitzw\model\StoredObjectInterface;
@@ -106,7 +107,7 @@ class Representation implements StoredObjectInterface {
      */
     public function getFilename(): bool|string {
         if (is_null($this->repDo->getREPID())) return false;
-        return Store::getDataDirectory() . DIRECTORY_SEPARATOR
+        return Env::dataDir() . DIRECTORY_SEPARATOR
             . self::IMG_DIR . DIRECTORY_SEPARATOR . $this->repDo->getREPID();
     }
 

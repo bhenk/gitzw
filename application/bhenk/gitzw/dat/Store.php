@@ -2,11 +2,10 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\base\Env;
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\model\WorkCategories;
-use bhenk\logger\log\Log;
 use Exception;
-use function dirname;
 use function end;
 use function intval;
 use function is_dir;
@@ -25,10 +24,6 @@ use function substr;
 class Store {
 
     /**
-     * Name of the directory where we expect to store data
-     */
-    const DATA_DIR = "data";
-    /**
      * Name of the directory dedicated to store data from this Store
      */
     const STORE_DIR = "store";
@@ -37,7 +32,6 @@ class Store {
     private static ?WorkStore $workStore = null;
     private static ?CreatorStore $creatorStore = null;
     private static ?ExhibitionStore $exhibitionStore = null;
-    private static ?string $data_directory = null;
 
     /**
      * Get the store for Creators
@@ -124,34 +118,13 @@ class Store {
     }
 
     /**
-     * @return string
-     * @throws Exception
-     */
-    public static function getDataDirectory(): string {
-        if (is_null(self::$data_directory)) {
-            for ($i = 1; $i < 20; $i++) {
-                $dir = dirname(__DIR__, $i);
-                $data_dir = $dir . DIRECTORY_SEPARATOR . self::DATA_DIR;
-                if (is_dir($data_dir)) {
-                    self::$data_directory = $data_dir;
-                    return self::$data_directory;
-                }
-            }
-            $msg = "Data directory 'data' not found";
-            Log::error($msg);
-            throw new Exception($msg);
-        }
-        return self::$data_directory;
-    }
-
-    /**
      * Get the data store directory for (de)serialization
      *
      * @return string data store directory
      * @throws Exception if data store directory not found
      */
     public static function getDataStore(): string {
-        $store_dir = self::getDataDirectory() . DIRECTORY_SEPARATOR . self::STORE_DIR;
+        $store_dir = Env::dataDir() . DIRECTORY_SEPARATOR . self::STORE_DIR;
         if (!is_dir($store_dir)) {
             mkdir($store_dir);
         }

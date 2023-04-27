@@ -1,0 +1,144 @@
+:root { 
+	/* variables are written with 2 hyphens */
+	--font-color: #DCDCDC;
+	--background: black;
+	--heightheading: 65px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-family: "Lucida Sans", sans-serif;
+	color: var(--font-color);
+	background-color: var(--background);
+}
+
+a {
+	text-decoration: none !important;
+}
+
+img {
+	max-width: 100%;
+}
+
+#column_2 {
+	padding: 1px;
+	background-color: gray;
+}
+
+@media screen and (max-width: 1000px) { /* kleiner dan */
+
+	#container { 
+		display: flex; 
+		flex-direction: column; 
+	}
+    #column_1 { order: 2; }
+    #column_2 { order: 1; }
+    #column_3 { order: 3; }
+
+	#column_1 {
+	    width: 100%;
+	    background-color: green;
+	}
+	
+	#column_2 {
+		width: 100%;
+	}
+	
+	#column_3 {
+		width: 100%;
+		background-color: purple;
+	}
+	
+	.ani {
+		width: 100vw;
+		object-fit: contain;
+		object-position: top;
+	}
+	
+}
+
+@media screen and (min-width: 1000px) { /* groter dan */
+
+	#container { 
+		display: flex; 
+		flex-direction: row; 
+	}
+	
+	#column_1 {
+	    width: 300px;
+	    flex: 0 0 300px;
+	    background-color: yellow;
+	}
+	
+	#column_3 {
+	    width: 200px;
+	    flex: 0 0 200px;
+	    background-color: red;
+	}
+
+	.ani {
+		width: 100vw;
+		height: calc(100vh - var(--heightheading));  /* moet in deze media filter */
+		object-fit: contain;
+		object-position: top;
+	}
+
+}
+
+/* heading */
+
+.heading {
+	height: var(--heightheading);
+	padding-left: 15px;
+	background-color: gray;
+}
+
+.child {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  margin-right: 15px;
+}
+
+.statistiek {
+	font-size: 0.85em;
+}
+
+/* column 1 */
+
+/* column 2 */
+
+.beeld {
+	position: relative;
+	background-color: black;
+}
+
+.pathlocation {
+	position: absolute;
+	left: 8px;
+	top: 8px;
+	font-style: italic;
+	font-size: 0.8em;
+	padding-bottom: 5px;
+	color: gray;
+	writing-mode: vertical-lr;
+}
+
+.copyprevious {
+	cursor: pointer;
+}
+
+.nospace {
+	display:none;
+}
+
+.buttons {
+	position: absolute;
+	right: 10px;
+	bottom: 20px;
+}
+
+/* column 3 */
