@@ -1,9 +1,18 @@
 <?php
+use bhenk\gitzw\base\Site;
 ?>
 <!-- login.php -->
 <div class="center-screen">
     <div id="container">
-        <div>Login</div>
+        <div>Login <?php echo Site::hostName() ?></div>
+        <?php if ($this->getSessionUser()) { ?>
+            <div class="row"><?php echo $this->getSessionUserFullName(); ?>&nbsp;</div>
+            <div class="row"><?php echo $this->getSessionUserLastLogin(); ?>&nbsp;</div>
+            <div class="row">
+                <a href="/logout"><button class="btn">Logout</button></a>
+                <a href="/admin"><button class="btn">Admin page</button></a>
+            </div>
+        <?php } else { ?>
         <div class="row"><?php echo $this->getMessage(); ?>&nbsp;</div>
         <form action="/login" method="post">
             <div class="row">
@@ -23,6 +32,7 @@
                 <input type="submit" class="btn" value="Login">
             </div>
         </form>
+        <?php } ?>
         <div class="row">
             <span><?php echo $this->getClientIp(); ?></span>
             <span title="copy IP" class="copyprevious"

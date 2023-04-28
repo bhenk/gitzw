@@ -64,3 +64,5 @@ checkSuccess $? "doc2rst: generating reStructuredText"
 
 sphinx-build -b html ./docs ./docs/_build/html
 checkSuccess $? "sphinx-build: creating html         "
+
+open -a '/Applications/Google Chrome.app' file:///Users/ecco/PhpstormProjects/gitzw/docs/_build/html/index.html

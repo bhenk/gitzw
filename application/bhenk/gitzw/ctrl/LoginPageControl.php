@@ -3,9 +3,12 @@
 namespace bhenk\gitzw\ctrl;
 
 use bhenk\gitzw\base\Env;
+use bhenk\gitzw\base\LoginRegister;
+use bhenk\gitzw\base\Security;
 use bhenk\gitzw\base\Site;
-use bhenk\gitzw\dajson\Security;
-use function session_start;
+use bhenk\gitzw\dajson\User;
+use function date;
+use function is_null;
 
 class LoginPageControl extends Page1cControl {
 
@@ -14,27 +17,33 @@ class LoginPageControl extends Page1cControl {
     private bool $name_error = false;
     private bool $pass_error = false;
     private string $hash = "";
+    private User|bool|null $sessionUser = null;
 
     public function canHandle(array|string $path): bool {
-        if (!Security::get()->canLogin()) return false;
+        $clientIp = Site::clientIp();
+        $date = date("Y-m-d H:i:s");
+        if (!Security::get()->canLogin($clientIp)) return false;
+        if (!LoginRegister::get()->canLogin($clientIp, $date)) return false;
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $this->handlePost();
-        } else {
+            $this->handlePost($clientIp, $date);
+        } elseif($path == "login") {
             $this->renderPage();
+        } elseif ($path == "logout") {
+            $this->handleLogout();
         }
         return true;
     }
 
-    private function handlePost(): void {
-        if ($_POST["action"] == "login") $this->handleLogin();
+    private function handlePost(string $clientIp, string $date): void {
+        if ($_POST["action"] == "login") $this->handleLogin($clientIp, $date);
         if ($_POST["action"] == "hash") {
             $this->hash = password_hash($_POST["word"], PASSWORD_DEFAULT );
             $this->renderPage();
         }
     }
 
-    private function handleLogin(): void {
+    private function handleLogin(string $clientIp, string $date): void {
         $this->username = $_POST["username"];
         $this->name_error = empty($this->username);
         $pass = $_POST["password"];
@@ -46,30 +55,60 @@ class LoginPageControl extends Page1cControl {
         }
         $user = Security::get()->getUserByName($this->username);
         if (!$user or !$user->verifyPass($pass)) {
+            LoginRegister::get()->addLoginAttempt($clientIp, $date, false);
             $this->message = "Unknown username or password";
             $this->renderPage();
             return;
         }
-        $clientIp = Site::clientIp();
         if (!$user->hasIp($clientIp)) {
+            LoginRegister::get()->addLoginAttempt($clientIp, $date, false);
             $this->message = "Ip $clientIp not associated with $this->username";
             $this->renderPage();
             return;
         }
-        // send session cookie
-        session_start();
-        Security::get()->startSession($user);
+        LoginRegister::get()->addLoginAttempt($clientIp, $date, true);
+        Security::get()->startSession($user, $clientIp, $date);
         Site::redirect("/admin");
+    }
+
+    private  function handleLogout(): void {
+        Security::get()->endSession();
+        Site::redirect("");
     }
 
     public function renderPage(): void {
         $this->setPageTitle("Login");
         $this->addStylesheet("/css/auth/auth.css");
+
         parent::renderPage();
     }
 
     public function renderBody(): void {
         require_once Env::templatesDir() . "/auth/login.php";
+    }
+
+    public function getSessionUser(): User|bool {
+        if (is_null($this->sessionUser)) {
+            $user = Security::get()->getSessionUser();
+            if (is_null($user)) {
+                $this->sessionUser = false;
+            } else {
+                $this->sessionUser = $user;
+            }
+        }
+        return $this->sessionUser;
+    }
+
+    public function getSessionUserFullName(): string {
+        return $this->sessionUser ? $this->sessionUser->getFullName() : "";
+    }
+
+    public function getSessionUserName(): string {
+        return $this->sessionUser ? $this->sessionUser->getName() : "";
+    }
+
+    public function getSessionUserLastLogin(): string {
+        return $this->sessionUser ? $this->sessionUser->getLastLogin() : "";
     }
 
     public function getClientIp(): string {

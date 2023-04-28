@@ -1,9 +1,8 @@
 <?php
 
-namespace bhenk\gitzw\dajson;
+namespace bhenk\gitzw\base;
 
-use bhenk\gitzw\base\Env;
-use bhenk\gitzw\base\Site;
+use bhenk\gitzw\dajson\User;
 use bhenk\logger\log\Log;
 use function date;
 use function file_get_contents;
@@ -23,9 +22,11 @@ class Security {
 
     function __construct() {
         $authData = $this->load();
-        foreach ($authData['users'] as $name => $data) {
-            $user = new User($name, $data);
-            $this->users[$name] = $user;
+        if (!empty($authData)) {
+            foreach ($authData['users'] as $name => $data) {
+                $user = new User($name, $data);
+                $this->users[$name] = $user;
+            }
         }
     }
 
@@ -42,7 +43,7 @@ class Security {
     }
 
     private function getFilename(): string {
-        return Env::dataDir() . DIRECTORY_SEPARATOR . "users" . DIRECTORY_SEPARATOR . "auth.json";
+        return Env::dataDir() . DIRECTORY_SEPARATOR . "auth" . DIRECTORY_SEPARATOR . "users.json";
     }
 
     private function load(): array {
@@ -74,22 +75,22 @@ class Security {
         return $maybeUsers;
     }
 
-    public function canLogin() : bool {
+    public function canLogin(string $clientIp) : bool {
         if (!isset($this->canLogin)) {
-            $this->canLogin = !empty($this->getUsersByIp());
+            $this->canLogin = !empty($this->getUsersByIp($clientIp));
         }
         return $this->canLogin;
     }
 
-    public function startSession(User $user): void {
+    public function startSession(User $user, string $clientIp, string $date): void {
         $this->sessionUser = $user;
         $lastLogin = $user->getLastLogin();
-        $user->setLastLogin(date("Y-m-d H:i:s"));
+        $user->setLastLogin($date);
         $this->persist();
-        $_SESSION["logged_in"] = TRUE;
+        $_SESSION["logged_in"] = true;
         $_SESSION["username"] = $user->getName();
         $_SESSION["full_name"] = $user->getFullName();
-        $_SESSION["client_ip"] = Site::clientIp();
+        $_SESSION["client_ip"] = $clientIp;
         $_SESSION["last_login"] = $lastLogin;
     }
 

@@ -11,7 +11,7 @@ use Exception;
 use function explode;
 use function parse_url;
 use function preg_replace;
-use function reset;
+use function session_start;
 use function substr;
 
 class Gitzwart {
@@ -24,6 +24,7 @@ class Gitzwart {
     }
 
     public function handleRequest(array $path): void {
+        session_start();
         try {
             switch (count($path)) {
                 case 1:
@@ -62,14 +63,11 @@ class Gitzwart {
                 echo Site::clientIp() . "<br/>";
                 return true;
             case "login":
+            case "logout":
                 if ((new LoginPageControl())->canHandle($path)) return true;
         }
-        $maybeId = explode(".", $path);
-        $second = $maybeId[1] ?? "";
-        if ($second == "work") {
-            if ((new WorkPageControl())->renderPage($maybeId, true)) return true;
-        }
-        if ((new CreatorPageControl())->renderPage($path)) return true;
+        if ((new WorkPageControl())->canHandle($path)) return true;
+        if ((new CreatorPageControl())->canHandle($path)) return true;
         return false;
     }
 
@@ -81,7 +79,7 @@ class Gitzwart {
     private function handlePath5(array $path): bool {
         $second = $path[1];
         if ($second == "work") {
-            if ((new WorkPageControl())->renderPage($path)) return true;
+            if ((new WorkPageControl())->canHandle($path)) return true;
         }
         return false;
     }

@@ -1,23 +1,4 @@
-:root { 
-	/* variables are written with 2 hyphens */
-	--font-color: #DCDCDC;
-	--background: black;
-	--heightheading: 65px;
-}
-
-* {
-	box-sizing: border-box;
-}
-
-html {
-	font-family: "Lucida Sans", sans-serif;
-	color: var(--font-color);
-	background-color: var(--background);
-}
-
-a {
-	text-decoration: none !important;
-}
+@import "base.css";
 
 img {
 	max-width: 100%;

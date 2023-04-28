@@ -1,6 +1,6 @@
 <?php
 
-namespace bhenk\gitzw\dajson;
+namespace bhenk\gitzw\base;
 
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
