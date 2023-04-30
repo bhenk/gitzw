@@ -65,10 +65,11 @@ class Login implements JsonSerializable {
             if ($success) return true;
         }
         // none of last 3 attempts were success
-        $previous = $this->getLastLoginDate();
+        $last = $this->getLastLoginDate();
         $now = new DateTime(date($date));
-        $days = intval($previous->diff($now)->format("%a"));
-        $hours = intval($previous->diff($now)->format("%H")) + 24 * $days;
+        $diff = $last->diff($now);
+        $days = intval($diff->format("%R%a"));
+        $hours = intval($diff->format("%R%h")) + $days * 24;
         if ($hours >= 3) return true;
         return false;
     }

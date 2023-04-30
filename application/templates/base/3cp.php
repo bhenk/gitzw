@@ -1,24 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
 <?php
-include("header.php");
+include("head.php");
 ?>
 <body>
-    <div class="head">
-        <?php $this->renderHead(); ?>
+<?php if ($this->includeHeader()) { ?>
+    <div id="header">
+        <?php $this->renderHeader(); ?>
     </div>
-    <div id="container">
+<?php } ?>
+<?php if ($this->includeContainer()) { ?>
+<div id="container">
+    <?php if ($this->includeColumn1()) { ?>
         <div id="column_1">
-            <?php $this->renderColumn_1(); ?>
+            <?php $this->renderColumn1(); ?>
         </div>
+    <?php } ?>
+    <?php if ($this->includeColumn2()) { ?>
         <div id="column_2">
-            <img class="ani" src="img/DSC02096.jpeg" alt="bla">
-                <?php $this->renderColumn_2(); ?>
-
+            <?php $this->renderColumn2(); ?>
         </div>
+    <?php } ?>
+    <?php if ($this->includeColumn3()) { ?>
         <div id="column_3">
-                <?php $this->renderColumn_3(); ?>
+            <?php $this->renderColumn3(); ?>
         </div>
-    </div>
+    <?php } ?>
+</div>
+<?php } else {
+    $this->renderBody();
+} ?>
+
 </body>
 <?php
-include("footer.php");
+if ($this->includeFooter()) {
+    include("footer.php");
+}
 ?>
+</html>

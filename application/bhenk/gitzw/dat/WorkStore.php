@@ -237,6 +237,22 @@ class WorkStore {
     }
 
     /**
+     * @return array
+     * @throws Exception
+     */
+    public function countByCategory(): array {
+        // SELECT category_id, COUNT(*) FROM product_details GROUP BY category_id;
+        $sql = /** @lang text */
+            "SELECT category, COUNT(*) from " . Dao::workDao()->getTableName() . " GROUP BY category;";
+        $result = Dao::workDao()->execute($sql);
+        $catCount = [];
+        foreach ($result as $item) {
+            $catCount[$item["category"]] = $item["COUNT(*)"];
+        }
+        return $catCount;
+    }
+
+    /**
      * Serialize all the Works
      * @param string $datastore directory for serialization files
      * @return array [count of serialized works, count of serialized relations]

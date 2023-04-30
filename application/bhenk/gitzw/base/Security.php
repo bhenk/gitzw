@@ -4,13 +4,17 @@ namespace bhenk\gitzw\base;
 
 use bhenk\gitzw\dajson\User;
 use bhenk\logger\log\Log;
+use DateTime;
+use Exception;
 use function date;
 use function file_get_contents;
 use function file_put_contents;
 use function is_null;
 use function json_decode;
 use function json_encode;
+use function print_r;
 use function session_destroy;
+use function session_start;
 
 class Security {
 
@@ -92,9 +96,12 @@ class Security {
         $_SESSION["full_name"] = $user->getFullName();
         $_SESSION["client_ip"] = $clientIp;
         $_SESSION["last_login"] = $lastLogin;
+        $_SESSION["last_access"] = $date;
+        Log::info("Start session: " . print_r($_SESSION, TRUE));
     }
 
     public function endSession(): bool {
+        Log::info("End session: " . print_r($_SESSION, TRUE));
         $this->sessionUser = NULL;
         $_SESSION = array();
         return session_destroy();
@@ -117,6 +124,56 @@ class Security {
             $this->sessionUser = $this->getUserbyName($_SESSION["username"]);
         }
         return $this->sessionUser;
+    }
+
+    /**
+     * Checks if session expired, if so, redirects to login page
+     *
+     * If redirected to login page, original requested path will be on *$_SESSION["next_path"]*
+     *
+     * @param string $path requested path
+     * @return bool *true* if session expired, *false* otherwise, indicating request must be handled
+     *    further down the stack
+     * @throws Exception
+     */
+    public function sessionExpired(string $path): bool {
+        if (!isset($_SESSION["logged_in"]) or !$_SESSION["logged_in"]) {
+            $msg = "This can never happen: SESSION['logged_in'] and !SESSION['logged_in']";
+            Log::critical($msg);
+            throw new Exception($msg);
+        }
+        if (!$this->getSessionUser()) {
+            $msg = "This can never happen: SESSION['logged_in'] and no sessionUser";
+            Log::critical($msg);
+            throw new Exception($msg);
+        }
+        $last_access = $_SESSION["last_access"] ?? false;
+        if (!$last_access) {
+            $msg = "This can never happen: SESSION['logged_in'] and no last_access";
+            Log::critical($msg);
+            throw new Exception($msg);
+        }
+
+        $date = date("Y-m-d H:i:s");
+        $_SESSION["last_access"] = $date;
+
+        // session expired?
+        $last = new DateTime($last_access);
+        $now = new DateTime($date);
+        $diff = $last->diff($now);
+        $days = intval($diff->format("%R%a"));
+        $hours = intval($diff->format("%R%h"));
+        $minutes = intval($diff->format("%R%i")) + $hours * 60 + $days * 24 * 60;
+        if ($minutes >= Env::sessionExpirationMinutes()) {
+            $user = $_SESSION["username"];
+            Log::info("Session expired: sessionUser='$user', minutes=$minutes, path=$path" );
+            $this->endSession();
+            session_start();
+            $_SESSION["next_path"] = $path;
+            Site::redirect("/login");
+            return true;
+        }
+        return false;
     }
 
 }

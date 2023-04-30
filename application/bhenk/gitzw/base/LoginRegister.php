@@ -4,6 +4,7 @@ namespace bhenk\gitzw\base;
 
 use bhenk\gitzw\dajson\Login;
 use bhenk\logger\log\Log;
+use Exception;
 use function array_keys;
 use function file_exists;
 use function file_get_contents;
@@ -12,15 +13,19 @@ use function in_array;
 use function json_decode;
 use function json_encode;
 
+/**
+ * Keeps track of login success and failure and from which client IP the attempt was launched
+ *
+ * See Json file at location given by {@link LoginRegister::getFilename()}.
+ */
 class LoginRegister {
 
     private static ?LoginRegister $instance = null;
 
     /** @var Login[] */
     private array $logins = [];
-    private bool $canLogin;
 
-    function __construct() {
+    private function __construct() {
         $loginData = $this->load();
         if (!empty($loginData)) {
             foreach ($loginData['logins'] as $ip => $data) {
@@ -30,6 +35,12 @@ class LoginRegister {
         }
     }
 
+    /**
+     * Get singleton instance of this class
+     *
+     * Loads {@link Login}s from file at {@link LoginRegister::getFilename()}.
+     * @return LoginRegister
+     */
     public static function get(): LoginRegister {
         if (is_null(self::$instance)) {
             Log::info("Instantiating LoginRegister");
@@ -38,10 +49,22 @@ class LoginRegister {
         return self::$instance;
     }
 
+    /**
+     * Reset the LoginRegister
+     *
+     * Next time around will read data from file.
+     * @return void
+     */
     public static function reset(): void {
         self::$instance = null;
     }
 
+    /**
+     * @param string $clientIp
+     * @param string $date
+     * @return bool
+     * @throws Exception
+     */
     public function canLogin(string $clientIp, string $date): bool {
         if (!in_array($clientIp, array_keys($this->logins))) return true;
         $login = $this->logins[$clientIp];

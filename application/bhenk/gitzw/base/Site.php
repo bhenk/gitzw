@@ -2,13 +2,20 @@
 
 namespace bhenk\gitzw\base;
 
+use bhenk\logger\log\Log;
 use function header;
 use function implode;
+use function in_array;
 use function is_array;
 use function strlen;
+use function strtolower;
 use function substr;
 
 class Site {
+
+    private static array $restricted = [
+        "admin",
+    ];
 
     public static function hostName() : string {
         if (isset($_SERVER['HTTP_HOST'])) {
@@ -35,8 +42,9 @@ class Site {
         return self::hostName().$path;
     }
 
-    public static function redirect($path) : string {
+    public static function redirect(string $path) : string {
         $location = self::redirectLocation($path);
+        Log::info("Redirecting, location=$location");
         header("Location: ".$location, TRUE, 301);
         return $location;
     }
@@ -58,6 +66,10 @@ class Site {
             $ip_address = $_SERVER['REMOTE_ADDR'];
         }
         return  $ip_address;
+    }
+
+    public static function isRestricted(array $path_array): bool {
+        return in_array(strtolower($path_array[0]), self::$restricted);
     }
 
 }

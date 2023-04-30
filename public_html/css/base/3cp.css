@@ -1,12 +1,13 @@
 @import "base.css";
 
-img {
-	max-width: 100%;
+:root {
+	--heightheader: 35px;
+	--col1width: 250px;
 }
 
 #column_2 {
 	padding: 1px;
-	background-color: gray;
+	width: 100%;
 }
 
 @media screen and (max-width: 1000px) { /* kleiner dan */
@@ -15,8 +16,8 @@ img {
 		display: flex; 
 		flex-direction: column; 
 	}
-    #column_1 { order: 2; }
-    #column_2 { order: 1; }
+    #column_1 { order: 1; }
+    #column_2 { order: 2; }
     #column_3 { order: 3; }
 
 	#column_1 {
@@ -49,77 +50,38 @@ img {
 	}
 	
 	#column_1 {
-	    width: 300px;
-	    flex: 0 0 300px;
-	    background-color: yellow;
+	    width: var(--col1width);
+	    flex: 0 0 var(--col1width);
+	    /*background-color: yellow;*/
 	}
 	
 	#column_3 {
 	    width: 200px;
 	    flex: 0 0 200px;
-	    background-color: red;
+	    background-color: #555555;
 	}
 
 	.ani {
 		width: 100vw;
-		height: calc(100vh - var(--heightheading));  /* moet in deze media filter */
+		height: calc(100vh - var(--heightheader)); /* moet in deze media filter */
 		object-fit: contain;
 		object-position: top;
 	}
 
 }
 
-/* heading */
-
-.heading {
-	height: var(--heightheading);
-	padding-left: 15px;
-	background-color: gray;
+#header {
+	height: var(--heightheader);
+	background-color: lightgray;
+	position: sticky;top: 0;
 }
 
-.child {
-  display: inline-block;
-  vertical-align: middle;
-  text-align: center;
-  margin-right: 15px;
+@media (prefers-color-scheme: dark) {
+	#header {
+		background-color: dimgray;
+	}
 }
 
-.statistiek {
-	font-size: 0.85em;
-}
 
-/* column 1 */
 
-/* column 2 */
 
-.beeld {
-	position: relative;
-	background-color: black;
-}
-
-.pathlocation {
-	position: absolute;
-	left: 8px;
-	top: 8px;
-	font-style: italic;
-	font-size: 0.8em;
-	padding-bottom: 5px;
-	color: gray;
-	writing-mode: vertical-lr;
-}
-
-.copyprevious {
-	cursor: pointer;
-}
-
-.nospace {
-	display:none;
-}
-
-.buttons {
-	position: absolute;
-	right: 10px;
-	bottom: 20px;
-}
-
-/* column 3 */

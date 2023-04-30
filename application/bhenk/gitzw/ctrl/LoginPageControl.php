@@ -2,15 +2,18 @@
 
 namespace bhenk\gitzw\ctrl;
 
+use bhenk\logger\log\Log;
 use bhenk\gitzw\base\Env;
 use bhenk\gitzw\base\LoginRegister;
 use bhenk\gitzw\base\Security;
 use bhenk\gitzw\base\Site;
 use bhenk\gitzw\dajson\User;
 use function date;
+use function implode;
+use function is_array;
 use function is_null;
 
-class LoginPageControl extends Page1cControl {
+class LoginPageControl extends Page3cControl {
 
     private string $message = "";
     private string $username = "";
@@ -24,12 +27,16 @@ class LoginPageControl extends Page1cControl {
         $date = date("Y-m-d H:i:s");
         if (!Security::get()->canLogin($clientIp)) return false;
         if (!LoginRegister::get()->canLogin($clientIp, $date)) return false;
+        if (is_array($path)) {
+            $path = $path[0] ?? "";
+        }
+        if (!($path == "login" or $path == "logout")) return false;
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $this->handlePost($clientIp, $date);
         } elseif($path == "login") {
             $this->renderPage();
-        } elseif ($path == "logout") {
+        } else {
             $this->handleLogout();
         }
         return true;
@@ -44,6 +51,7 @@ class LoginPageControl extends Page1cControl {
     }
 
     private function handleLogin(string $clientIp, string $date): void {
+        Log::info("handle login from IP $clientIp");
         $this->username = $_POST["username"];
         $this->name_error = empty($this->username);
         $pass = $_POST["password"];
@@ -66,9 +74,16 @@ class LoginPageControl extends Page1cControl {
             $this->renderPage();
             return;
         }
+        // redirect??
+        $next_path = $_SESSION["next_path"] ?? false;
+
         LoginRegister::get()->addLoginAttempt($clientIp, $date, true);
         Security::get()->startSession($user, $clientIp, $date);
-        Site::redirect("/admin");
+        if (!$next_path) {
+            Site::redirect("/admin");
+        } else {
+            Site::redirect($next_path);
+        }
     }
 
     private  function handleLogout(): void {
@@ -77,9 +92,11 @@ class LoginPageControl extends Page1cControl {
     }
 
     public function renderPage(): void {
-        $this->setPageTitle("Login");
-        $this->addStylesheet("/css/auth/auth.css");
-
+        $this->setPageTitle("Login " . Site::hostName());
+        $this->addStylesheet("/css/auth/login.css");
+        $this->setIncludeHeader(false);
+        $this->setIncludeContainer(false);
+        $this->setIncludeFooter(false);
         parent::renderPage();
     }
 

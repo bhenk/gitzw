@@ -2,6 +2,8 @@
 
 namespace bhenk\gitzw\ctrl;
 
+use bhenk\gitzw\site\Menu;
+
 abstract class PageControl {
 
     private string $pageTitle = "gitzw.art";
@@ -9,6 +11,10 @@ abstract class PageControl {
     private array $scriptLinks = [];
 
     public abstract function canHandle(array|string $path): bool;
+
+    public function renderPage(): void {
+
+    }
 
     /**
      * @return string
@@ -46,5 +52,4 @@ abstract class PageControl {
         $this->scriptLinks[] = $name;
     }
 
-    public function renderPage(): void {}
 }

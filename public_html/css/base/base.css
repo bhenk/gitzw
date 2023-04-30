@@ -24,3 +24,17 @@ html {
 a {
     text-decoration: none !important;
 }
+
+.btn {
+    border-radius: 5px;
+    border: 2px solid white;
+    font-size: smaller;
+    padding: 2px 20px 2px 20px;
+    background-color: gray;
+    color: white;
+}
+
+.btn:hover {
+    background-color: #DCDCDC;
+    color: #232323;
+}

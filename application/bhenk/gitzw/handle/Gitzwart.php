@@ -2,41 +2,70 @@
 
 namespace bhenk\gitzw\handle;
 
+use bhenk\gitzw\base\Security;
 use bhenk\gitzw\base\Site;
+use bhenk\gitzw\ctrl\AdminPageControl;
 use bhenk\gitzw\ctrl\CreatorPageControl;
 use bhenk\gitzw\ctrl\LoginPageControl;
 use bhenk\gitzw\ctrl\WorkPageControl;
+use bhenk\logger\log\Log;
 use bhenk\logger\log\Req;
 use Exception;
+use Throwable;
 use function explode;
 use function parse_url;
 use function preg_replace;
 use function session_start;
+use function strtolower;
 use function substr;
 
 class Gitzwart {
 
+    /**
+     * Handle a raw request
+     *
+     * @return void
+     * @throws Exception
+     */
     public function handleRequestURI(): void {
-        Req::info("");
-        $path = preg_replace("/[^0-9a-zA-Z\/._ +]/", "-",
-            parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
-        $this->handleRequest(explode('/', substr($path, 1)));
+        try {
+            $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+            Log::info("raw url: " . $path);
+            Req::info("");
+            $path = strtolower(preg_replace("/[^0-9a-zA-Z\/._ +]/", "-", $path));
+            $path_array = explode('/', substr($path, 1));
+            session_start();
+            if (isset($_SESSION["logged_in"]) and $_SESSION["logged_in"]) {
+                if (Site::isRestricted($path_array)) {
+                    if (Security::get()->sessionExpired($path)) return;
+                }
+            }
+            $this->handleRequest($path_array);
+        } catch (Throwable $e) {
+            echo "<h1>500 from handleRequestURI</h1>";
+            echo "message:<br/>" . $e->getMessage();
+        }
     }
 
-    public function handleRequest(array $path): void {
-        session_start();
+    /**
+     * Handle a processed request
+     *
+     * @param array $path_array
+     * @return void
+     */
+    public function handleRequest(array $path_array): void {
         try {
-            switch (count($path)) {
+            switch (count($path_array)) {
                 case 1:
-                    if ($this->handlePath1($path[0])) return;
+                    if ($this->handlePath1($path_array[0])) return;
                     break;
                 case 5:
-                    if ($this->handlePath5($path)) return;
+                    if ($this->handlePath5($path_array)) return;
                     break;
             }
-        } catch (Exception $e) {
-            echo "<h1>500</h1>";
-            echo "Something went wrong:<br/>" . $e->getMessage();
+        } catch (Throwable $e) {
+            echo "<h1>500 from handleRequest</h1>";
+            echo "message:<br/>" . $e->getMessage();
         }
 
         echo "<h1>404</h1>";
@@ -65,6 +94,8 @@ class Gitzwart {
             case "login":
             case "logout":
                 if ((new LoginPageControl())->canHandle($path)) return true;
+            case "admin":
+                if ((new AdminPageControl())->canHandle($path)) return true;
         }
         if ((new WorkPageControl())->canHandle($path)) return true;
         if ((new CreatorPageControl())->canHandle($path)) return true;
@@ -72,14 +103,14 @@ class Gitzwart {
     }
 
     /**
-     * @param array $path
+     * @param array $path_array
      * @return bool
      * @throws Exception
      */
-    private function handlePath5(array $path): bool {
-        $second = $path[1];
+    private function handlePath5(array $path_array): bool {
+        $second = $path_array[1];
         if ($second == "work") {
-            if ((new WorkPageControl())->canHandle($path)) return true;
+            if ((new WorkPageControl())->canHandle($path_array)) return true;
         }
         return false;
     }

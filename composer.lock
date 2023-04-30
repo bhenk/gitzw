@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "bhenk/logger",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bhenk/logger.git",
-                "reference": "82934750547a3af5ffb81776fb1eb4ec7d4f9897"
+                "reference": "33d8a46ad2f2c78214fbf4da452e1dce55526719"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bhenk/logger/zipball/82934750547a3af5ffb81776fb1eb4ec7d4f9897",
-                "reference": "82934750547a3af5ffb81776fb1eb4ec7d4f9897",
+                "url": "https://api.github.com/repos/bhenk/logger/zipball/33d8a46ad2f2c78214fbf4da452e1dce55526719",
+                "reference": "33d8a46ad2f2c78214fbf4da452e1dce55526719",
                 "shasum": ""
             },
             "require": {
@@ -50,9 +50,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bhenk/logger/issues",
-                "source": "https://github.com/bhenk/logger/tree/1.0.5"
+                "source": "https://github.com/bhenk/logger/tree/1.0.6"
             },
-            "time": "2023-04-07T08:37:44+00:00"
+            "time": "2023-04-29T12:40:57+00:00"
         },
         {
             "name": "bhenk/msdata",

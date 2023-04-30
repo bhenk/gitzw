@@ -1,0 +1,32 @@
+
+#admin_header {
+    display: flex;
+    flex-direction: row;
+    font-size: 0.9em;
+    padding: 7px 10px 5px 15px;
+}
+
+.head_text {
+    margin-left: auto;
+}
+
+.head_text > span {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.statistics {
+    color: olive;
+}
+
+@media screen and (max-width: 1000px) {  /* kleiner dan */
+    .statistics {
+        display: none;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .statistics {
+        color: bisque;
+    }
+}
