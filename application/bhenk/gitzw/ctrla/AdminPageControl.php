@@ -1,18 +1,17 @@
 <?php
 
-namespace bhenk\gitzw\ctrl;
+namespace bhenk\gitzw\ctrla;
 
 use bhenk\gitzw\base\Env;
-use bhenk\gitzw\base\Security;
+use bhenk\gitzw\ctrl\Page3cControl;
 use bhenk\gitzw\dajson\User;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\site\Menu;
-use bhenk\gitzw\site\MenuItem;
 use bhenk\logger\log\Log;
 use Exception;
+use function count;
 use function file_get_contents;
 use function is_array;
-use function is_null;
 
 class AdminPageControl extends Page3cControl {
 
@@ -21,34 +20,22 @@ class AdminPageControl extends Page3cControl {
 
     public function canHandle(array|string $path): bool {
         if (is_array($path)) {
+            if (count($path) > 1) return false;
             $first = $path[0] ?? "";
         } else {
             $first = $path;
         }
         if ($first != "admin") return false;
-
-        $this->sessionUser = Security::get()->getSessionUser();
-        if (is_null($this->sessionUser)) {
-            Log::info("No sessionUser for page admin");
-            return false;
-        }
-
-        $this->prepareMenu();
-        $this->renderPage();
         return true;
     }
 
-    private function prepareMenu(): void {
-        $this->site_menu = new Menu();
-        $this->site_menu
-            ->addItem(new MenuItem("/", "Home"))
-            ->addItem(new MenuItem("#", "label a"))
-            ->addItem(new MenuItem("#", "label b", true))
-            ->addItem(new MenuItem("#", "label c"));
+    public function handleRequest(array $path, User $sessionUser, Menu $site_menu): void {
+        $this->sessionUser = $sessionUser;
+        $this->site_menu = $site_menu;
     }
 
     public function renderPage(): void {
-        Log::info("Rendering admin page for " . $this->sessionUser->getName());
+        Log::info("Rendering admin page for user " . $this->sessionUser->getName());
         $this->setPageTitle("Admin");
         $this->addStylesheet("/css/admin/header.css");
         $this->addStylesheet("/css/site/menu.css");
@@ -91,7 +78,7 @@ class AdminPageControl extends Page3cControl {
     }
 
     public function renderColumn1(): void {
-        require_once Env::templatesDir() ."/site/menu.php";
+        require_once Env::templatesDir() . "/site/menu.php";
     }
 
     public function renderColumn2(): void {

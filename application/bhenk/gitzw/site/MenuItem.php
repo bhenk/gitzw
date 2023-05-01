@@ -4,6 +4,8 @@ namespace bhenk\gitzw\site;
 
 class MenuItem extends AbstractElement {
 
+    private bool $separator = false;
+
 
     function __construct(private string $href, private string $label, private bool $active = false) {}
 
@@ -55,6 +57,20 @@ class MenuItem extends AbstractElement {
         } else {
             return "item";
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSeparator(): bool {
+        return $this->separator;
+    }
+
+    /**
+     * @param bool $separator
+     */
+    public function setSeparator(bool $separator): void {
+        $this->separator = $separator;
     }
 
 }

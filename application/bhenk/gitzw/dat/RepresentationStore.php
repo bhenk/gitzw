@@ -137,11 +137,8 @@ class RepresentationStore {
     public function selectWhere(string $where, int $offset = 0, int $limit = PHP_INT_MAX): array {
         $representations = [];
         $dos = Dao::representationDao()->selectWhere($where, $offset, $limit);
-        /** @var RepresentationDo $do */
-        foreach ($dos as $do) {
-            $representations[$do->getID()] = new Representation($do);
-        }
-        return $representations;
+        /** @var RepresentationDo[] $dos */
+        return $this->make($dos, $representations);
     }
 
     /**
@@ -152,13 +149,42 @@ class RepresentationStore {
      * @throws Exception
      */
     public function selectBatch(array $IDs): array {
-        $representations = [];
+        /** @var RepresentationDo[] $dos */
         $dos = Dao::representationDao()->selectBatch($IDs);
-        /** @var RepresentationDo $do */
-        foreach ($dos as $do) {
-            $representations[$do->getID()] = new Representation($do);
+        return $this->make($dos);
+    }
+
+    /**
+     * Select representations and order by year in RESID
+     *
+     * @param string $where
+     * @param int $offset
+     * @param int $limit
+     * @param bool $desc
+     * @return Representation[]
+     * @throws Exception
+     */
+    public function orderByYear(string $where, int $offset = 0, int $limit = 10, bool $desc = false): array {
+        $order = $desc ? "DESC" : "ASC";
+        $sql = "SELECT * FROM " . Dao::representationDao()->getTableName()
+                . " WHERE $where ORDER BY REPID $order"
+                . " LIMIT $offset, $limit;";
+        Log::info($sql);
+        /** @var RepresentationDo[] $dos */
+        $dos = Dao::representationDao()->selectSql($sql);
+        return $this->make($dos);
+    }
+
+    public function countBySource(): array {
+        // SELECT source, COUNT(*) FROM product_details GROUP BY source;
+        $sql = /** @lang text */
+            "SELECT source, COUNT(*) from " . Dao::representationDao()->getTableName() . " GROUP BY source;";
+        $result = Dao::representationDao()->execute($sql);
+        $sourceCount = [];
+        foreach ($result as $item) {
+            $sourceCount[$item["source"]] = $item["COUNT(*)"];
         }
-        return $representations;
+        return $sourceCount;
     }
 
     /**
@@ -260,6 +286,18 @@ class RepresentationStore {
             $count++;
         }
         return $count;
+    }
+
+    /**
+     * @param RepresentationDo[] $dos
+     * @return Representation[]
+     */
+    private function make(array $dos): array {
+        $representations = [];
+        foreach ($dos as $do) {
+            $representations[$do->getID()] = new Representation($do);
+        }
+        return $representations;
     }
 
 }

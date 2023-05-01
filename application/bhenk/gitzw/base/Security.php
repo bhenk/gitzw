@@ -36,7 +36,6 @@ class Security {
 
     public static function get(): Security {
         if (is_null(self::$instance)) {
-            Log::info("Instantiating Security");
             self::$instance = new Security();
         }
         return self::$instance;
@@ -110,6 +109,7 @@ class Security {
     public function getSessionUser() : ?User {
         if (empty($this->sessionUser)) {
             if (!isset($_SESSION["logged_in"]) or !$_SESSION["logged_in"]) {
+                Log::info("No sessionUser: returning null");
                 return NULL;
             }
             if (Site::clientIp() != $_SESSION["client_ip"]) {
@@ -122,6 +122,8 @@ class Security {
                 return NULL;
             }
             $this->sessionUser = $this->getUserbyName($_SESSION["username"]);
+            Log::info("Found sessionUser: " . $this->sessionUser->getName()
+                . " " . $this->sessionUser->getLastLogin());
         }
         return $this->sessionUser;
     }

@@ -60,12 +60,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bhenk/msdata.git",
-                "reference": "6984d1cf50966b2f3d405be3f5185694a42c2607"
+                "reference": "81b0b1397aa0b825146527ac57d2c22fec565637"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bhenk/msdata/zipball/6984d1cf50966b2f3d405be3f5185694a42c2607",
-                "reference": "6984d1cf50966b2f3d405be3f5185694a42c2607",
+                "url": "https://api.github.com/repos/bhenk/msdata/zipball/81b0b1397aa0b825146527ac57d2c22fec565637",
+                "reference": "81b0b1397aa0b825146527ac57d2c22fec565637",
                 "shasum": ""
             },
             "require": {
@@ -101,7 +101,7 @@
                 "issues": "https://github.com/bhenk/msdata/issues",
                 "source": "https://github.com/bhenk/msdata/tree/main"
             },
-            "time": "2023-04-24T09:04:50+00:00"
+            "time": "2023-05-01T14:42:31+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1204,16 +1204,16 @@
         },
         {
             "name": "sebastian/diff",
-            "version": "5.0.1",
+            "version": "5.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "aae9a0a43bff37bd5d8d0311426c87bf36153f02"
+                "reference": "912dc2fbe3e3c1e7873313cc801b100b6c68c87b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/aae9a0a43bff37bd5d8d0311426c87bf36153f02",
-                "reference": "aae9a0a43bff37bd5d8d0311426c87bf36153f02",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/912dc2fbe3e3c1e7873313cc801b100b6c68c87b",
+                "reference": "912dc2fbe3e3c1e7873313cc801b100b6c68c87b",
                 "shasum": ""
             },
             "require": {
@@ -1259,7 +1259,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/diff/issues",
                 "security": "https://github.com/sebastianbergmann/diff/security/policy",
-                "source": "https://github.com/sebastianbergmann/diff/tree/5.0.1"
+                "source": "https://github.com/sebastianbergmann/diff/tree/5.0.3"
             },
             "funding": [
                 {
@@ -1267,7 +1267,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-03-23T05:12:41+00:00"
+            "time": "2023-05-01T07:48:21+00:00"
         },
         {
             "name": "sebastian/environment",
