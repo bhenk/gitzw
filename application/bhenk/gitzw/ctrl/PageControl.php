@@ -3,17 +3,42 @@
 namespace bhenk\gitzw\ctrl;
 
 use bhenk\gitzw\site\Menu;
+use bhenk\gitzw\site\Request;
 
 abstract class PageControl {
 
     private string $pageTitle = "gitzw.art";
     private array $stylesheets = [];
     private array $scriptLinks = [];
+    private Request $request;
 
-    public abstract function canHandle(array|string $path): bool;
+    /**
+     * Construct class and prepare page
+     * @param Request $request
+     */
+    function __construct(Request $request) {
+        $this->request = $request;
+    }
 
-    public function renderPage(): void {
+    /**
+     * Prepare page
+     *
+     * @return void
+     */
+    public abstract function handleRequest(): void;
 
+    /**
+     * Start emitting the page
+     *
+     * @return void
+     */
+    public abstract function renderPage(): void;
+
+    /**
+     * @return Request
+     */
+    public function getRequest(): Request {
+        return $this->request;
     }
 
     /**

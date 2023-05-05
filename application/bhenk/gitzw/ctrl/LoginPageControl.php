@@ -2,16 +2,13 @@
 
 namespace bhenk\gitzw\ctrl;
 
-use bhenk\logger\log\Log;
 use bhenk\gitzw\base\Env;
-use bhenk\gitzw\base\LoginRegister;
-use bhenk\gitzw\base\Security;
 use bhenk\gitzw\base\Site;
+use bhenk\gitzw\dajson\Registry;
 use bhenk\gitzw\dajson\User;
-use function date;
-use function implode;
-use function is_array;
-use function is_null;
+use bhenk\gitzw\site\Request;
+use bhenk\logger\log\Log;
+use function print_r;
 
 class LoginPageControl extends Page3cControl {
 
@@ -20,38 +17,32 @@ class LoginPageControl extends Page3cControl {
     private bool $name_error = false;
     private bool $pass_error = false;
     private string $hash = "";
-    private User|bool|null $sessionUser = null;
+    private User|bool $sessionUser = false;
 
-    public function canHandle(array|string $path): bool {
-        $clientIp = Site::clientIp();
-        $date = date("Y-m-d H:i:s");
-        if (!Security::get()->canLogin($clientIp)) return false;
-        if (!LoginRegister::get()->canLogin($clientIp, $date)) return false;
-        if (is_array($path)) {
-            $path = $path[0] ?? "";
-        }
-        if (!($path == "login" or $path == "logout")) return false;
-
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $this->handlePost($clientIp, $date);
-        } elseif($path == "login") {
-            $this->renderPage();
-        } else {
-            $this->handleLogout();
-        }
-        return true;
+    function __construct(Request $request) {
+        parent::__construct($request);
     }
 
-    private function handlePost(string $clientIp, string $date): void {
-        if ($_POST["action"] == "login") $this->handleLogin($clientIp, $date);
+    public function handleRequest(): void {
+        $this->sessionUser = $this->getRequest()->getSessionUser() ?? false;
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $this->handlePost();
+        } else {
+            $this->renderPage();
+        }
+    }
+
+    private function handlePost(): void {
+        if ($_POST["action"] == "login") $this->handleLogin();
         if ($_POST["action"] == "hash") {
             $this->hash = password_hash($_POST["word"], PASSWORD_DEFAULT );
             $this->renderPage();
         }
     }
 
-    private function handleLogin(string $clientIp, string $date): void {
-        Log::info("handle login from IP $clientIp");
+    private function handleLogin(): void {
+        $clientIp = $this->getRequest()->getClientIP();
+        Log::info("handle login from IP " . $clientIp);
         $this->username = $_POST["username"];
         $this->name_error = empty($this->username);
         $pass = $_POST["password"];
@@ -61,34 +52,44 @@ class LoginPageControl extends Page3cControl {
             $this->renderPage();
             return;
         }
-        $user = Security::get()->getUserByName($this->username);
+        $user = Registry::userRegistry()->getUserByName($this->username);
         if (!$user or !$user->verifyPass($pass)) {
-            LoginRegister::get()->addLoginAttempt($clientIp, $date, false);
+            Registry::loginRegistry()->addLoginAttempt($this->getRequest(), false);
             $this->message = "Unknown username or password";
             $this->renderPage();
             return;
         }
         if (!$user->hasIp($clientIp)) {
-            LoginRegister::get()->addLoginAttempt($clientIp, $date, false);
+            Registry::loginRegistry()->addLoginAttempt($this->getRequest(), false);
             $this->message = "Ip $clientIp not associated with $this->username";
             $this->renderPage();
             return;
         }
+        $this->sessionUser = $user;
+        $this->getRequest()->setSessionUser($user);
         // redirect??
         $next_path = $_SESSION["next_path"] ?? false;
-
-        LoginRegister::get()->addLoginAttempt($clientIp, $date, true);
-        Security::get()->startSession($user, $clientIp, $date);
-        if (!$next_path) {
-            Site::redirect("/admin");
-        } else {
+        Registry::loginRegistry()->addLoginAttempt($this->getRequest(), true);
+        $this->startSession();
+        if ($next_path) {
+            unset($_SESSION["next_path"]);
             Site::redirect($next_path);
+        } else {
+            Site::redirect("/admin");
         }
     }
 
-    private  function handleLogout(): void {
-        Security::get()->endSession();
-        Site::redirect("");
+    private function startSession(): void {
+        $lastLogin = $this->sessionUser->getLastLogin();
+        $this->sessionUser->setLastLogin($this->getRequest()->getRequestDate());
+        Registry::userRegistry()->persist();
+        $_SESSION["logged_in"] = true;
+        $_SESSION["username"] = $this->sessionUser->getName();
+        $_SESSION["full_name"] = $this->sessionUser->getFullName();
+        $_SESSION["client_ip"] = $this->getRequest()->getClientIP();
+        $_SESSION["last_login"] = $lastLogin;
+        $_SESSION["last_access"] = $this->getRequest()->getRequestDate();
+        Log::info("Start session: " . print_r($_SESSION, TRUE));
     }
 
     public function renderPage(): void {
@@ -104,15 +105,7 @@ class LoginPageControl extends Page3cControl {
         require_once Env::templatesDir() . "/auth/login.php";
     }
 
-    public function getSessionUser(): User|bool {
-        if (is_null($this->sessionUser)) {
-            $user = Security::get()->getSessionUser();
-            if (is_null($user)) {
-                $this->sessionUser = false;
-            } else {
-                $this->sessionUser = $user;
-            }
-        }
+    public function getSessionUser(): bool|User {
         return $this->sessionUser;
     }
 

@@ -13,10 +13,6 @@ use function substr;
 
 class Site {
 
-    private static array $restricted = [
-        "admin",
-    ];
-
     public static function hostName() : string {
         if (isset($_SERVER['HTTP_HOST'])) {
             return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")
@@ -66,10 +62,6 @@ class Site {
             $ip_address = $_SERVER['REMOTE_ADDR'];
         }
         return  $ip_address;
-    }
-
-    public static function isRestricted(array $path_array): bool {
-        return in_array(strtolower($path_array[0]), self::$restricted);
     }
 
 }

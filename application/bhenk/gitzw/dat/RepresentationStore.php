@@ -135,10 +135,9 @@ class RepresentationStore {
      * @throws Exception
      */
     public function selectWhere(string $where, int $offset = 0, int $limit = PHP_INT_MAX): array {
-        $representations = [];
-        $dos = Dao::representationDao()->selectWhere($where, $offset, $limit);
         /** @var RepresentationDo[] $dos */
-        return $this->make($dos, $representations);
+        $dos = Dao::representationDao()->selectWhere($where, $offset, $limit);
+        return $this->make($dos);
     }
 
     /**

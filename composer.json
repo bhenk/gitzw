@@ -15,7 +15,8 @@
   "require": {
     "php": ">=8.2",
     "bhenk/msdata": "dev-main",
-    "ext-exif": "*"
+    "ext-exif": "*",
+    "ext-imagick": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^10.0",

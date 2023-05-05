@@ -27,8 +27,10 @@ class Env {
      */
     private const TEMPLATES_DIR = "templates";
 
+
     private static ?string $application_directory = null;
     private static ?string $data_directory = null;
+    private static ?string $html_directory = null;
 
     /**
      * Absolute path to directory where we expect this application
@@ -60,6 +62,28 @@ class Env {
             }
         }
         return self::$data_directory;
+    }
+
+    /**
+     * Absolute path to root directory
+     * @return string
+     */
+    public static function public_html(): string {
+        if (is_null(self::$html_directory)) {
+            $dir = dirname(__DIR__, 4) . DIRECTORY_SEPARATOR;
+            if (is_dir($dir . "public_html")) {
+                self::$html_directory = $dir . "public_html";
+            } elseif (is_dir($dir . "html")) {
+                self::$html_directory = $dir . "html";
+            } else {
+                throw new RuntimeException("Public html directory not found");
+            }
+        }
+        return self::$html_directory;
+    }
+
+    public static function public_img(): string {
+        return self::public_html() . DIRECTORY_SEPARATOR . "img";
     }
 
     /**

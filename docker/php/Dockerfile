@@ -4,6 +4,11 @@ ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/mas
 RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && install-php-extensions gd
 RUN docker-php-ext-install exif
 RUN docker-php-ext-install mysqli
+RUN apt-get update
+RUN apt-get install -y libmagickwand-dev
+RUN pecl install imagick
+RUN docker-php-ext-enable imagick
+
 
 RUN mkdir /var/www/application
 RUN mkdir /var/www/config

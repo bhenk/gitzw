@@ -7,6 +7,7 @@ use bhenk\gitzw\dajson\User;
 use bhenk\gitzw\dat\Representation;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\site\Menu;
+use bhenk\gitzw\site\Request;
 use bhenk\logger\log\Log;
 use function is_null;
 
@@ -20,13 +21,13 @@ class RepresentationsPageControl extends AdminPageControl {
     private string $sourceCount;
     private int $total_reps;
 
-    public function handleRequest(array $path, User $sessionUser, Menu $site_menu): void {
-        parent::handleRequest($path, $sessionUser, $site_menu);
-        $this->prepare($path);
-        $this->renderPage();
+    function __construct(Request $request) {
+        parent::__construct($request);
+        $this->setPageTitle("Representations");
+        //$this->addStylesheet();
     }
 
-    private function prepare(array $path): void {
+    public function handleRequest(): void {
         $sources = Store::representationStore()->countBySource();
         $this->sourceCount = "";
         $this->total_reps = 0;
@@ -37,8 +38,8 @@ class RepresentationsPageControl extends AdminPageControl {
         }
         $this->sourceCount .= "total: $this->total_reps &nbsp;";
 
-        $np = $path[2] ?? "";
-        $this->offset = $path[3] ?? 0;
+        $np = $this->getRequest()->getUrlPart(2);
+        $this->offset = intval($this->getRequest()->getUrlPart(3));
         if ($np == "previous") {
             $this->offset = $this->offset - self::LIMIT;
             if ($this->offset < 0) $this->offset = 0;
@@ -49,6 +50,7 @@ class RepresentationsPageControl extends AdminPageControl {
         $this->representations = Store::representationStore()
             ->orderByYear("1=1", $this->offset, self::LIMIT, true );
     }
+
 
     /**
      * @return Representation[]

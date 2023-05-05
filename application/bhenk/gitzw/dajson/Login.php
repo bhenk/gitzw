@@ -50,7 +50,7 @@ class Login implements JsonSerializable {
      * Login attempts are allowed if:
      *
      * * no more than 3 attempts have been done,
-     * * at least one of last 3 attempts were successful
+     * * at least one of last 3 attempts was successful
      * * all last 3 attempts were failure, but the time between last attempt and this attempt is more or equal
      *    to 3 hours
      *

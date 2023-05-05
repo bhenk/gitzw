@@ -4,51 +4,46 @@ namespace bhenk\gitzw\ctrla;
 
 use bhenk\gitzw\base\Env;
 use bhenk\gitzw\ctrl\Page3cControl;
-use bhenk\gitzw\dajson\User;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\site\Menu;
-use bhenk\logger\log\Log;
+use bhenk\gitzw\site\MenuItem;
+use bhenk\gitzw\site\Request;
 use Exception;
-use function count;
 use function file_get_contents;
-use function is_array;
 
 class AdminPageControl extends Page3cControl {
 
     private Menu $site_menu;
-    private ?User $sessionUser = null;
 
-    public function canHandle(array|string $path): bool {
-        if (is_array($path)) {
-            if (count($path) > 1) return false;
-            $first = $path[0] ?? "";
-        } else {
-            $first = $path;
-        }
-        if ($first != "admin") return false;
-        return true;
+    function __construct(Request $request) {
+        parent::__construct($request);
+        $this->site_menu = new Menu();
+        $act = $this->getRequest()->getUrlPart(1);
+        $this->site_menu
+            ->addItem(new MenuItem("/", "Home"))
+            ->addItem(new MenuItem("/admin", "Admin", $act == ""))
+            ->addItem(new MenuItem("/admin/representations", "Representations",
+                $act == "representations"));
     }
 
-    public function handleRequest(array $path, User $sessionUser, Menu $site_menu): void {
-        $this->sessionUser = $sessionUser;
-        $this->site_menu = $site_menu;
+    public function handleRequest(): void {
+        $this->setPageTitle("Admin");
+        $this->setIncludeColumn3(false);
+        $this->setIncludeFooter(false);
     }
 
     public function renderPage(): void {
-        Log::info("Rendering admin page for user " . $this->sessionUser->getName());
-        $this->setPageTitle("Admin");
         $this->addStylesheet("/css/admin/header.css");
         $this->addStylesheet("/css/site/menu.css");
-        $this->setIncludeFooter(false);
         parent::renderPage();
     }
 
     public function getSessionUserFullName(): string {
-        return $this->sessionUser->getFullName();
+        return $this->getRequest()->getSessionUser()->getFullName();
     }
 
     public function getLastLogin(): string {
-        return $this->sessionUser->getLastLogin();
+        return $this->getRequest()->getSessionUser()->getLastLogin();
     }
 
     /**
@@ -85,7 +80,4 @@ class AdminPageControl extends Page3cControl {
         echo file_get_contents(Env::templatesDir() . "/test/lorem.txt");
     }
 
-    public function renderColumn3(): void {
-        echo "column 3";
-    }
 }

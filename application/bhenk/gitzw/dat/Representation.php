@@ -3,6 +3,7 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\base\Env;
+use bhenk\gitzw\base\Images;
 use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\model\DateTrait;
 use bhenk\gitzw\model\StoredObjectInterface;
@@ -11,6 +12,7 @@ use ReflectionException;
 use function exif_read_data;
 use function json_decode;
 use function json_encode;
+use function strrpos;
 
 /**
  * A Representation represents a manifestation of a Work
@@ -106,9 +108,14 @@ class Representation implements StoredObjectInterface {
      * @throws Exception
      */
     public function getFilename(): bool|string {
-        if (is_null($this->repDo->getREPID())) return false;
+        $REPID = $this->repDo->getREPID();
+        if (is_null($REPID)) return false;
         return Env::dataDir() . DIRECTORY_SEPARATOR
             . self::IMG_DIR . DIRECTORY_SEPARATOR . $this->repDo->getREPID();
+    }
+
+    public function getLocation(array $dimensions = Images::LARGE): string {
+        return Images::locationForREPID($this->getREPID(), $dimensions);
     }
 
     /**
