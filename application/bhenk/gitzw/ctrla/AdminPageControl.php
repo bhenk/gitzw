@@ -10,6 +10,9 @@ use bhenk\gitzw\site\MenuItem;
 use bhenk\gitzw\site\Request;
 use Exception;
 use function file_get_contents;
+use function gettype;
+use function phpinfo;
+use function str_replace;
 
 class AdminPageControl extends Page3cControl {
 
@@ -22,6 +25,7 @@ class AdminPageControl extends Page3cControl {
         $this->site_menu
             ->addItem(new MenuItem("/", "Home"))
             ->addItem(new MenuItem("/admin", "Admin", $act == ""))
+            ->addItem(new MenuItem("/admin/phpinfo", "PHP info", $act == "phpinfo"))
             ->addItem(new MenuItem("/admin/representations", "Representations",
                 $act == "representations"));
     }
@@ -30,6 +34,7 @@ class AdminPageControl extends Page3cControl {
         $this->setPageTitle("Admin");
         $this->setIncludeColumn3(false);
         $this->setIncludeFooter(false);
+
     }
 
     public function renderPage(): void {
@@ -73,11 +78,19 @@ class AdminPageControl extends Page3cControl {
     }
 
     public function renderColumn1(): void {
+        require_once Env::templatesDir() ."/base/logo.php";
         require_once Env::templatesDir() . "/site/menu.php";
     }
 
     public function renderColumn2(): void {
-        echo file_get_contents(Env::templatesDir() . "/test/lorem.txt");
+        $act = $this->getRequest()->getUrlPart(1);
+        if ($act == "") {
+            echo file_get_contents(Env::templatesDir() . "/test/lorem.txt");
+        } elseif ($act == "phpinfo") {
+            phpinfo();
+        } else {
+            echo "unknown command: " . $act;
+        }
     }
 
 }

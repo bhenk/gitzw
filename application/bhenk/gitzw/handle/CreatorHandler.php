@@ -13,8 +13,19 @@ class CreatorHandler extends AbstractHandler {
         $name = $request->getUrlPart(0);
         $creator = Store::creatorStore()->selectByName($name);
         if (!$creator) {
-            $this->getNextHandler()->handleRequest($request);
-            return;
+            $name = $request->getIdPart(0);
+            if (empty($name)) {
+                $this->getNextHandler()->handleRequest($request);
+                return;
+            } else {
+                $creator = Store::creatorStore()->selectByName($name);
+                if (!$creator) {
+                    $this->getNextHandler()->handleRequest($request);
+                    return;
+                } else {
+                    $request->setIdUrl(true);
+                }
+            }
         }
         $request->setCreator($creator);
         $act = $request->getUrlPart(1);
@@ -26,9 +37,9 @@ class CreatorHandler extends AbstractHandler {
     }
 
     private function goCreatorPage(Request $request): void {
-        $long_url = $request->getCreator()->getUriName();
-        if ($request->getUrlPart(0) != $long_url) {
-            Site::redirect("/" . $long_url);
+        $canonical = $request->getCreator()->getUriName();
+        if ($request->getCleanUrl() != $canonical) {
+            Site::redirect("/" . $canonical);
         } else {
             $ctrl = new CreatorPageControl($request);
             $ctrl->handleRequest();

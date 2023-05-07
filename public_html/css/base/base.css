@@ -2,12 +2,14 @@
     /* variables are written with 2 hyphens */
     --background: #DCDCDC;
     --font-color: #232323;
+    --font-accent: blue;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --background: #232323;
         --font-color: #DCDCDC;
+        --font-accent: orange;
     }
 }
 
@@ -44,4 +46,16 @@ a {
     border: 2px solid #999999;
     background-color: #cccccc;
     color: #666666;
+}
+
+.logo {
+    display: block;
+    background-color: gray;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.logo svg:hover {
+    fill: red;
+    stroke: magenta;
 }

@@ -1,5 +1,5 @@
 <?php
 ?>
-<div id="foot">
-
+<div id="footer">
+    <?php $this->renderFooter(); ?>
 </div>

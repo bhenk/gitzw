@@ -27,6 +27,7 @@ class Work implements StoredObjectInterface {
     use DateTrait;
 
     private WorkRelations $relations;
+    private ?Creator $creator = null;
 
     function __construct(private readonly WorkDo $workDo = new WorkDo(),
                          ?array                  $representationRelations = null) {
@@ -89,6 +90,19 @@ class Work implements StoredObjectInterface {
      */
     public function setRESID(string $RESID): void {
         $this->workDo->setRESID($RESID);
+    }
+
+    public function getCanonicalUrl(Creator $creator = null): bool|string {
+        if (is_null($this->getRESID())) return false;
+        if (is_null($creator)) {
+            $creator = $this->getCreator();
+        }
+        $resid_array = explode(".", $this->getRESID());
+        $shortCRID = $resid_array[0];
+        if ($shortCRID != $creator->getShortCRID()) return false;
+        $this->creator = $creator;
+        $cat = WorkCategories::forName($resid_array[2]);
+        return $creator->getUriName() . "/work/$cat->value/$resid_array[3]/$resid_array[4]";
     }
 
     /**
@@ -182,12 +196,16 @@ class Work implements StoredObjectInterface {
      * @throws Exception
      */
     public function getCreator(): bool|Creator {
-        if (is_null($this->workDo->getCreatorId())) return false;
-        return Store::creatorStore()->select($this->workDo->getCreatorId());
+        if (is_null($this->creator)) {
+            if (is_null($this->workDo->getCreatorId())) return false;
+            $this->creator = Store::creatorStore()->select($this->workDo->getCreatorId());
+        }
+        return $this->creator;
     }
 
     public function unsetCreator(): void {
         $this->workDo->setCreatorId(null);
+        $this->creator = null;
     }
 
     /**

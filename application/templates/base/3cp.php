@@ -13,7 +13,9 @@ include("head.php");
 <div id="container">
     <?php if ($this->includeColumn1()) { ?>
         <div id="column_1">
+            <div id="c1_content">
             <?php $this->renderColumn1(); ?>
+            </div>
         </div>
     <?php } ?>
     <?php if ($this->includeColumn2()) { ?>

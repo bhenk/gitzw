@@ -10,7 +10,9 @@ use Exception;
 use function array_values;
 use function count;
 use function gettype;
+use function in_array;
 use function is_null;
+use function var_export;
 
 /**
  * Store for obtaining and persisting Works
@@ -250,6 +252,20 @@ class WorkStore {
             $catCount[$item["category"]] = $item["COUNT(*)"];
         }
         return $catCount;
+    }
+
+    /**
+     * Select category, year for given creator shortCRID
+     * @param string $shortCrid
+     * @return array
+     * @throws Exception
+     */
+    public function selectCatYear(string $shortCrid): array {
+        $sql = "SELECT category, YEAR(date) as `year` from tbl_works "
+            . "where RESID like '$shortCrid.%' "
+            . "GROUP BY category, `year` "
+            . "ORDER BY category, `year` DESC";
+        return Dao::workDao()->execute($sql);
     }
 
     /**

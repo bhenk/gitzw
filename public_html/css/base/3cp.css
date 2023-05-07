@@ -2,7 +2,7 @@
 
 :root {
 	--heightheader: 35px;
-	--col1width: 250px;
+	--col1width: 20vw;
 }
 
 #column_2 {
@@ -70,11 +70,22 @@
 
 }
 
+body {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
 #header {
 	height: var(--heightheader);
 	background-color: lightgray;
 	position: sticky;top: 0;
 }
+
+#footer {
+	margin-top: auto;
+}
+
 
 @media (prefers-color-scheme: dark) {
 	#header {

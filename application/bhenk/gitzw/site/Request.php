@@ -5,6 +5,8 @@ namespace bhenk\gitzw\site;
 use bhenk\gitzw\base\Site;
 use bhenk\gitzw\dajson\User;
 use bhenk\gitzw\dat\Creator;
+use bhenk\gitzw\dat\Work;
+use bhenk\gitzw\model\WorkCategories;
 use bhenk\logger\log\Log;
 use bhenk\logger\log\Req;
 use function date;
@@ -21,10 +23,14 @@ class Request {
     private string $request;
     private string $cleanUrl;
     private array $url_array;
+    private array $id_array;
     private string $clientIP;
     private string $requestDate;
     private ?User $sessionUser = null;
     private ?Creator $creator = null;
+    private ?Work $work = null;
+    private bool $id_url = false;
+    private ?WorkCategories $workCategory = null;
 
     /**
      * Constructs a new Request
@@ -34,9 +40,11 @@ class Request {
         Req::info("");
         $this->request = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
         Log::info("------------------- request: " . $this->request);
-        $this->cleanUrl = strtolower(preg_replace("/[^0-9a-zA-Z\/._ +]/", "-", $this->request));
-        $offset = str_starts_with($this->cleanUrl, "/") ? 1 : 0;
-        $this->url_array = explode('/', substr($this->cleanUrl, $offset));
+        $offset = str_starts_with($this->request, "/") ? 1 : 0;
+        $clean = strtolower(preg_replace("/[^0-9a-zA-Z\/._ +]/", "-", $this->request));
+        $this->cleanUrl = substr($clean, $offset);
+        $this->url_array = explode('/', $this->cleanUrl);
+        $this->id_array = explode('.', $this->cleanUrl);
         $this->clientIP = Site::clientIp();
     }
 
@@ -75,7 +83,15 @@ class Request {
      * @return string
      */
     public function getUrlPart(int $index): string {
-        return $this->url_array[$index] ?? "";
+        if ($this->id_url) {
+            return $this->getIdPart($index);
+        } else {
+            return $this->url_array[$index] ?? "";
+        }
+    }
+
+    public function getIdPart(int $index): string {
+        return $this->id_array[$index] ?? "";
     }
 
     /**
@@ -119,6 +135,50 @@ class Request {
 
     public function hasCreator(): bool {
         return !is_null($this->creator);
+    }
+
+    public function getWork(): ?Work {
+        return $this->work;
+    }
+
+    public function setWork(?Work $work): void {
+        $this->work = $work;
+    }
+
+    public function hasWork(): bool {
+        return !is_null($this->work);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIdUrl(): bool {
+        return $this->id_url;
+    }
+
+    /**
+     * @param bool $id_url
+     */
+    public function setIdUrl(bool $id_url): void {
+        $this->id_url = $id_url;
+    }
+
+    /**
+     * @return WorkCategories|null
+     */
+    public function getWorkCategory(): ?WorkCategories {
+        return $this->workCategory;
+    }
+
+    /**
+     * @param WorkCategories|null $workCategory
+     */
+    public function setWorkCategory(?WorkCategories $workCategory): void {
+        $this->workCategory = $workCategory;
+    }
+
+    public function hasWorkCategory(): bool {
+        return !is_null($this->workCategory);
     }
 
 }

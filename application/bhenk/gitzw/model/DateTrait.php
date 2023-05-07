@@ -3,6 +3,7 @@
 namespace bhenk\gitzw\model;
 
 use DateTimeImmutable;
+use function date;
 use function str_replace;
 use function strlen;
 use function strpos;
@@ -53,6 +54,13 @@ trait DateTrait {
             return true;
         }
         return false;
+    }
+
+    public function getYear(): ?string {
+        if ($this->date->getDate()) {
+            return substr($this->date->getDate(), 0, 4);
+        }
+        return null;
     }
 
     /**

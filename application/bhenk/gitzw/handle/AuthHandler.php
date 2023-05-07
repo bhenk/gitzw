@@ -4,6 +4,7 @@ namespace bhenk\gitzw\handle;
 
 use bhenk\gitzw\base\Env;
 use bhenk\gitzw\base\Site;
+use bhenk\gitzw\ctrl\HomePageControl;
 use bhenk\gitzw\ctrl\LoginPageControl;
 use bhenk\gitzw\dajson\Registry;
 use bhenk\gitzw\site\Request;
@@ -40,12 +41,23 @@ class AuthHandler extends AbstractHandler {
      */
     public function handleRequest(Request $request): void {
         session_start();
+        $first = $request->getUrlPart(0);
         if (isset($_SESSION["logged_in"]) and $_SESSION["logged_in"]) {
             if (!$this->setSessionUser($request)) return;
+            if ($first == "logout") {
+                $this->endSession($request);
+                Site::redirect("");
+                return;
+            }
             if ($this->isRestricted($request) && $this->sessionExpired($request)) return;
         }
 
-        $first = $request->getUrlPart(0);
+        if ($first == "") {
+            $ctrl = new HomePageControl($request);
+            $ctrl->handleRequest();
+            return;
+        }
+
         if ($first == "login") {
             if ($this->canLogin($request)) {
                 $ctrl = new LoginPageControl($request);
@@ -55,16 +67,7 @@ class AuthHandler extends AbstractHandler {
             }
             return;
         }
-        if ($first == "logout") {
-            if (empty(Registry::userRegistry()->getUsersByIp($request->getClientIP()))) {
-                // no known ip
-                $this->endSession($request);
-                (new NotFoundHandler())->handleRequest($request);
-                return;
-            }
-            $this->endSession($request);
-            Site::redirect("");
-        }
+
         if ($first == "admin") {
             if ($request->hasSessionUser()) {
                 (new AdminHandler())->handleRequest($request);

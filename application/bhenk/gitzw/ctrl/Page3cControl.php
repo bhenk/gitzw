@@ -105,7 +105,7 @@ abstract class Page3cControl extends PageControl {
     }
 
     public function renderColumn3(): void {
-        echo "column 3 " . self::class;
+        echo "column 3 <br/>" . "Page3cControl";
     }
 
     /**
