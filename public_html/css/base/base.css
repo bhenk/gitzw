@@ -47,15 +47,3 @@ a {
     background-color: #cccccc;
     color: #666666;
 }
-
-.logo {
-    display: block;
-    background-color: gray;
-    padding: 15px;
-    margin-bottom: 10px;
-}
-
-.logo svg:hover {
-    fill: red;
-    stroke: magenta;
-}

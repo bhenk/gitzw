@@ -69,7 +69,7 @@ trait MultiLanguageTitleTrait {
         return $this->ml_title->getTitleNl();
     }
 
-    public function getTitles(): string {
+    public function getTitles(string $ifempty = ""): string {
         if ($this->getPreferredLanguage() == "nl") {
             $first = $this->getTitleNl();
             $second = $this->getTitleEn();
@@ -81,8 +81,10 @@ trait MultiLanguageTitleTrait {
             return $first . " (" . $second . ")";
         } elseif ($first) {
             return $first;
-        } else {
+        }elseif ($second) {
             return $second;
+        } else {
+            return $ifempty;
         }
     }
 

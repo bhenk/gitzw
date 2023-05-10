@@ -23,7 +23,7 @@ $menu = $this->getMenu();
 </div>
 
 <script>
-    window.addEventListener("load", () => {
+    window.addEventListener("DOMContentLoaded", () => {
         const elem = document.getElementById("<?php echo $menu->getActiveMenuId(); ?>");
         menu_label_click(elem);
     });

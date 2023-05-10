@@ -6,6 +6,7 @@ use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\WorkHasRepDo;
 use Exception;
 use function array_keys;
+use function array_values;
 use function count;
 use function in_array;
 use function is_null;
@@ -114,6 +115,20 @@ class WorkRelations extends RepresentationOwner {
         if (in_array($representationId, array_keys($this->repRelations)))
             return $this->repRelations[$representationId];
         return null;
+    }
+
+    /**
+     * Get the preferred Representation or *null* if owner does not have a preferred representation
+     * @return Representation|null
+     * @throws Exception
+     */
+    public function getPreferredRepresentation(): ?Representation {
+        foreach ($this->getRepRelations() as $workHasRepDo) {
+            if ($workHasRepDo->isPreferred()) {
+                return $this->getRepresentation($workHasRepDo->getFkRight());
+            }
+        }
+        return array_values($this->getRepresentations())[0] ?? null;
     }
 
     /**

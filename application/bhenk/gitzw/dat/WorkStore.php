@@ -230,12 +230,19 @@ class WorkStore {
         // Select RESID from tbl_works where RESID like 'hnq.work.draw.2020.%' order by RESID;
         $sql = /** @lang text */
             "SELECT RESID from " . Dao::workDao()->getTableName()
-            . " where RESID like '$owner.work.$cat->name.$year.%' order by RESID;";
+            . " WHERE RESID like '$owner.work.$cat->name.$year.%' order by RESID;";
         $resids = [];
         foreach (Dao::workDao()->execute($sql) as $row) {
             $resids[] = $row["RESID"];
         }
         return $resids;
+    }
+
+    public function countWhere(string $where): int {
+        // SELECT COUNT(*) FROM `tbl_works` WHERE
+        $sql = "SELECT COUNT(*) FROM " . Dao::workDao()->getTableName() . " WHERE " . $where . ";";
+        $result = Dao::workDao()->execute($sql);
+        return $result[0]["COUNT(*)"];
     }
 
     /**

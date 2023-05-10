@@ -11,7 +11,8 @@ use function str_replace;
 
 class Images {
 
-    const SMALLER = [300, 200];
+    const SMALLEST = [300, 200];
+    const SMALLER = [350, 350];
     const SMALL = [600, 400];
     const MEDIUM_SMALL = [800, 533];
     const MEDIUM = [1200, 800];

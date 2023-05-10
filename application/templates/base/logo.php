@@ -1,11 +1,11 @@
 <?php
 ?>
 <!-- logo.php -->
-<div class="logo">
+<div id="logo">
     <a href="/">
-        <svg style="width: 22vw; height: 15vw;">
+        <svg><!-- style see base/3cp.css -->
             <rect width="14vw" height="14vw"/>
-            <text fill="#ffffff" style="font-size:2.9vw;"
+            <text fill="#ffffff" style="font-size:2.7vw;"
                   font-family="Courier New, Courier, monospace" x="7%" y="85%">gitzw.art</text>
         </svg>
     </a>

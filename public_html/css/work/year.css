@@ -1,0 +1,59 @@
+
+#works_year_view {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 15px 30px 15px 30px;
+}
+
+div.work {
+    width: 380px;
+    height: 380px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+div.image div {
+    font-style: italic;
+    font-size: 0.9em;
+    text-align: center;
+    padding-right: 10px;
+}
+
+.works_year_btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.page_btn {
+    color: grey;
+    font-size: 1.5em;
+}
+
+.page_dig {
+    color: grey;
+    font-size: 1.2em;
+}
+
+.disabled {
+    visibility: hidden;
+}
+
+.left_pager {
+    margin-top: 30px;
+}
+
+/*
+#grey_space {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #999999;
+    opacity: 0.7;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+}*/

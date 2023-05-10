@@ -3,10 +3,12 @@
 namespace bhenk\gitzw\handle;
 
 use bhenk\gitzw\base\Site;
-use bhenk\gitzw\ctrl\WorkPageControl;
+use bhenk\gitzw\ctrl\WorkViewControl;
+use bhenk\gitzw\ctrl\WorkYearViewControl;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\model\WorkCategories;
 use bhenk\gitzw\site\Request;
+use Exception;
 use function is_null;
 
 class WorkHandler extends AbstractHandler {
@@ -17,6 +19,7 @@ class WorkHandler extends AbstractHandler {
      * Precondition: creator is set on request.
      * @param Request $request
      * @return void
+     * @throws Exception
      */
     public function handleRequest(Request $request): void {
         $act = $request->getUrlPart(1);
@@ -31,7 +34,7 @@ class WorkHandler extends AbstractHandler {
             if ($request->getCleanUrl() != $canonical) {
                 Site::redirect("/" . $canonical);
             } else {
-                $this->goWorkPage($request, WorkPageControl::MODE_WORK);
+                $this->goWorkControl($request);
             }
             return;
         } else {
@@ -49,7 +52,7 @@ class WorkHandler extends AbstractHandler {
             if ($request->getCleanUrl() != $canonical) {
                 Site::redirect("/" . $canonical);
             } else {
-                $this->goWorkPage($request, WorkPageControl::MODE_CAT);
+                $this->goWorkCatControl($request);
             }
             return;
         }
@@ -61,8 +64,11 @@ class WorkHandler extends AbstractHandler {
             if ($request->getCleanUrl() != $canonical) {
                 Site::redirect("/" . $canonical);
             } else {
-                $this->goWorkPage($request, WorkPageControl::MODE_YEAR);
+                $this->goWorkYearControl($request);
             }
+            return;
+        } elseif ($number == "view") {
+            $this->goWorkYearControl($request);
             return;
         }
 
@@ -79,14 +85,27 @@ class WorkHandler extends AbstractHandler {
             Site::redirect("/" . $canonical);
             return;
         }
-        $this->goWorkPage($request, WorkPageControl::MODE_ID);
+        $this->goWorkViewControl($request);
     }
 
-    private function goWorkPage(Request $request, int $mode): void {
-        $ctrl = new WorkPageControl($request, $mode);
+    private function goWorkViewControl(Request $request): void {
+        $ctrl = new WorkViewControl($request);
         $ctrl->handleRequest();
         $ctrl->renderPage();
     }
 
+    private function goWorkYearControl(Request $request): void {
+        $ctrl = new WorkYearViewControl($request);
+        /*$ctrl->handleRequest();*/
+        /*$ctrl->renderPage();*/
+    }
+
+    private function goWorkCatControl(Request $request): void {
+        echo "work cat control = under construction";
+    }
+
+    private function goWorkControl(Request $request): void {
+        echo "work control = under construction";
+    }
 
 }
