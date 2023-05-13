@@ -25,12 +25,6 @@ $menu = $this->getMenu();
 
 <script>
     window.addEventListener("DOMContentLoaded", () => {
-        let left_menu = getCookie("l_menu");
-        if (left_menu === "in") {
-            leftMenuIn();
-        } else {
-            leftMenuOut();
-        }
         const elem = document.getElementById("<?php echo $menu->getActiveMenuId(); ?>");
         menu_label_click(elem);
     });
@@ -48,19 +42,5 @@ $menu = $this->getMenu();
                 collection[i].nextElementSibling.style.display="none";
             }
         }
-    }
-
-    function leftMenuOut() {
-        document.getElementById("column_1").style.display = "inherit";
-        document.getElementById("left_menu_out").style.display = "none";
-        document.getElementById("left_menu_in").style.display = "inherit";
-        setCookie("l_menu", "out", 1);
-    }
-
-    function leftMenuIn() {
-        document.getElementById("column_1").style.display = "none";
-        document.getElementById("left_menu_out").style.display = "inherit";
-        document.getElementById("left_menu_in").style.display = "none";
-        setCookie("l_menu", "in", 1);
     }
 </script>

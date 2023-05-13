@@ -22,7 +22,7 @@
 
 /* left and right paging */
 .lrpage-prev {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: -50px;
     width: 35px;
@@ -30,7 +30,7 @@
 }
 
 .lrpage-next {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: -50px;
     width: 35px;
@@ -109,15 +109,36 @@
     background-color: grey;
 }
 
-#fullscreen {
+#left_button_group {
     width: 36px;
-    height: 35px;
-    position: absolute;
-    right: -50px;
-    bottom: 0;
+    height: 100%;
+    padding-left: 2px;
+    padding-top: 5px;
+    position: fixed;
+    left: var(--col1width);
+    top: 0;
+}
+
+#right_button_group {
+    width: 36px;
+    height: 100%;
+    padding-right: 2px;
+    padding-top: 5px;
+    position: fixed;
+    right: var(--col3width);
+    top: 0;
+}
+
+.glower {
     opacity: var(--opacity);
 }
 
-#fullscreen:hover {
+.glower:hover {
     opacity: 1.0;
 }
+
+.link_bar {
+    width: 36px;
+    height: 80%;
+}
+

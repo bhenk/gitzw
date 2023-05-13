@@ -14,7 +14,6 @@ $location_08 = $repr->getLocation(Images::IMG_08);
 ?>
 
 <div id="work_view">
-
     <div class="work">
         <picture class="image">
             <source srcset="<?php echo $location_08 ?>" media="(max-width: 600px)">
@@ -25,47 +24,60 @@ $location_08 = $repr->getLocation(Images::IMG_08);
         <span><?php echo $work->getTitles("&lt;no title&gt;")
                 . " - " . $work->getMedia() . " - " . $work->getDimensions(); ?></span>
     </div>
-    <div class="lrpage-prev" title="to the future">
-        <a href="<?php echo $page->getFutureUrl(); ?>">
-            <picture>
-                <source srcset="/img/ico/lefttrianglewhite35.png" media="(prefers-color-scheme: dark)">
-                <img src="/img/ico/left_triangle35.png" alt="to the future" title="to the future">
-            </picture>
-        </a>
-    </div>
-    <div class="lrpage-next" title="to the past">
-        <a href="<?php echo $page->getPastUrl(); ?>">
-            <picture>
-                <source srcset="/img/ico/righttrianglewhite35.png" media="(prefers-color-scheme: dark)">
-                <img src="/img/ico/right_triangle35.png" alt="to the past" title="to the past">
-            </picture>
-        </a>
-    </div>
-    <div id="left_menu_in" onclick="leftMenuIn()">
-        <img src="/img/ico/left_arrow35.png" alt="hide menu" title="hide menu">
-    </div>
-    <div id="right_data_in" onclick="rightDataIn()">
-        <img src="/img/ico/right_arrow35.png" alt="hide data" title="hide data panel">
-    </div>
-    <div id="fullscreen" onclick="openFullscreen()">
-        <picture>
-            <source srcset="/img/ico/fullscreen-white35.png" media="(prefers-color-scheme: dark)">
-            <img src="/img/ico/fullscreen-35.png" alt="open fullscreen" title="open fullscreen">
+</div>
+
+<div id="left_button_group">
+    <picture onclick="leftMenuIn()" class="glower" id="left_in">
+        <source srcset="/img/ico/left-arrow-w35.png" media="(prefers-color-scheme: dark)">
+        <img src="/img/ico/left-arrow-b35.png" alt="hide menu" title="hide menu">
+    </picture>
+    <picture onclick="leftMenuOut()" class="glower" id="left_out">
+        <source srcset="/img/ico/right-arrow-w35.png" media="(prefers-color-scheme: dark)">
+        <img src="/img/ico/right-arrow-b35.png" alt="hide menu" title="show menu">
+    </picture>
+    <a href="<?php echo $page->getFutureUrl(); ?>">
+        <picture class="glower" id="future_link"  onmouseover="futureLinkOver()" onmouseout="futureLinkOut()">
+            <source srcset="/img/ico/lefttrianglewhite35.png" media="(prefers-color-scheme: dark)">
+            <img src="/img/ico/left_triangle35.png" alt="to the future" title="to the future">
         </picture>
-    </div>
+    </a>
+    <picture onclick="openFullscreen()" class="glower">
+        <source srcset="/img/ico/fullscreen-w35.png" media="(prefers-color-scheme: dark)">
+        <img src="/img/ico/fullscreen-35.png" alt="open fullscreen" title="open fullscreen">
+    </picture>
+    <a href="<?php echo $page->getFutureUrl(); ?>" title="to the future">
+        <div class="link_bar" onmouseover="futureLinkOver()" onmouseout="futureLinkOut()"></div>
+    </a>
 </div>
 
-<div id="left_menu_out" onclick="leftMenuOut()">
-    <img src="/img/ico/right_arrow35.png" alt="show menu" title="show menu">
+<div id="right_button_group">
+    <picture onclick="rightDataIn()" class="glower" id="right_in">
+        <source srcset="/img/ico/right-arrow-w35.png" media="(prefers-color-scheme: dark)">
+        <img src="/img/ico/right-arrow-b35.png" alt="hide data panel" title="hide data panel">
+    </picture>
+    <picture onclick="rightDataOut()" class="glower" id="right_out">
+        <source srcset="/img/ico/left-arrow-w35.png" media="(prefers-color-scheme: dark)">
+        <img src="/img/ico/left-arrow-b35.png" alt="show data panel" title="show data panel">
+    </picture>
+    <a href="<?php echo $page->getPastUrl(); ?>">
+        <picture class="glower" id="past_link" onmouseover="pastLinkOver()" onmouseout="pastLinkOut()">
+            <source srcset="/img/ico/righttrianglewhite35.png" media="(prefers-color-scheme: dark)">
+            <img src="/img/ico/right_triangle35.png" alt="to the future" title="to the past">
+        </picture>
+    </a>
+    <a href="<?php echo $page->getPastUrl(); ?>" title="to the past">
+        <div class="link_bar" onmouseover="pastLinkOver()" onmouseout="pastLinkOut()"></div>
+    </a>
 </div>
 
-<div id="right_data_out" onclick="rightDataOut()">
-    <img src="/img/ico/left_arrow35.png" alt="show data" title="show data panel">
-</div>
-
-<!-- zoom in, zoom out-->
 <script>
     window.addEventListener("DOMContentLoaded", () => {
+        let left_menu = getCookie("l_menu");
+        if (left_menu === "in") {
+            leftMenuIn();
+        } else {
+            leftMenuOut();
+        }
         let right_data = getCookie("r_data");
         if (right_data === "out") {
             rightDataOut();
@@ -73,6 +85,54 @@ $location_08 = $repr->getLocation(Images::IMG_08);
             rightDataIn();
         }
     });
+
+    function leftMenuOut() {
+        document.getElementById("column_1").style.display = "inherit";
+        document.getElementById("left_button_group").style.left ="var(--col1width)";
+        document.getElementById("left_out").style.display = "none";
+        document.getElementById("left_in").style.display = "inherit";
+        setCookie("l_menu", "out", 1);
+    }
+
+    function leftMenuIn() {
+        document.getElementById("column_1").style.display = "none";
+        document.getElementById("left_button_group").style.left ="0";
+        document.getElementById("left_out").style.display = "inherit";
+        document.getElementById("left_in").style.display = "none";
+        setCookie("l_menu", "in", 1);
+    }
+
+    function rightDataOut() {
+        document.getElementById("column_3").style.display = "inherit";
+        document.getElementById("right_button_group").style.right ="var(--col3width)";
+        document.getElementById("right_out").style.display = "none";
+        document.getElementById("right_in").style.display = "inherit";
+        setCookie("r_data", "out", 1);
+    }
+
+    function rightDataIn() {
+        document.getElementById("column_3").style.display = "none";
+        document.getElementById("right_button_group").style.right ="0";
+        document.getElementById("right_out").style.display = "inherit";
+        document.getElementById("right_in").style.display = "none";
+        setCookie("r_data", "in", 1);
+    }
+
+    function futureLinkOver() {
+        document.getElementById("future_link").style.opacity = "1.0";
+    }
+
+    function futureLinkOut() {
+        document.getElementById("future_link").style.opacity = "var(--opacity)";
+    }
+
+    function pastLinkOver() {
+        document.getElementById("past_link").style.opacity = "1.0";
+    }
+
+    function pastLinkOut() {
+        document.getElementById("past_link").style.opacity = "var(--opacity)";
+    }
 
     function image_clicked(el) {
         if (document.fullscreenElement) {
@@ -91,24 +151,11 @@ $location_08 = $repr->getLocation(Images::IMG_08);
         }
     }
 
-    function rightDataOut() {
-        document.getElementById("column_3").style.display = "inherit";
-        document.getElementById("right_data_out").style.display = "none";
-        document.getElementById("right_data_in").style.display = "inherit";
-        setCookie("r_data", "out", 1);
-    }
-
-    function rightDataIn() {
-        document.getElementById("column_3").style.display = "none";
-        document.getElementById("right_data_out").style.display = "inherit";
-        document.getElementById("right_data_in").style.display = "none";
-        setCookie("r_data", "in", 1);
-    }
-
     function openFullscreen() {
         let elem = document.getElementById("img_work_view");
         if (elem.requestFullscreen) {
-            elem.requestFullscreen().then(r => {});
+            elem.requestFullscreen().then(function (r) {
+            });
         }
         elem.style.cursor = "default";
     }

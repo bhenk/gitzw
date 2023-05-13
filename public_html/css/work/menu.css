@@ -51,37 +51,3 @@ li.menu_item a:hover {
     color: var(--background);
 }
 
-#left_menu_out {
-    width: 36px;
-    height: 35px;
-    background-color: gray;
-    position: fixed;
-    left: 0;
-    top: 0;
-    opacity: var(--opacity);
-    display: none;
-    border-bottom-right-radius: 15px;
-    border-top-right-radius: 15px;
-}
-
-#left_menu_out:hover {
-    opacity: 1.0;
-    background-color: lightgrey;
-}
-
-#left_menu_in {
-    width: 36px;
-    height: 35px;
-    background-color: gray;
-    position: fixed;
-    top: 0;
-    left: var(--col1width);
-    opacity: var(--opacity);
-    border-bottom-right-radius: 15px;
-    border-top-right-radius: 15px;
-}
-
-#left_menu_in:hover {
-    opacity: 1.0;
-    background-color: grey;
-}
