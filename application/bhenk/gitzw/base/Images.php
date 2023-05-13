@@ -11,12 +11,10 @@ use function str_replace;
 
 class Images {
 
-    const SMALLEST = [300, 200];
-    const SMALLER = [350, 350];
-    const SMALL = [600, 400];
-    const MEDIUM_SMALL = [800, 533];
-    const MEDIUM = [1200, 800];
-    const LARGE = [2400, 1600];
+    const IMG_04 = [400, 400];
+    const IMG_08 = [800, 800];
+    const IMG_15 = [1500, 1500];
+    const IMG_30 = [3000, 3000];
 
     public static function locationForREPID(string $REPID, array $dimensions): string {
         $width = $dimensions[0];

@@ -64,11 +64,11 @@ class WorkHandler extends AbstractHandler {
             if ($request->getCleanUrl() != $canonical) {
                 Site::redirect("/" . $canonical);
             } else {
-                $this->goWorkYearControl($request);
+                $this->goWorkYearViewControl($request);
             }
             return;
         } elseif ($number == "view") {
-            $this->goWorkYearControl($request);
+            $this->goWorkYearViewControl($request);
             return;
         }
 
@@ -90,14 +90,10 @@ class WorkHandler extends AbstractHandler {
 
     private function goWorkViewControl(Request $request): void {
         $ctrl = new WorkViewControl($request);
-        $ctrl->handleRequest();
-        $ctrl->renderPage();
     }
 
-    private function goWorkYearControl(Request $request): void {
+    private function goWorkYearViewControl(Request $request): void {
         $ctrl = new WorkYearViewControl($request);
-        /*$ctrl->handleRequest();*/
-        /*$ctrl->renderPage();*/
     }
 
     private function goWorkCatControl(Request $request): void {

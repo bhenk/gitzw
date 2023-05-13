@@ -114,7 +114,7 @@ class Representation implements StoredObjectInterface {
             . self::IMG_DIR . DIRECTORY_SEPARATOR . $this->repDo->getREPID();
     }
 
-    public function getLocation(array $dimensions = Images::LARGE): string {
+    public function getLocation(array $dimensions = Images::IMG_30): string {
         return Images::locationForREPID($this->getREPID(), $dimensions);
     }
 

@@ -30,8 +30,8 @@ class WorkYearViewControl extends WorkPageControl {
         }
         parent::__construct($request);
         $this->addStylesheet("/css/work/year.css");
-        $this->addStylesheet("/css/base/spinner.css");
         $this->setIncludeColumn3(false);
+        $this->setIncludeFooter(false);
         $this->handleRequest();
     }
 

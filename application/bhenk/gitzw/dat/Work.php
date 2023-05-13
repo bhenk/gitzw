@@ -2,6 +2,7 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\base\Env;
 use bhenk\gitzw\dao\WorkDo;
 use bhenk\gitzw\dao\WorkHasRepDo;
 use bhenk\gitzw\model\DateTrait;
@@ -234,5 +235,28 @@ class Work implements StoredObjectInterface {
      */
     public function getWorkDo(): WorkDo {
         return $this->workDo;
+    }
+
+    // [
+    //    			"@type"=>"VisualArtwork",
+    //    			"@id"=>$this->getFullId(),
+    //    			"additionalType"=>$additionalTypes,
+    //    			"url"=>'https://gitzw.art'.$this->getResourcePath(),
+    //    			"name"=>$names,
+    //    			"image"=>$imageId,
+    //    			"material"=>$material,
+    //    			"width"=>$this->getWidth().' cm',
+    //    			"height"=>$this->getHeight().' cm',
+    //    			"dateCreated"=>$this->getDateCreated(),
+    //    			"creator"=>$creator->getSdShort(),
+    //    			"copyrightHolder"=>$creator->getFullId(),
+    //    			"license"=>'https://creativecommons.org/licenses/by-nc-nd/4.0/'
+    //    	]
+    public function getStructuredData(): array {
+        return [
+            "@type" => "VisualArtwork",
+            "@id"=> Env::HTTP_URL . "/" . $this->getRESID(),
+
+        ];
     }
 }

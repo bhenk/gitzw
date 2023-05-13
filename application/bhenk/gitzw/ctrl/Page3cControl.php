@@ -3,6 +3,7 @@
 namespace bhenk\gitzw\ctrl;
 
 use bhenk\gitzw\base\Env;
+use function date;
 
 abstract class Page3cControl extends PageControl {
 
@@ -12,8 +13,15 @@ abstract class Page3cControl extends PageControl {
     private bool $includeColumn2 = true;
     private bool $includeColumn3 = true;
     private bool $includeFooter = true;
+    private bool $includeCopyright = true;
+    private string $copyrightText;
 
     public function renderPage(): void {
+        if ($this->includeCopyright) {
+            $this->copyrightText = "&#169;1977" . "&nbsp;-&nbsp;" . date('Y')
+                . " " . $this->getRequest()->getCreator()->getFullName()
+                . "&nbsp;&bull;&nbsp;info at gitzw.art";
+        }
         $this->addStylesheet("/css/base/3cp.css");
         require_once Env::templatesDir() . "/base/3cp.php";
     }
@@ -124,5 +132,17 @@ abstract class Page3cControl extends PageControl {
 
     public function renderFooter(): void {
         echo "footer " . self::class;
+    }
+
+    public function includeCopyright(): bool {
+        return $this->includeCopyright;
+    }
+
+    public function setIncludeCopyright(bool $includeCopyright): void {
+        $this->includeCopyright = $includeCopyright;
+    }
+
+    public function getCopyrightText(): string {
+        return $this->copyrightText;
     }
 }

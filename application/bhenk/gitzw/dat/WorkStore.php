@@ -142,6 +142,40 @@ class WorkStore {
     }
 
     /**
+     * Select the nearest row from *$ID* going down
+     *
+     * @param int $ID
+     * @return Work
+     * @throws Exception
+     */
+    public function selectNearestDown(int $ID): Work {
+        //select * from tbl_works where ID = (select min(ID) from tbl_works where ID > 197)
+        $where = "ID = (select min(ID) from tbl_works where ID > $ID)";
+        $down_array = $this->selectWhere($where);
+        if (empty($down_array)) {
+            $where = "ID = (select min(ID) from tbl_works where ID > -1)";
+            $down_array = $this->selectWhere($where);
+        }
+        return array_values($down_array)[0];
+    }
+
+    /**
+     * Select the nearest row from *$ID* going up
+     * @param int $ID
+     * @return Work
+     * @throws Exception
+     */
+    public function selectNearestUp(int $ID): Work {
+        $where = "ID = (select max(ID) from tbl_works where ID < $ID)";
+        $up_array = $this->selectWhere($where);
+        if (empty($up_array)) {
+            $where = "ID = (select max(ID) from tbl_works where ID < 999999999)";
+            $up_array = $this->selectWhere($where);
+        }
+        return array_values($up_array)[0];
+    }
+
+    /**
      * Select Works with a where-clause
      * @param string $where expression
      * @param int $offset start index

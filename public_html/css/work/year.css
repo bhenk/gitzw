@@ -3,6 +3,8 @@
     display: flex;
     flex-wrap: wrap;
     padding: 15px 30px 15px 30px;
+    margin: 25px 50px 25px 50px;
+    position: relative;
 }
 
 div.work {
@@ -19,6 +21,12 @@ div.image div {
     font-size: 0.9em;
     text-align: center;
     padding-right: 10px;
+    color: gray;
+}
+
+div.image img {
+    width: auto;
+    max-height: 350px;
 }
 
 .works_year_btn {
@@ -46,14 +54,3 @@ div.image div {
     margin-top: 30px;
 }
 
-/*
-#grey_space {
-    position: fixed;
-    left: 0;
-    top: 0;
-    background-color: #999999;
-    opacity: 0.7;
-    width: 100vw;
-    height: 100vh;
-    display: none;
-}*/

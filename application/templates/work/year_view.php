@@ -18,7 +18,7 @@ $works = $this->getWorks();
                 $representation = $work->getRelations()->getPreferredRepresentation();
                 $location = "/img/cow.png";
                 if (!is_null($representation)) {
-                    $location = $representation->getLocation(Images::SMALLER);
+                    $location = $representation->getLocation(Images::IMG_04);
                 }
                 ?>
                 <a href="<?php echo "/" . $work->getCanonicalUrl(); ?>">
@@ -27,6 +27,9 @@ $works = $this->getWorks();
             </div>
         </div>
     <?php } ?>
+    <div id="left_menu_in" onclick="leftMenuIn()">
+        <img src="/img/ico/left_arrow35.png" alt=">" title="hide menu">
+    </div>
 </div>
 <div class="works_year_btn">
     <a href="<?php echo $page->getUrlPrevious(); ?>">
@@ -38,7 +41,10 @@ $works = $this->getWorks();
         <span class="page_btn<?php echo $page->isNextEnabled(); ?>"> &#9654; </span>
     </a>
 </div>
-<!--<div id="grey_space"></div>-->
+
+<div id="left_menu_out" onclick="leftMenuOut()">
+    <img src="/img/ico/right_arrow35.png" alt=">" title="unhide menu">
+</div>
 
 <script>
     document.addEventListener('touchstart', handleTouchStart, false);

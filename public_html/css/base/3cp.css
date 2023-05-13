@@ -2,7 +2,10 @@
 
 :root {
 	--heightheader: 35px;
+	--heightfooter: 35px;
 	--col1width: 20vw;
+	--col3width: 25vw;
+	--opacity: 0.2;
 }
 
 #logo {
@@ -47,7 +50,7 @@
 	}
 
 	.menu_block {
-		font-size: 1.8em;
+		font-size: 1.2em;
 	}
 
 	#column_1 {
@@ -84,22 +87,25 @@
 	}
 	
 	#column_3 {
-	    width: 200px;
-	    flex: 0 0 200px;
+	    width: var(--col3width);
+	    flex: 0 0 var(--col3width);
 	    background-color: #555555;
 	}
 
 	.ani {
-		width: 100vw;
-		height: calc(100vh - var(--heightheader)); /* moet in deze media filter */
+		width: 100%;
+		max-height:  calc(100vh - 100px); /* moet in deze media filter */
 		object-fit: contain;
 		object-position: top;
+		cursor: zoom-in;
 	}
+
+
 
 }
 
 body {
-	min-height: 100vh;
+	min-height: calc(100vh - var(--heightfooter));
 	display: flex;
 	flex-direction: column;
 }
@@ -110,8 +116,29 @@ body {
 	position: sticky;top: 0;
 }
 
-#footer {
-	margin-top: auto;
+#copyright {
+	position: fixed;
+	left: 105px;
+	bottom: 15px;
+	font-style: italic;
+	font-size: 0.8em;
+	padding-bottom: 5px;
+	color: gray;
+	/*writing-mode: sideways-rl;*/
+}
+
+#copyright a {
+	color: gray;
+}
+
+#copyright a:hover {
+	color: white;
+}
+
+.license {
+	position: fixed;
+	left: 5px;
+	bottom: 15px;
 }
 
 

@@ -1,0 +1,123 @@
+#work_view {
+    margin: 25px 50px 25px 50px;
+    position: relative;
+}
+
+.image {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    justify-items: auto;
+    vertical-align: top;
+}
+.work span {
+    margin-top: 25px;
+    font-style: italic;
+    font-size: 0.9em;
+    display: block;
+    width: 100%;
+    color: gray;
+    text-align: center;
+}
+
+/* left and right paging */
+.lrpage-prev {
+    position: absolute;
+    bottom: 0;
+    left: -50px;
+    width: 35px;
+    height: 100%;
+}
+
+.lrpage-next {
+    position: absolute;
+    bottom: 0;
+    right: -50px;
+    width: 35px;
+    height: 100%;
+}
+
+[class^="lrpage-"] a {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.lrpage-prev a > picture > img {
+    position: absolute;
+    top: 60vh;
+    left: 0;
+}
+
+.lrpage-next a > picture > img {
+    position: absolute;
+    top: 60vh;
+    right: 0;
+}
+
+[class^="lrpage-"] a > picture > img {
+    opacity: var(--opacity);
+    background-color: var(--background);
+
+}
+
+[class^="lrpage-"] a:hover > picture > img {
+    opacity: 1.0;
+    /*background-color: grey;*/
+}
+
+/* end left and right paging */
+
+/* column 3 display  */
+#column_3 {
+    display: none;
+}
+
+#right_data_out {
+    width: 36px;
+    height: 35px;
+    background-color: gray;
+    position: fixed;
+    right: 0;
+    top: 0;
+    opacity: var(--opacity);
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+#right_data_out:hover {
+    opacity: 1.0;
+    background-color: grey;
+}
+
+#right_data_in {
+    width: 36px;
+    height: 35px;
+    background-color: grey;
+    position: fixed;
+    right: var(--col3width);
+    top: 0;
+    opacity: var(--opacity);
+    display: none;
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+#right_data_in:hover {
+    opacity: 1.0;
+    background-color: grey;
+}
+
+#fullscreen {
+    width: 36px;
+    height: 35px;
+    position: absolute;
+    right: -50px;
+    bottom: 0;
+    opacity: var(--opacity);
+}
+
+#fullscreen:hover {
+    opacity: 1.0;
+}

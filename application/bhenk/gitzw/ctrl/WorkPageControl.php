@@ -13,7 +13,6 @@ abstract class WorkPageControl extends Page3cControl {
 
     private Menu2d $menu;
 
-
     function __construct(Request $request) {
         parent::__construct($request);
         $this->menu = new Menu2d();

@@ -32,11 +32,7 @@ include("head.php");
 <?php } else {
     $this->renderBody();
 } ?>
-
+<?php if ($this->includeCopyright()) include ("copyright.php"); ?>
+<?php if ($this->includeFooter()) include("footer.php"); ?>
 </body>
-<?php
-if ($this->includeFooter()) {
-    include("footer.php");
-}
-?>
 </html>
