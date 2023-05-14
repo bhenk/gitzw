@@ -14,6 +14,8 @@ use function file_put_contents;
 use function is_null;
 use function ob_start;
 use function str_replace;
+use function strpos;
+use function substr_replace;
 
 class Handler extends AbstractHandler {
 
@@ -52,9 +54,9 @@ class Handler extends AbstractHandler {
                 echo file_get_contents($cache_filename);
                 return;
             }
-            $this->request = $request;
-            ob_start([$this, 'saveOutput']);
         }
+        $this->request = $request;
+        ob_start([$this, 'saveOutput']);
         $this->compiled = true;
         $this
             ->setNextHandler(new AuthHandler())
@@ -66,17 +68,19 @@ class Handler extends AbstractHandler {
     }
 
     public function saveOutput(string $buffer): string {
+        if (!$this->useCache) return $this->addStructuredData($buffer);
         if (Site::isRedirected()) return $buffer;
         if ($this->request->getUrlPart(0) == "admin") return $buffer;
 
         $buffer = $this->sanitize_output($buffer);
+        $buffer = $this->addStructuredData($buffer);
         $cache_filename = $this->request->getCacheFilename();
         file_put_contents($cache_filename, $buffer);
         Log::notice("++++++++ saved cache: " . $cache_filename);
         return $buffer;
     }
 
-    function sanitize_output($buffer): string {
+    private function sanitize_output($buffer): string {
 
         $search = array(
             '/>[^\S ]+/s',     // strip whitespaces after tags, except space
@@ -93,5 +97,14 @@ class Handler extends AbstractHandler {
         );
 
         return preg_replace($search, $replace, $buffer);
+    }
+
+    private function addStructuredData(string $buffer): string {
+        $sd = $this->request->getStructuredData();
+        if (!is_null($sd)) {
+            $pos = strpos($buffer, '</head>');
+            $buffer = substr_replace($buffer, $sd, $pos, 0);
+        }
+        return $buffer;
     }
 }

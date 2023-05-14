@@ -12,6 +12,7 @@ use ReflectionException;
 use function exif_read_data;
 use function json_decode;
 use function json_encode;
+use function str_replace;
 use function strrpos;
 
 /**
@@ -125,6 +126,18 @@ class Representation implements StoredObjectInterface {
      */
     public function getExifData(): bool|array {
         return exif_read_data($this->getFilename(), 0, true);
+    }
+
+    public function getSDId(): string {
+        return Env::HTTP_URL . "/#" . str_replace("/", ".", $this->getREPID());
+    }
+
+    public function getStructuredData(): array {
+        return [
+            "@type" => "ImageObject",
+            "@id" => $this->getSDId(),
+            "url" => Env::HTTPS_URL . $this->getLocation(),
+        ];
     }
 
 }

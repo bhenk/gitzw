@@ -39,15 +39,15 @@ class AAT {
     ];
 
     const ADDITIONAL_TYPES = [
-        'None'=>null,
-        'Acrylic Painting'=>'aat:300181918',
-        'Oil Painting'=>'aat:300033799',
-        'Drypoint'=>'aat:300041349',
-        'Drawing'=>'aat:300033973',
-        'Poster'=>'aat:300027221',
-        'Collage'=>'aat:300033963',
-        'Assemblage'=>'aat:300047194',
-        'Lithography'=>'aat:300041379'
+        'none'=>null,
+        'acrylic painting'=>'aat:300181918',
+        'oil painting'=>'aat:300033799',
+        'drypoint'=>'aat:300041349',
+        'drawing'=>'aat:300033973',
+        'poster'=>'aat:300027221',
+        'collage'=>'aat:300033963',
+        'assemblage'=>'aat:300047194',
+        'lithography'=>'aat:300041379'
     ];
 
 }

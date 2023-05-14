@@ -17,5 +17,6 @@
     foreach (array_unique($this->getScriptLinks()) as $link) {
         echo "<script type='text/javascript' src='$link'></script>\n";
     }
+    $this->renderStructuredData();
     ?>
 </head>

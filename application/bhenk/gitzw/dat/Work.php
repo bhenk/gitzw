@@ -2,6 +2,7 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\base\AAT;
 use bhenk\gitzw\base\Env;
 use bhenk\gitzw\dao\WorkDo;
 use bhenk\gitzw\dao\WorkHasRepDo;
@@ -14,9 +15,12 @@ use Exception;
 use ReflectionException;
 use function explode;
 use function implode;
+use function in_array;
 use function is_null;
 use function json_decode;
 use function json_encode;
+use function strtolower;
+use function trim;
 
 /**
  * A Work in gitzwart is something that can be represented by one or more images aka Representations
@@ -237,26 +241,39 @@ class Work implements StoredObjectInterface {
         return $this->workDo;
     }
 
-    // [
-    //    			"@type"=>"VisualArtwork",
-    //    			"@id"=>$this->getFullId(),
-    //    			"additionalType"=>$additionalTypes,
-    //    			"url"=>'https://gitzw.art'.$this->getResourcePath(),
-    //    			"name"=>$names,
-    //    			"image"=>$imageId,
-    //    			"material"=>$material,
-    //    			"width"=>$this->getWidth().' cm',
-    //    			"height"=>$this->getHeight().' cm',
-    //    			"dateCreated"=>$this->getDateCreated(),
-    //    			"creator"=>$creator->getSdShort(),
-    //    			"copyrightHolder"=>$creator->getFullId(),
-    //    			"license"=>'https://creativecommons.org/licenses/by-nc-nd/4.0/'
-    //    	]
+    public function getSDId(): string {
+        return Env::HTTP_URL . "/" . $this->getRESID();
+    }
+
     public function getStructuredData(): array {
+        $additionalTypes = [];
+        foreach ($this->getTypes() as $type) {
+            $additionalTypes[] = $type;
+            $additionalTypes[] = AAT::ADDITIONAL_TYPES[strtolower($type)];
+        }
+        $material = [];
+        foreach (explode(" ", $this->getMedia()) as $word) {
+            $term = strtolower(trim($word));
+            $aat = AAT::ART_MEDIA[$term] ?? null;
+            if ($aat) {
+                $material[] = $term;
+                $material[] = $aat;
+            }
+        }
         return [
             "@type" => "VisualArtwork",
-            "@id"=> Env::HTTP_URL . "/" . $this->getRESID(),
-
+            "@id"=> $this->getSDId(),
+            "additionalType" => $additionalTypes,
+            "url" => Env::HTTPS_URL . "/" . $this->getCanonicalUrl(),
+            "name" => $this->getTitles("<no title>"),
+            "image" => $this->getRelations()->getPreferredRepresentation()->getSDId(),
+            "material" => $material,
+            "width" => $this->getWidth().' cm',
+            "height" => $this->getHeight().' cm',
+            "dateCreated" => $this->getDate(),
+            "creator" => $this->getCreator()->getStructuredDataShort(),
+            "copyrightHolder" => $this->getCreator()->getCRID(),
+            "license" => "https://creativecommons.org/licenses/by-nc-nd/4.0/"
         ];
     }
 }

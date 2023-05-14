@@ -99,8 +99,6 @@ $location_08 = $repr->getLocation(Images::IMG_08);
             let opa = document.getElementById("c1_content").style.opacity;
             if (opa === "0") {
                 document.getElementById("column_1").style.display = "none";
-            } else {
-                document.getElementById("column_1").style.display = "inherit";
             }
         };
     }

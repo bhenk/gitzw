@@ -2,6 +2,7 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\dao\CreatorDo;
 use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\dao\WorkDo;
 use bhenk\gitzw\model\WorkCategories;
@@ -13,6 +14,7 @@ use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
+use function var_dump;
 
 #[LogAttribute(false)]
 class WorkTest extends TestCase {
@@ -149,5 +151,7 @@ class WorkTest extends TestCase {
         $work = Work::deserialize($serialized);
         assertEquals($serialized, $work->serialize());
     }
+
+
 
 }

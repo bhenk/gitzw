@@ -33,6 +33,7 @@ class Request {
     private ?Work $work = null;
     private bool $id_url = false;
     private ?WorkCategories $workCategory = null;
+    private ?string $structuredData = null;
 
     /**
      * Constructs a new Request
@@ -185,6 +186,20 @@ class Request {
 
     public function hasWorkCategory(): bool {
         return !is_null($this->workCategory);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStructuredData(): ?string {
+        return $this->structuredData;
+    }
+
+    /**
+     * @param string|null $structuredData
+     */
+    public function setStructuredData(?string $structuredData): void {
+        $this->structuredData = $structuredData;
     }
 
 }

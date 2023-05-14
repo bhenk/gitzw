@@ -4,12 +4,15 @@ namespace bhenk\gitzw\ctrl;
 
 use bhenk\gitzw\site\Menu;
 use bhenk\gitzw\site\Request;
+use function is_null;
+use function json_encode;
 
 abstract class PageControl {
 
     private string $pageTitle = "gitzw.art";
     private array $stylesheets = [];
     private array $scriptLinks = [];
+    private array $structuredData = [];
     private Request $request;
 
     /**
@@ -75,6 +78,23 @@ abstract class PageControl {
 
     public function addScriptLink(string $name): void {
         $this->scriptLinks[] = $name;
+    }
+
+    public function getStructuredData(): array {
+        return $this->structuredData;
+    }
+
+    public function setStructuredData(array $structuredData): void {
+        $this->structuredData = $structuredData;
+    }
+
+    public function renderStructuredData(): void {
+        if (!empty($this->structuredData)) {
+            $json = "\n".'<script type="application/ld+json">'."\n";
+            $json .= json_encode($this->structuredData, JSON_PRETTY_PRINT+JSON_UNESCAPED_SLASHES);
+            $json .= "\n".'</script>'."\n";
+            $this->getRequest()->setStructuredData($json);
+        }
     }
 
 }

@@ -6,6 +6,7 @@ use bhenk\gitzw\base\Env;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\dat\Work;
 use bhenk\gitzw\site\Request;
+use function json_encode;
 
 class WorkViewControl extends WorkPageControl {
 
@@ -33,6 +34,7 @@ class WorkViewControl extends WorkPageControl {
         $this->past_url = Store::workStore()->selectNearestUp($work->getID())->getCanonicalUrl();
         $this->future_url = Store::workStore()->selectNearestDown($work->getID())->getCanonicalUrl();
 
+        $this->setStructuredData($this->getPageStructuredData());
         $this->renderPage();
 
     }
@@ -58,4 +60,26 @@ class WorkViewControl extends WorkPageControl {
     public function renderColumn2(): void {
         require_once Env::templatesDir() . "/work/view.php";
     }
+
+    public function getPageStructuredData(): array {
+        $canonical = $this->work->getCanonicalUrl();
+        $page_sd = [
+            "@type" => "WebPage",
+            "@id" => Env::HTTP_URL . "/" . $canonical,
+            "url" => Env::HTTPS_URL . "/" . $canonical,
+            "mainEntity" => [ "@id" => $this->getWork()->getSDId() ]
+        ];
+        $image_sd = $this->work->getRelations()->getPreferredRepresentation()->getStructuredData();
+        $image_sd["copyrightHolder"] = $this->work->getCreator()->getCRID();
+        $image_sd["license"] = "https://creativecommons.org/licenses/by-nc-nd/4.0/";
+        return [
+            "@context" => ["http://schema.org",
+                ["aat" => "http://vocab.getty.edu/aat/"]],
+            "@graph" => [$this->work->getStructuredData(),
+                $image_sd,
+                $page_sd
+            ]
+        ];
+    }
+
 }
