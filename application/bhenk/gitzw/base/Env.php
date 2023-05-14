@@ -97,6 +97,10 @@ class Env {
         return self::applicationDir() . DIRECTORY_SEPARATOR . self::TEMPLATES_DIR;
     }
 
+    public static function cacheDir(): string {
+        return self::dataDir() . "/cache";
+    }
+
     public static function sessionExpirationMinutes(): int {
         return PHP_INT_MAX;
     }

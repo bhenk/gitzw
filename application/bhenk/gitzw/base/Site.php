@@ -13,6 +13,8 @@ use function substr;
 
 class Site {
 
+    private static bool $redirected = false;
+
     public static function hostName() : string {
         if (isset($_SERVER['HTTP_HOST'])) {
             return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")
@@ -40,9 +42,14 @@ class Site {
 
     public static function redirect(string $path) : string {
         $location = self::redirectLocation($path);
+        self::$redirected = true;
         Log::info("Redirecting, location=$location");
         header("Location: ".$location, TRUE, 301);
         return $location;
+    }
+
+    public static function isRedirected(): bool {
+        return self::$redirected;
     }
 
     /**

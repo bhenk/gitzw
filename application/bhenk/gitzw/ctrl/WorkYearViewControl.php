@@ -42,7 +42,7 @@ class WorkYearViewControl extends WorkPageControl {
         $this->setPageTitle($creator->getFullName()
             . " - " . $request->getWorkCategory()->value . " - " . $year);
         $offset = 0;
-        $limit = 10;
+        $limit = 30;
         $cat_name = $request->getWorkCategory()->name;
         $year = $request->getUrlPart(3);
         $id = $request->getCreator()->getID();

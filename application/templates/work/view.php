@@ -72,8 +72,10 @@ $location_08 = $repr->getLocation(Images::IMG_08);
 
 <script>
     window.addEventListener("DOMContentLoaded", () => {
+
         let left_menu = getCookie("l_menu");
         if (left_menu === "in") {
+            document.getElementById("column_1").style.display = "none";
             leftMenuIn();
         } else {
             leftMenuOut();
@@ -88,14 +90,23 @@ $location_08 = $repr->getLocation(Images::IMG_08);
 
     function leftMenuOut() {
         document.getElementById("column_1").style.display = "inherit";
+        document.getElementById("c1_content").style.opacity = "1.0";
         document.getElementById("left_button_group").style.left ="var(--col1width)";
         document.getElementById("left_out").style.display = "none";
         document.getElementById("left_in").style.display = "inherit";
         setCookie("l_menu", "out", 1);
+        document.getElementById("c1_content").ontransitionend = function () {
+            let opa = document.getElementById("c1_content").style.opacity;
+            if (opa === "0") {
+                document.getElementById("column_1").style.display = "none";
+            } else {
+                document.getElementById("column_1").style.display = "inherit";
+            }
+        };
     }
 
     function leftMenuIn() {
-        document.getElementById("column_1").style.display = "none";
+        document.getElementById("c1_content").style.opacity = "0.0";
         document.getElementById("left_button_group").style.left ="0";
         document.getElementById("left_out").style.display = "inherit";
         document.getElementById("left_in").style.display = "none";
@@ -158,6 +169,14 @@ $location_08 = $repr->getLocation(Images::IMG_08);
             });
         }
         elem.style.cursor = "default";
+    }
+
+    function sleep(milliseconds) {
+        const date = Date.now();
+        let currentDate = null;
+        do {
+            currentDate = Date.now();
+        } while (currentDate - date < milliseconds);
     }
 </script>
 

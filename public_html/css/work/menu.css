@@ -2,6 +2,9 @@
 #c1_content {
     position: fixed;
     width: var(--col1width);
+    left: 0;
+    transition: opacity 1.5s;
+    opacity: 0.0;
 }
 
 .menu_block {

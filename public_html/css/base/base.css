@@ -3,6 +3,7 @@
     --background: #DCDCDC;
     --font-color: #232323;
     --font-accent: blue;
+    --logo-color: silver;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -10,6 +11,7 @@
         --background: #232323;
         --font-color: #DCDCDC;
         --font-accent: orange;
+        --logo-color: #555555;
     }
 }
 

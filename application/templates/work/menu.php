@@ -15,7 +15,10 @@ $menu = $this->getMenu();
         <ul class="menu_items">
             <?php foreach ($menu_label->getItems() as $item) { ?>
             <li class="menu_item"><a <?php if ($item->isActive()) echo "class='selected'"; ?>
-                    href="<?php echo $item->getHref(); ?>"><?php echo $item->getLabel(); ?></a></li>
+                    href="<?php echo $item->getHref(); ?>">
+                    <?php echo $item->getLabel(); ?>
+                </a>
+            </li>
             <?php } ?>
         </ul>
     </div>
@@ -34,11 +37,11 @@ $menu = $this->getMenu();
         for (let i = 0; i < collection.length; i++) {
             if (collection[i] === el) {
                 collection[i].style.outline = "gray 1px solid";
-                collection[i].setAttribute("class", "menu_label active")
+                collection[i].setAttribute("class", "menu_label active");
                 collection[i].nextElementSibling.style.display="flex";
             } else if (collection[i].id !== "<?php echo $menu->getActiveMenuId(); ?>") {
                 collection[i].style.outline = "";
-                collection[i].setAttribute("class", "menu_label")
+                collection[i].setAttribute("class", "menu_label");
                 collection[i].nextElementSibling.style.display="none";
             }
         }

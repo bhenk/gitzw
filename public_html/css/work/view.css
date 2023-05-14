@@ -120,6 +120,7 @@
 }
 
 #right_button_group {
+    direction: rtl;
     width: 36px;
     height: 100%;
     padding-right: 2px;
@@ -138,7 +139,7 @@
 }
 
 .link_bar {
-    width: 36px;
+    width: 10vw;
     height: 80%;
 }
 

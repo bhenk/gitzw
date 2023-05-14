@@ -27,9 +27,6 @@ $works = $this->getWorks();
             </div>
         </div>
     <?php } ?>
-    <div id="left_menu_in" onclick="leftMenuIn()">
-        <img src="/img/ico/left_arrow35.png" alt=">" title="hide menu">
-    </div>
 </div>
 <div class="works_year_btn">
     <a href="<?php echo $page->getUrlPrevious(); ?>">
@@ -42,11 +39,43 @@ $works = $this->getWorks();
     </a>
 </div>
 
-<div id="left_menu_out" onclick="leftMenuOut()">
-    <img src="/img/ico/right_arrow35.png" alt=">" title="unhide menu">
+<div id="left_button_group">
+    <picture onclick="leftMenuIn()" class="glower" id="left_in">
+        <source srcset="/img/ico/left-arrow-w35.png" media="(prefers-color-scheme: dark)">
+        <img src="/img/ico/left-arrow-b35.png" alt="hide menu" title="hide menu">
+    </picture>
+    <picture onclick="leftMenuOut()" class="glower" id="left_out">
+        <source srcset="/img/ico/right-arrow-w35.png" media="(prefers-color-scheme: dark)">
+        <img src="/img/ico/right-arrow-b35.png" alt="hide menu" title="show menu">
+    </picture>
 </div>
 
 <script>
+    window.addEventListener("DOMContentLoaded", () => {
+        let left_menu = getCookie("l_menu");
+        if (left_menu === "in") {
+            leftMenuIn();
+        } else {
+            leftMenuOut();
+        }
+    });
+
+    function leftMenuOut() {
+        document.getElementById("column_1").style.display = "inherit";
+        document.getElementById("left_button_group").style.left ="var(--col1width)";
+        document.getElementById("left_out").style.display = "none";
+        document.getElementById("left_in").style.display = "inherit";
+        setCookie("l_menu", "out", 1);
+    }
+
+    function leftMenuIn() {
+        document.getElementById("column_1").style.display = "none";
+        document.getElementById("left_button_group").style.left ="0";
+        document.getElementById("left_out").style.display = "inherit";
+        document.getElementById("left_in").style.display = "none";
+        setCookie("l_menu", "in", 1);
+    }
+
     document.addEventListener('touchstart', handleTouchStart, false);
     document.addEventListener('touchmove', handleTouchMove, false);
 
@@ -59,8 +88,7 @@ $works = $this->getWorks();
     }
 
     function getTouches(evt) {
-        return evt.touches ||             // browser API
-            evt.originalEvent.touches; // jQuery
+        return evt.touches || evt.originalEvent.touches;
     }
 
     function handleTouchStart(evt) {
@@ -80,7 +108,7 @@ $works = $this->getWorks();
         let xDiff = xDown - xUp;
         let yDiff = yDown - yUp;
 
-        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
             /*document.getElementById("grey_space").style.display = "inherit"*/
             if ( xDiff > 0 ) {
                 /* right swipe */

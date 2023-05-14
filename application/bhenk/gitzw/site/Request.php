@@ -2,6 +2,7 @@
 
 namespace bhenk\gitzw\site;
 
+use bhenk\gitzw\base\Env;
 use bhenk\gitzw\base\Site;
 use bhenk\gitzw\dajson\User;
 use bhenk\gitzw\dat\Creator;
@@ -14,6 +15,7 @@ use function explode;
 use function is_null;
 use function parse_url;
 use function preg_replace;
+use function str_replace;
 use function str_starts_with;
 use function strtolower;
 use function substr;
@@ -64,6 +66,10 @@ class Request {
      */
     public function getCleanUrl(): string {
         return $this->cleanUrl;
+    }
+
+    public function getCacheFilename(): string {
+        return Env::cacheDir() . "/" . str_replace("/", "_", $this->cleanUrl) . ".html";
     }
 
     /**
