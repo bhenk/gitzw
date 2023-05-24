@@ -2,6 +2,7 @@
 
 namespace bhenk\gitzw\handle;
 
+use bhenk\gitzw\base\Env;
 use bhenk\gitzw\base\Site;
 use bhenk\gitzw\site\Request;
 use bhenk\logger\log\Log;
@@ -20,7 +21,6 @@ use function substr_replace;
 class Handler extends AbstractHandler {
 
     private Request $request;
-    private bool $useCache = false;
     private bool $compiled = false;
 
     public function handle(): void {
@@ -47,7 +47,7 @@ class Handler extends AbstractHandler {
     }
 
     public function handleRequest(Request $request): void {
-        if ($this->useCache) {
+        if (Env::useCache()) {
             $cache_filename = $request->getCacheFilename();
             if (file_exists($cache_filename)) {
                 Log::info("Serving from cache");
@@ -68,9 +68,7 @@ class Handler extends AbstractHandler {
     }
 
     public function saveOutput(string $buffer): string {
-        if (!$this->useCache) return $this->addStructuredData($buffer);
-        if (Site::isRedirected()) return $buffer;
-        if ($this->request->getUrlPart(0) == "admin") return $buffer;
+        if (!$this->request->useCache()) return $this->addStructuredData($buffer);
 
         $buffer = $this->sanitize_output($buffer);
         $buffer = $this->addStructuredData($buffer);

@@ -34,6 +34,7 @@ class Request {
     private bool $id_url = false;
     private ?WorkCategories $workCategory = null;
     private ?string $structuredData = null;
+    private bool $useCache = false;
 
     /**
      * Constructs a new Request
@@ -201,5 +202,24 @@ class Request {
     public function setStructuredData(?string $structuredData): void {
         $this->structuredData = $structuredData;
     }
+
+    /**
+     * @return bool
+     */
+    public function useCache(): bool {
+        return $this->useCache
+            && Env::useCache()
+            && !$this->hasSessionUser()
+            && $this->getUrlPart(0) != "admin";
+    }
+
+    /**
+     * @param bool $useCache
+     */
+    public function setUseCache(bool $useCache): void {
+        $this->useCache = $useCache;
+    }
+
+
 
 }

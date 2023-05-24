@@ -21,6 +21,11 @@ class Env {
     private const APPLICATION_DIR = "application";
 
     /**
+     * Name of the directory where we expect configuration files
+     */
+    private const CONFIG_DIR = "config";
+
+    /**
      * Name of the directory where we expect data
      */
     private const DATA_DIR = "data";
@@ -31,7 +36,9 @@ class Env {
     private const TEMPLATES_DIR = "templates";
 
 
+    private static array $env_variables = [];
     private static ?string $application_directory = null;
+    private static ?string $configuration_directory = null;
     private static ?string $data_directory = null;
     private static ?string $html_directory = null;
 
@@ -49,6 +56,22 @@ class Env {
             }
         }
         return self::$application_directory;
+    }
+
+    /**
+     * Absolute path to directory where we expect configuration fies
+     * @return string
+     */
+    public static function configurationDir(): string {
+        if (is_null(self::$configuration_directory)) {
+            $dir = dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . self::CONFIG_DIR;
+            if (is_dir($dir)) {
+                self::$configuration_directory = $dir;
+            } else {
+                throw new RuntimeException("Configuration directory not found");
+            }
+        }
+        return self::$configuration_directory;
     }
 
     /**
@@ -101,8 +124,19 @@ class Env {
         return self::dataDir() . "/cache";
     }
 
+    private static function getEnvVariables(): array {
+        if (empty(self::$env_variables)) {
+            self::$env_variables = require_once self::configurationDir() . "/web_config.php";
+        }
+        return self::$env_variables;
+    }
+
+    public static function useCache(): bool {
+        return self::getEnvVariables()["useCache"];
+    }
+
     public static function sessionExpirationMinutes(): int {
-        return PHP_INT_MAX;
+        return self::getEnvVariables()["sessionExpirationMinutes"];
     }
 
 }

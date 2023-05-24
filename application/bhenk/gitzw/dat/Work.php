@@ -249,7 +249,7 @@ class Work implements StoredObjectInterface {
         $additionalTypes = [];
         foreach ($this->getTypes() as $type) {
             $additionalTypes[] = $type;
-            $additionalTypes[] = AAT::ADDITIONAL_TYPES[strtolower($type)];
+            $additionalTypes[] = AAT::ART_TYPES[strtolower($type)];
         }
         $material = [];
         foreach (explode(" ", $this->getMedia()) as $word) {

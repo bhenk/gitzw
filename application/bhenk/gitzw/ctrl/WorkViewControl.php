@@ -35,6 +35,7 @@ class WorkViewControl extends WorkPageControl {
         $this->future_url = Store::workStore()->selectNearestDown($work->getID())->getCanonicalUrl();
 
         $this->setStructuredData($this->getPageStructuredData());
+        $request->setUseCache(true);
         $this->renderPage();
 
     }

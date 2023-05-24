@@ -70,6 +70,7 @@ class WorkYearViewControl extends WorkPageControl {
         $url = "/" . $creator->getUriName() . "/work/" . $request->getWorkCategory()->value . "/$year";
         $this->url_next = $url . "/view/" . $next;
         $this->url_previous = $url . "/view/" . $previous;
+        $request->setUseCache(true);
         $this->renderPage();
     }
 
