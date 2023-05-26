@@ -4,7 +4,7 @@
 	--heightheader: 35px;
 	--heightfooter: 35px;
 	--col1width: 20vw;
-	--col3width: 25vw;
+	--col3width: 22em;
 	--opacity: 0.2;
 }
 
@@ -89,7 +89,7 @@
 	#column_3 {
 	    width: var(--col3width);
 	    flex: 0 0 var(--col3width);
-	    background-color: #555555;
+	    background-color: var(--logo-color);
 	}
 
 	.ani {
@@ -97,7 +97,6 @@
 		max-height:  calc(100vh - 100px); /* moet in deze media filter */
 		object-fit: contain;
 		object-position: top;
-		cursor: zoom-in;
 	}
 
 

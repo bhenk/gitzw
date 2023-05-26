@@ -35,6 +35,7 @@ class Request {
     private ?WorkCategories $workCategory = null;
     private ?string $structuredData = null;
     private bool $useCache = false;
+    private ?string $format = null;
 
     /**
      * Constructs a new Request
@@ -218,6 +219,20 @@ class Request {
      */
     public function setUseCache(bool $useCache): void {
         $this->useCache = $useCache;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFormat(): ?string {
+        return $this->format;
+    }
+
+    /**
+     * @param string $format
+     */
+    public function setFormat(string $format): void {
+        $this->format = $format;
     }
 
 

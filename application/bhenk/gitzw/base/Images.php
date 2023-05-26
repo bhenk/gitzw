@@ -3,6 +3,7 @@
 namespace bhenk\gitzw\base;
 
 use bhenk\logger\log\Log;
+use ImagickException;
 use function dirname;
 use function is_dir;
 use function is_file;
@@ -16,6 +17,15 @@ class Images {
     const IMG_15 = [1500, 1500];
     const IMG_30 = [3000, 3000];
 
+    /**
+     * Returns the relative filepath to the image denoted by $REPID with the given dimensions.
+     *
+     * If the image does not exist, it will be created.
+     * @param string $REPID
+     * @param array $dimensions preferably one of the IMG_XX constants
+     * @return string relative filepath to the image
+     * @throws ImagickException
+     */
     public static function locationForREPID(string $REPID, array $dimensions): string {
         $width = $dimensions[0];
         $height = $dimensions[1];

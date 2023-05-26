@@ -9,7 +9,10 @@ use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\model\WorkCategories;
 use bhenk\gitzw\site\Request;
 use Exception;
+use function count;
 use function is_null;
+use function strlen;
+use function substr;
 
 class WorkHandler extends AbstractHandler {
 
@@ -57,7 +60,9 @@ class WorkHandler extends AbstractHandler {
             return;
         }
 
-        $number = $request->getUrlPart(4);
+        $last = explode(".", $request->getUrlPart(4));
+        $number = $last[0];
+        $format = (count($last) > 1) ? $last[1] : false;
         if (empty($number)) {
             $canonical = $request->getCreator()->getUriName() . "/work/"
                 . $request->getWorkCategory()->value . "/$year";
@@ -81,10 +86,13 @@ class WorkHandler extends AbstractHandler {
         }
         $request->setWork($work);
         $canonical = $work->getCanonicalUrl($request->getCreator());
-        if ($request->getCleanUrl() != $canonical) {
+        $cleanUrl = $request->getCleanUrl();
+        if ($format) $cleanUrl = substr($request->getCleanUrl(), 0, - (strlen($format) + 1));
+        if ($cleanUrl != $canonical) {
             Site::redirect("/" . $canonical);
             return;
         }
+        $request->setFormat($format);
         $this->goWorkViewControl($request);
     }
 

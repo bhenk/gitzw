@@ -115,7 +115,7 @@ class Representation implements StoredObjectInterface {
             . self::IMG_DIR . DIRECTORY_SEPARATOR . $this->repDo->getREPID();
     }
 
-    public function getLocation(array $dimensions = Images::IMG_30): string {
+    public function getFileLocation(array $dimensions = Images::IMG_30): string {
         return Images::locationForREPID($this->getREPID(), $dimensions);
     }
 
@@ -128,6 +128,12 @@ class Representation implements StoredObjectInterface {
         return exif_read_data($this->getFilename(), 0, true);
     }
 
+    /**
+     * Returns the Structured Data ID
+     *
+     * example: "http://gitzw.art/#hnq.2020._DSC0533_00022.jpg"
+     * @return string
+     */
     public function getSDId(): string {
         return Env::HTTP_URL . "/#" . str_replace("/", ".", $this->getREPID());
     }
@@ -136,7 +142,7 @@ class Representation implements StoredObjectInterface {
         return [
             "@type" => "ImageObject",
             "@id" => $this->getSDId(),
-            "url" => Env::HTTPS_URL . $this->getLocation(),
+            "url" => Env::HTTPS_URL . $this->getFileLocation(),
         ];
     }
 

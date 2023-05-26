@@ -24,12 +24,15 @@ use function is_null;
 use function json_decode;
 use function json_encode;
 use function ksort;
+use function str_contains;
 use function str_replace;
+use function strtolower;
 use function usort;
 
 class AAT {
 
     const URI_AAT = "http://vocab.getty.edu/aat/";
+    const URI_AAT_PAGE = "http://vocab.getty.edu/page/aat/";
     const URI_RDFS = "http://www.w3.org/2000/01/rdf-schema#";
     const URI_SKOS = "http://www.w3.org/2004/02/skos/core#";
 
@@ -67,6 +70,18 @@ class AAT {
 
     private array $terms = [];
 
+    public static function getUrl($term): string {
+        return self::URI_AAT . explode(':', $term)[1];
+    }
+
+    public static function getRdfUrl($term): string {
+        return self::URI_AAT . explode(':', $term)[1].'.rdf';
+    }
+
+    public static function getPageUrl($term): string {
+        return self::URI_AAT_PAGE . explode(':', $term)[1];
+    }
+
     function __construct() {
         $aatData = $this->load();
         foreach ($aatData["aat"] as $term => $data) {
@@ -78,6 +93,34 @@ class AAT {
         }
     }
 
+    /**
+     * @param string[] $types
+     * @return array[] array(term => AATLabels[])
+     */
+    public function getTypes(array $types): array {
+        $all = [];
+        foreach ($types as $type) {
+            $term = self::ART_TYPES[strtolower($type)] ?? false;
+            if ($term) $all[$term] = $this->getPreferredLabels($term);
+        }
+        return $all;
+    }
+
+    /**
+     * @param string $mediaString
+     * @return array[] array(term => AATLabels[])
+     */
+    public function getMedia(string $mediaString): array {
+        $all = [];
+        $subject = strtolower($mediaString);
+        foreach (array_keys(self::ART_MEDIA) as $word) {
+            if (str_contains($subject, $word)) {
+                $term = self::ART_MEDIA[$word];
+                $all[$term] = $this->getPreferredLabels($term);
+            }
+        }
+        return $all;
+    }
 
 
     /**

@@ -5,11 +5,14 @@ namespace bhenk\gitzw\dat;
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\WorkHasRepDo;
 use Exception;
+use function array_diff_key;
+use function array_fill_keys;
 use function array_keys;
 use function array_values;
 use function count;
 use function in_array;
 use function is_null;
+use function uasort;
 
 /**
  * The WorkRelations object keeps track of relations the owner {@link Work} has to
@@ -19,6 +22,7 @@ class WorkRelations extends RepresentationOwner {
 
     /** @var WorkHasRepDo[]|null */
     private ?array $repRelations;
+    private ?array $workRepresentations = null;
 
     /**
      * Construct a WorkRelations object
@@ -118,17 +122,48 @@ class WorkRelations extends RepresentationOwner {
     }
 
     /**
-     * Get the preferred Representation or *null* if owner does not have a preferred representation
-     * @return Representation|null
+     * Get assemble of WorkHasRepDo and Representation in an ordered array
+     *
+     * The array is ordered using WorkHasRepDo->ordinal, keys in the array are Representation IDs.
+     * @return WorkRepresentation[]
+     * @throws Exception
+     */
+    public function getWorkRepresentations(): array {
+        if (is_null($this->workRepresentations)) {
+            $this->workRepresentations = [];
+            $representations = $this->getRepresentations();
+            foreach ($this->getRepRelations() as $workHasRepDo) {
+                $representation = $representations[$workHasRepDo->getFkRight()];
+                $workRepresentation = new WorkRepresentation($workHasRepDo, $representation);
+                $this->workRepresentations[$representation->getID()] = $workRepresentation;
+            }
+            uasort($this->workRepresentations, function ($a, $b) {
+                $ao = $a->getOrdinal();
+                $bo = $b->getOrdinal();
+                if ($ao == $bo) return 0;
+                return $ao > $bo ? 1: -1;
+            });
+        }
+        return $this->workRepresentations;
+    }
+
+    /**
+     * Get the preferred Representation
+     *
+     * @return WorkRepresentation|null preferred, first or null
      * @throws Exception
      */
     public function getPreferredRepresentation(): ?Representation {
-        foreach ($this->getRepRelations() as $workHasRepDo) {
-            if ($workHasRepDo->isPreferred()) {
-                return $this->getRepresentation($workHasRepDo->getFkRight());
+        foreach ($this->getWorkRepresentations() as $workRepresentation) {
+            if ($workRepresentation->isPreferred()) {
+                return $workRepresentation->getRepresentation();
             }
         }
         return array_values($this->getRepresentations())[0] ?? null;
+    }
+
+    public function getOtherWorkRepresentations(array $excludedIDs = []): array {
+        return array_diff_key($this->getWorkRepresentations(), array_fill_keys($excludedIDs, 0));
     }
 
     /**

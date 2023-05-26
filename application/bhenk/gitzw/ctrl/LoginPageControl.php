@@ -20,6 +20,7 @@ class LoginPageControl extends Page3cControl {
     private User|bool $sessionUser = false;
 
     function __construct(Request $request) {
+        $this->setIncludeCopyright(false);
         parent::__construct($request);
     }
 

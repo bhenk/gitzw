@@ -8,9 +8,10 @@ use bhenk\gitzw\ctrl\WorkViewControl;
 $page = $this;
 $work = $page->getWork();
 $repr = $work->getRelations()->getPreferredRepresentation();
-$location_30 = $repr->getLocation(Images::IMG_30);
-$location_15 = $repr->getLocation(Images::IMG_15);
-$location_08 = $repr->getLocation(Images::IMG_08);
+$location_30 = $repr->getFileLocation(Images::IMG_30);
+$location_15 = $repr->getFileLocation(Images::IMG_15);
+$location_08 = $repr->getFileLocation(Images::IMG_08);
+$others = $work->getRelations()->getOtherWorkRepresentations([$repr->getID()])
 ?>
 
 <div id="work_view">
@@ -24,6 +25,24 @@ $location_08 = $repr->getLocation(Images::IMG_08);
         <span><?php echo $work->getTitles("&lt;no title&gt;")
                 . " - " . $work->getMedia() . " - " . $work->getDimensions(); ?></span>
     </div>
+    <?php if (!empty($others)) { ?>
+        <div class="others" >
+            <?php foreach ($others as $other) { ?>
+                <div class="image">
+                    <picture>
+                        <source srcset="<?php echo $other->getFileLocation(Images::IMG_08); ?>"
+                                media="(max-width: 600px)">
+                        <source srcset="<?php echo $other->getFileLocation(Images::IMG_15); ?>"
+                                media="(max-width: 1000px)">
+                        <img class="ani" src="<?php echo $other->getFileLocation(Images::IMG_30); ?>"
+                             alt="<?php $other->getRepresentation()->getREPID(); ?>"
+                             onclick="image_clicked(this)">
+                    </picture>
+                    <span><?php echo $other->getDescription(); ?></span>
+                </div>
+            <?php } ?>
+        </div>
+    <?php } // if?>
 </div>
 
 <div id="left_button_group">

@@ -49,3 +49,8 @@ a {
     background-color: #cccccc;
     color: #666666;
 }
+
+.copyprevious {
+    cursor: copy;
+    font-size: 1.2em;
+}

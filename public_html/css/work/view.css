@@ -10,6 +10,11 @@
     justify-items: auto;
     vertical-align: top;
 }
+
+.work > picture {
+    cursor: zoom-in;
+}
+
 .work span {
     margin-top: 25px;
     font-style: italic;
@@ -18,6 +23,28 @@
     width: 100%;
     color: gray;
     text-align: center;
+}
+
+.others {
+    margin-bottom: 100px;
+}
+
+.others div {
+    margin: 50px 0 50px 0;
+}
+
+.others picture {
+    cursor: zoom-in;
+}
+
+.others span {
+    margin-top: 5px;
+    font-style: italic;
+    font-size: 0.9em;
+    display: block;
+    width: 100%;
+    color: gray;
+    /*text-align: center;*/
 }
 
 #column_3 {
@@ -54,7 +81,7 @@
 }
 
 .link_bar {
-    width: 10vw;
+    width: 7vw;
     height: 80%;
 }
 

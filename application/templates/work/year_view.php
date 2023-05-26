@@ -18,7 +18,7 @@ $works = $this->getWorks();
                 $representation = $work->getRelations()->getPreferredRepresentation();
                 $location = "/img/cow.png";
                 if (!is_null($representation)) {
-                    $location = $representation->getLocation(Images::IMG_04);
+                    $location = $representation->getFileLocation(Images::IMG_04);
                 }
                 ?>
                 <a href="<?php echo "/" . $work->getCanonicalUrl(); ?>">

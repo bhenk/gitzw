@@ -15,7 +15,6 @@ use Exception;
 use ReflectionException;
 use function explode;
 use function implode;
-use function in_array;
 use function is_null;
 use function json_decode;
 use function json_encode;
@@ -97,7 +96,11 @@ class Work implements StoredObjectInterface {
         $this->workDo->setRESID($RESID);
     }
 
-    public function getCanonicalUrl(Creator $creator = null): bool|string {
+    public function getFullRESID(): string {
+        return Env::HTTP_URL . "/" . $this->getRESID();
+    }
+
+    public function getCanonicalUrl(Creator $creator = null, bool $full = false): bool|string {
         if (is_null($this->getRESID())) return false;
         if (is_null($creator)) {
             $creator = $this->getCreator();
@@ -107,7 +110,9 @@ class Work implements StoredObjectInterface {
         if ($shortCRID != $creator->getShortCRID()) return false;
         $this->creator = $creator;
         $cat = WorkCategories::forName($resid_array[2]);
-        return $creator->getUriName() . "/work/$cat->value/$resid_array[3]/$resid_array[4]";
+        $url = $creator->getUriName() . "/work/$cat->value/$resid_array[3]/$resid_array[4]";
+        if ($full) $url = Env::HTTPS_URL . "/" . $url;
+        return $url;
     }
 
     /**

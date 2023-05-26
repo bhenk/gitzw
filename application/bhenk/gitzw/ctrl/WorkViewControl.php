@@ -6,7 +6,12 @@ use bhenk\gitzw\base\Env;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\dat\Work;
 use bhenk\gitzw\site\Request;
+use bhenk\logger\log\Log;
+use Exception;
+use function header;
 use function json_encode;
+use function ob_end_clean;
+use function strlen;
 
 class WorkViewControl extends WorkPageControl {
 
@@ -17,6 +22,7 @@ class WorkViewControl extends WorkPageControl {
     function __construct(Request $request) {
         parent::__construct($request);
         $this->addStylesheet("/css/work/view.css");
+        $this->addStylesheet("/css/work/data.css");
         $this->work = $request->getWork();
         $this->handleRequest();
 
@@ -24,6 +30,11 @@ class WorkViewControl extends WorkPageControl {
 
     public function handleRequest(): void {
         $request = $this->getRequest();
+        $format = $request->getFormat();
+        if ($format) {
+            $this->sendSD($request);
+            return;
+        }
         $creator = $request->getCreator();
         $work = $request->getWork();
 
@@ -62,6 +73,10 @@ class WorkViewControl extends WorkPageControl {
         require_once Env::templatesDir() . "/work/view.php";
     }
 
+    public function renderColumn3(): void {
+        require_once Env::templatesDir() . "/work/data.php";
+    }
+
     public function getPageStructuredData(): array {
         $canonical = $this->work->getCanonicalUrl();
         $page_sd = [
@@ -81,6 +96,27 @@ class WorkViewControl extends WorkPageControl {
                 $page_sd
             ]
         ];
+    }
+
+    private function sendSD(Request $request): void {
+        $format = $request->getFormat();
+        if ($format == 'jsonld' or $format == 'json') {
+            $str = json_encode($this->getPageStructuredData(), JSON_PRETTY_PRINT+JSON_UNESCAPED_SLASHES);
+            Log::info(">>>>>>" . $str);
+            $contentType = 'application/json';
+            $ext = '.json';
+            $filename = $request->getWork()->getRESID() . $ext;
+            ob_end_clean();
+            header("Content-type: ".$contentType);
+            header("Content-disposition: attachment; filename = " . $filename);
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Content-Length: ' .strlen($str));
+            echo $str;
+        } else {
+            throw new Exception("not found: " . $request->getRawUrl());
+        }
     }
 
 }
