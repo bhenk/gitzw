@@ -1,0 +1,89 @@
+#upload_area {
+    margin: 0 15px;
+    font-size: 0.9em;
+}
+
+#upload {
+    display: inherit;
+    align-items: normal;
+    padding: 10px;
+}
+
+input[type=file], input[type=text] {
+    width: 350px;
+    max-width: 100%;
+    color: #444;
+    padding: 0;
+    background: #fff;
+    border-radius: 3px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+input[type=text] {
+    padding-left: 7px;
+}
+
+input[type=file]::file-selector-button, input[type=submit], input[type=reset], input[type=button] {
+    min-width: 100px;
+    background: darkgray;
+    padding: 3px 5px;
+    border-radius: 3px;
+    color: #444;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+    border: 1px solid lightgray;
+    border-right-color: #555555;
+    border-bottom-color: #555555;
+    font-size: 0.85em;
+}
+
+input[type=file]::file-selector-button {
+    margin-right: 10px;
+}
+
+input[type=file]::file-selector-button:hover, input[type=submit]:hover, input[type=reset]:hover, input[type=button]:hover {
+    background: dimgray;
+    color: white;
+}
+
+.img_uploads {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+    font-size: 0.9em;
+}
+
+.img_uploads > div, .button_panel {
+    margin: 10px;
+}
+
+.img_uploads img {
+    max-height: 150px;
+}
+
+.placeholder {
+    height: 150px;
+    font-size: 3em;
+}
+
+#move_selected select {
+    margin-right: 15px;
+}
+
+#move_selected {
+    margin-top: 10px;
+}
+
+.move_buttons {
+    margin-top: 10px;
+}
+
+.error {
+    font-size: 1em;
+    font-weight: bold;
+    color: red;
+    background-color: lightgray;
+    margin-top: 20px;
+    padding: 20px;
+}

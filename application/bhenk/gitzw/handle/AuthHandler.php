@@ -16,6 +16,8 @@ use function intval;
 use function print_r;
 use function session_destroy;
 use function session_start;
+use function str_contains;
+use function str_starts_with;
 
 class AuthHandler extends AbstractHandler {
 
@@ -46,7 +48,9 @@ class AuthHandler extends AbstractHandler {
             if (!$this->setSessionUser($request)) return;
             if ($first == "logout") {
                 $this->endSession($request);
-                Site::redirect("");
+                $path = $_SERVER["HTTP_REFERER"] ?? "";
+                if (str_contains($path, "admin")) $path = "";
+                Site::redirect($path);
                 return;
             }
             if ($this->isRestricted($request) && $this->sessionExpired($request)) return;

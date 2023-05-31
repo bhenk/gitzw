@@ -1,0 +1,61 @@
+
+#overview_page, #directory_view {
+    margin: 0 15px;
+    font-size: 0.9em;
+}
+
+h2 a {
+    color: var(--font-color);
+}
+
+.directories {
+    margin-left: 100px;
+}
+
+.directories div {
+    margin: 10px;
+    width: 350px;
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    align-items: start;
+
+}
+
+.top_label {
+    margin-left: 10px;
+}
+
+.directories a {
+    color: var(--link-color);
+    margin-right: auto;
+    margin-left: 10px;
+}
+
+.span1 {
+    text-align: right;
+    width: 35px;
+}
+
+.span2 {
+    text-align: right;
+    width: 70px;
+}
+
+.representations {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.represent {
+    margin: 10px;
+    font-size: 0.85em;
+    text-align: center;
+}
+
+.represent img {
+    max-height:100px;
+    margin: auto;
+    display: block;
+}

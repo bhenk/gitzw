@@ -42,7 +42,7 @@
 }
 
 .data_def > a {
-    color: forestgreen;
+    color: var(--link-color);
 }
 
 .lang_term {
@@ -66,19 +66,11 @@
 }
 
 #data_links > a {
-    color: forestgreen;
+    color: var(--link-color);
 }
 
 @media (prefers-color-scheme: dark) {
     .data_term {
         color: burlywood;
-    }
-
-    .data_def > a {
-        color: lightblue;
-    }
-
-    #data_links > a {
-        color: lightblue;
     }
 }

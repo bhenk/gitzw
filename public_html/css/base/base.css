@@ -4,6 +4,7 @@
     --font-color: #232323;
     --font-accent: blue;
     --logo-color: silver;
+    --link-color: forestgreen;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -12,6 +13,7 @@
         --font-color: #DCDCDC;
         --font-accent: orange;
         --logo-color: #555555;
+        --link-color: lightblue;
     }
 }
 

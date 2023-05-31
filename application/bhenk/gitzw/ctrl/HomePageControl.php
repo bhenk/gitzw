@@ -9,6 +9,7 @@ use bhenk\gitzw\site\Request;
 class HomePageControl extends Page3cControl {
 
     function __construct(Request $request) {
+        $this->setIncludeCopyright(false);
         parent::__construct($request);
     }
     public function handleRequest(): void {

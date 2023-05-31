@@ -19,15 +19,17 @@ class AdminPageControl extends Page3cControl {
     private Menu $site_menu;
 
     function __construct(Request $request) {
+        $this->setIncludeCopyright(false);
         parent::__construct($request);
         $this->site_menu = new Menu();
         $act = $this->getRequest()->getUrlPart(1);
         $this->site_menu
-            ->addItem(new MenuItem("/", "Home"))
             ->addItem(new MenuItem("/admin", "Admin", $act == ""))
             ->addItem(new MenuItem("/admin/phpinfo", "PHP info", $act == "phpinfo"))
             ->addItem(new MenuItem("/admin/representations", "Representations",
-                $act == "representations"));
+                $act == "representations"))
+            ->addItem(new MenuItem("/admin/edit", "Edit work", $act == "edit"))
+        ;
     }
 
     public function handleRequest(): void {
@@ -39,7 +41,7 @@ class AdminPageControl extends Page3cControl {
 
     public function renderPage(): void {
         $this->addStylesheet("/css/admin/header.css");
-        $this->addStylesheet("/css/site/menu.css");
+        $this->addStylesheet("/css/admin/menu.css");
         parent::renderPage();
     }
 
@@ -79,7 +81,7 @@ class AdminPageControl extends Page3cControl {
 
     public function renderColumn1(): void {
         require_once Env::templatesDir() ."/base/logo.php";
-        require_once Env::templatesDir() . "/site/menu.php";
+        require_once Env::templatesDir() . "/admin/menu.php";
     }
 
     public function renderColumn2(): void {

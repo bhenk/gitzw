@@ -1,7 +1,7 @@
 <?php
 $menu = $this->getSiteMenu();
 ?>
-<div id="site_menu">
+<div id="admin_menu">
     <ul class="menu-list">
         <?php foreach ($menu->getItems() as $item) { ?>
             <li class="menu-item"><a class="<?php echo $item->getClass(); ?>"

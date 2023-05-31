@@ -7,6 +7,7 @@ use function header;
 use function implode;
 use function in_array;
 use function is_array;
+use function str_starts_with;
 use function strlen;
 use function strtolower;
 use function substr;
@@ -25,6 +26,7 @@ class Site {
     }
 
     public static function redirectLocation($path) : string {
+        if (str_starts_with($path, "http")) return $path;
         if (is_array($path)) {
             $path = implode('/', $path);
         }

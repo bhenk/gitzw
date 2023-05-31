@@ -1,4 +1,14 @@
 
+
+#c1_content {
+    position: fixed;
+}
+
+#admin_menu {
+    display: flex;
+    flex-direction: column;
+}
+
 ul.menu-list {
     list-style-type: none;
     margin: 0;

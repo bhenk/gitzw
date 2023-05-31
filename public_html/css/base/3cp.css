@@ -1,7 +1,8 @@
 @import "base.css";
 
 :root {
-	--heightheader: 35px;
+	--heightheader: 30px;
+	--bg_header: lightgray;
 	--heightfooter: 35px;
 	--col1width: 20vw;
 	--col3width: 22em;
@@ -111,7 +112,7 @@ body {
 
 #header {
 	height: var(--heightheader);
-	background-color: lightgray;
+	background-color: var(--bg_header);
 	position: sticky;top: 0;
 }
 
@@ -142,8 +143,8 @@ body {
 
 
 @media (prefers-color-scheme: dark) {
-	#header {
-		background-color: dimgray;
+	:root {
+		--bg_header: dimgray;
 	}
 }
 

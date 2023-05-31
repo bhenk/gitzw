@@ -10,6 +10,8 @@ use function array_values;
 use function count;
 use function gettype;
 use function is_null;
+use function str_repeat;
+use function substr;
 
 /**
  * Store for obtaining and persisting Representations
@@ -138,6 +140,23 @@ class RepresentationStore {
         /** @var RepresentationDo[] $dos */
         $dos = Dao::representationDao()->selectWhere($where, $offset, $limit);
         return $this->make($dos);
+    }
+
+    /**
+     * @param array $repids array with
+     * @param int $offset
+     * @param int $limit
+     * @return Representation[]
+     * @throws Exception
+     */
+    public function selectBatchByRepid(array $repids, int $offset = 0, int $limit = PHP_INT_MAX): array {
+        $where = "";
+        foreach ($repids as $repid) {
+            $where .= " OR REPID='$repid'";
+        }
+        if (empty($where)) return [];
+        $where = substr($where, 4);
+        return $this->selectWhere($where, $offset, $limit);
     }
 
     /**

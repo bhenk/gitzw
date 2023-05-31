@@ -44,7 +44,10 @@
     display: block;
     width: 100%;
     color: gray;
-    /*text-align: center;*/
+}
+
+.others a {
+    color: var(--link-color);
 }
 
 #column_3 {
@@ -84,4 +87,3 @@
     width: 7vw;
     height: 80%;
 }
-

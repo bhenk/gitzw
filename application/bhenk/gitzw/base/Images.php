@@ -12,6 +12,7 @@ use function str_replace;
 
 class Images {
 
+    const IMG_01 = [150, 150];
     const IMG_04 = [400, 400];
     const IMG_08 = [800, 800];
     const IMG_15 = [1500, 1500];

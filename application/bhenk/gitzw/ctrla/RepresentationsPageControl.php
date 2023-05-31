@@ -24,10 +24,11 @@ class RepresentationsPageControl extends AdminPageControl {
     function __construct(Request $request) {
         parent::__construct($request);
         $this->setPageTitle("Representations");
-        //$this->addStylesheet();
+        $this->addStylesheet("/css/admin/rep_list_3.css");
     }
 
     public function handleRequest(): void {
+        $this->setIncludeFooter(false);
         $sources = Store::representationStore()->countBySource();
         $this->sourceCount = "";
         $this->total_reps = 0;
