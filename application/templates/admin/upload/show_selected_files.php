@@ -2,12 +2,12 @@
 use bhenk\gitzw\base\Env;
 use bhenk\gitzw\ctrla\UploadControl;
 
-/** @var UploadControl $page */
-$page = $this;
+/** @var UploadControl $ctrl */
+$ctrl = $this;
 $dir = Env::public_html() . "/uploads";
 $files = array_values(array_diff(scandir($dir), array('..', '.')));
 
-$files_to_handle = $page->getFilesToHandle();
+$files_to_handle = $ctrl->getFilesToHandle();
 ?>
 
 <div class="img_uploads">

@@ -3,10 +3,10 @@
 use bhenk\gitzw\base\Env;
 use bhenk\gitzw\ctrla\UploadControl;
 
-/** @var UploadControl $page */
-$page = $this;
-$files_to_handle = $page->getFilesToHandle();
-$options = $page->getDestinationOptions();
+/** @var UploadControl $ctrl */
+$ctrl = $this;
+$files_to_handle = $ctrl->getFilesToHandle();
+$options = $ctrl->getDestinationOptions();
 ?>
 <div id="upload_area">
 
@@ -21,7 +21,7 @@ $options = $page->getDestinationOptions();
                 <option value="<?php echo $option; ?>"><?php echo $option; ?></option>
             <?php } ?>
         </select>
-        <label for="path">Directory: </label>
+        <label for="dir_path">Directory: </label>
         <input type="text" id="dir_path" name="path" value=""><br/>
         <input type="hidden" name="action" value="moveFiles">
         <input type="hidden" name="files_to_move" value="<?php echo implode(';', $files_to_handle) ?>">
@@ -30,8 +30,8 @@ $options = $page->getDestinationOptions();
             <input type="submit" name="doMove" value="Move">
         </div>
     </form>
-    <?php if (!empty($page->getErrorMsg())) { ?>
-        <div class="error"><?php echo $page->getErrorMsg(); ?></div>
+    <?php if (!empty($ctrl->getErrorMsg())) { ?>
+        <div class="error"><?php echo $ctrl->getErrorMsg(); ?></div>
     <?php } ?>
 </div>
 

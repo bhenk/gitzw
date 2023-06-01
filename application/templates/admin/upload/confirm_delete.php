@@ -2,9 +2,9 @@
 
 use bhenk\gitzw\ctrla\UploadControl;
 
-/** @var UploadControl $page */
-$page = $this;
-$files_to_handle = $page->getFilesToHandle();
+/** @var UploadControl $ctrl */
+$ctrl = $this;
+$files_to_handle = $ctrl->getFilesToHandle();
 ?>
 
 <div id="upload_area">

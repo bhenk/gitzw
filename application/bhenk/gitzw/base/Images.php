@@ -14,6 +14,7 @@ class Images {
 
     const IMG_01 = [150, 150];
     const IMG_04 = [400, 400];
+    const IMG_06 = [600, 600];
     const IMG_08 = [800, 800];
     const IMG_15 = [1500, 1500];
     const IMG_30 = [3000, 3000];

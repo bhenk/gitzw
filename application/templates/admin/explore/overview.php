@@ -1,10 +1,10 @@
 <?php
-/** @var FileExplorerControl $page */
+/** @var FileExplorerControl $ctrl */
 
 use bhenk\gitzw\ctrla\FileExplorerControl;
 
-$page = $this;
-$dirs = $page->getImageDirectories();
+$ctrl = $this;
+$dirs = $ctrl->getImageDirectories();
 $fc = 0;
 $dc = 0;
 $bc = 0;

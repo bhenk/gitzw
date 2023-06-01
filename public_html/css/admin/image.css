@@ -1,0 +1,90 @@
+
+#edit_image {
+    margin: 0 15px;
+    font-size: 0.95em;
+}
+
+.img_panel {
+    display: flex;
+    flex-direction: row;
+}
+
+.img_form {
+    margin-left: 50px;
+    max-width: 690px;
+}
+
+.img_view {
+    margin: 25px 10px;
+}
+
+.img_view img {
+    max-width: 35vw;
+}
+
+.form_rows {
+    margin: 20px 0;
+}
+
+.form_row {
+    display: flex;
+    flex-direction: row;
+    margin: 4px 0;
+}
+
+.form_row label {
+    width: 85px;
+    display: block;
+    margin-right: 3px;
+}
+
+input[type=text] {
+    font-size: 0.9em;
+}
+
+textarea {
+    background-color: lightgray;
+    border: none;
+}
+
+.toggle {
+    cursor: pointer;
+}
+
+span[id^='count_'] {
+    font-size: 0.7em;
+}
+
+input[type=submit] {
+    min-width: 100px;
+    background: darkgray;
+    padding: 3px 5px;
+    border-radius: 3px;
+    color: #444;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+    border: 1px solid lightgray;
+    border-right-color: #555555;
+    border-bottom-color: #555555;
+    font-size: 0.85em;
+}
+
+input[type=submit]:hover {
+    background: dimgray;
+    color: white;
+}
+
+input[type=submit]:disabled {
+    color: lightgray;
+}
+
+.button_row {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.img_rels {
+    margin-left: 15px;
+}
+
