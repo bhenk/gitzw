@@ -65,6 +65,7 @@ class AAT {
         'lithography'=>'aat:300041379',
         'oil painting'=>'aat:300033799',
         'poster'=>'aat:300027221',
+        'print' => 'aat:300041273',
         'work on paper' => 'aat:300189621'
     ];
 
@@ -107,11 +108,12 @@ class AAT {
     }
 
     /**
-     * @param string $mediaString
+     * @param string|null $mediaString
      * @return array[] array(term => AATLabels[])
      */
-    public function getMedia(string $mediaString): array {
+    public function getMedia(?string $mediaString): array {
         $all = [];
+        if (is_null($mediaString)) return $all;
         $subject = strtolower($mediaString);
         foreach (array_keys(self::ART_MEDIA) as $word) {
             if (str_contains($subject, $word)) {

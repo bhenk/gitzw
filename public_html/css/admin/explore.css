@@ -4,10 +4,6 @@
     font-size: 0.9em;
 }
 
-h2 a {
-    color: var(--font-color);
-}
-
 .directories {
     margin-left: 100px;
 }

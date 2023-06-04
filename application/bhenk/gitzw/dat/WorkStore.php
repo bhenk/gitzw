@@ -11,7 +11,11 @@ use function array_values;
 use function count;
 use function gettype;
 use function in_array;
+use function intval;
 use function is_null;
+use function str_pad;
+use function strlen;
+use function substr;
 use function var_export;
 
 /**
@@ -270,6 +274,29 @@ class WorkStore {
             $resids[] = $row["RESID"];
         }
         return $resids;
+    }
+
+    /**
+     * Get the next RESID
+     *
+     * @param int $year
+     * @param WorkCategories $cat
+     * @param string $owner
+     * @return string|bool next RESID or *false* if value of parameters not accepted
+     * @throws Exception
+     */
+    public function nextRESID(int $year, WorkCategories $cat, string $owner): string|bool {
+        $resids = $this->selectRESIDsWhere($year, $cat, $owner);
+        if (empty($resids)) {
+            if (strlen($owner) != 3) return false;
+            if ($year < 1000 || $year > 9999) return false;
+            return "$owner.work.$cat->name.$year.0000";
+        } else {
+            $last = end($resids);
+            $number = intval(substr($last, -4));
+            $next = str_pad($number + 1, 4, "0", STR_PAD_LEFT);
+            return "$owner.work.$cat->name.$year.$next";
+        }
     }
 
     public function countWhere(string $where): int {

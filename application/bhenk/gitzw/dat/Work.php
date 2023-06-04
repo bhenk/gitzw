@@ -229,6 +229,7 @@ class Work implements StoredObjectInterface {
     }
 
     /**
+     * Given array values should be keys in AAT::ART_TYPES
      * @param array $types
      */
     public function setTypes(array $types): void {
@@ -237,6 +238,20 @@ class Work implements StoredObjectInterface {
         } else {
             $this->workDo->setTypes(implode(";", $types));
         }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLocation(): ?string {
+        return $this->workDo->getLocation();
+    }
+
+    /**
+     * @param string|null $location
+     */
+    public function setLocation(?string $location): void {
+        $this->workDo->setLocation($location);
     }
 
     /**
@@ -257,14 +272,18 @@ class Work implements StoredObjectInterface {
             $additionalTypes[] = AAT::ART_TYPES[strtolower($type)];
         }
         $material = [];
-        foreach (explode(" ", $this->getMedia()) as $word) {
-            $term = strtolower(trim($word));
-            $aat = AAT::ART_MEDIA[$term] ?? null;
-            if ($aat) {
-                $material[] = $term;
-                $material[] = $aat;
+        if (!is_null($this->getMedia())) {
+            foreach (explode(" ", $this->getMedia()) as $word) {
+                $term = strtolower(trim($word));
+                $aat = AAT::ART_MEDIA[$term] ?? null;
+                if ($aat) {
+                    $material[] = $term;
+                    $material[] = $aat;
+                }
             }
         }
+        $width = ($this->getWidth() >= 0) ? $this->getWidth() . " cm" : "";
+        $height = ($this->getHeight() >= 0) ? $this->getHeight() . " cm" : "";
         return [
             "@type" => "VisualArtwork",
             "@id"=> $this->getSDId(),
@@ -273,8 +292,8 @@ class Work implements StoredObjectInterface {
             "name" => $this->getTitles("<no title>"),
             "image" => $this->getRelations()->getPreferredRepresentation()->getSDId(),
             "material" => $material,
-            "width" => $this->getWidth().' cm',
-            "height" => $this->getHeight().' cm',
+            "width" => $width,
+            "height" => $height,
             "dateCreated" => $this->getDate(),
             "creator" => $this->getCreator()->getStructuredDataShort(),
             "copyrightHolder" => $this->getCreator()->getCRID(),

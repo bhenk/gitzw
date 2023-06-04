@@ -1,3 +1,4 @@
+@import "/css/base/exif_data.css";
 
 #edit_image {
     margin: 0 15px;
@@ -10,16 +11,17 @@
 }
 
 .img_form {
-    margin-left: 50px;
+    margin: 0 70px 0 50px;
     max-width: 690px;
+    min-width: 650px;
 }
 
 .img_view {
-    margin: 25px 10px;
+    margin: 25px;
 }
 
 .img_view img {
-    max-width: 35vw;
+    max-width: 100%;
 }
 
 .form_rows {

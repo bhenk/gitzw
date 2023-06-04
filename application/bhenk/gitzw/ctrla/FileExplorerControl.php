@@ -36,8 +36,10 @@ class FileExplorerControl extends Page3cControl {
         $act = $this->getRequest()->getUrlPart(2);
         if ($act == "") {
             $this->mode = self::MODE_OVERVIEW;
+            $this->setPageTitle("File explorer");
         } else {
             $this->mode = self::MODE_DIRECTORY_VIEW;
+            $this->setPageTitle("Explore image directory");
         }
     }
 

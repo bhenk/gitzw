@@ -29,7 +29,8 @@ trait MultiLanguageTitleTrait {
     }
 
     /**
-     * @param string $preferred
+     *
+     * @param string $preferred 'nl' or 'en'
      * @return bool
      */
     public function setPreferredLanguage(string $preferred): bool {

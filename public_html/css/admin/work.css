@@ -1,0 +1,144 @@
+
+#edit_work {
+    margin: 0 15px;
+    font-size: 0.95em;
+}
+
+.work_panel {
+    display: flex;
+    flex-direction: row;
+}
+
+.work_form {
+    margin: 0 70px 0 50px;
+    max-width: 690px;
+    min-width: 650px
+}
+
+.work_view {
+    margin: 25px;
+}
+
+.work_view img {
+    max-width: 100%;
+}
+
+.no_image {
+    padding: 80px;
+}
+
+.form_rows {
+    margin: 20px 0;
+}
+
+.form_row {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 0;
+}
+
+/*.form_row label {
+    width: 85px;
+    min-width: 85px;
+    display: block;
+    margin-right: 3px;
+}*/
+
+.fm_label {
+    width: 85px;
+    min-width: 85px;
+    display: block;
+    margin-right: 3px;
+}
+
+input, select {
+    background-color: lightgray;
+    border: none;
+}
+
+input[type=text], select {
+    width: 200px;
+    padding-left: 3px;
+}
+
+input.larger {
+    min-width: 530px;
+}
+
+input[type=text].smaller {
+    width: 4em;
+}
+
+.cb_field {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.cb_field div {
+    width: 132px;
+    display: flex;
+    flex-direction: row;
+}
+
+.cb_label {
+    min-width: 105px;
+}
+
+input[type=checkbox] {
+    margin-right: 5px;
+}
+
+input[type=submit] {
+    min-width: 100px;
+    background: darkgray;
+    padding: 3px 5px;
+    border-radius: 3px;
+    color: #444;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+    border: 1px solid lightgray;
+    border-right-color: #555555;
+    border-bottom-color: #555555;
+    font-size: 0.85em;
+}
+
+input[type=submit]:hover {
+    background: dimgray;
+    color: white;
+}
+
+input[type=submit]:disabled {
+    color: lightgray;
+}
+
+.button_row {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+span[id^='count_'] {
+    font-size: 0.7em;
+}
+
+.glower {
+    opacity: var(--opacity);
+}
+
+.glower:hover {
+    opacity: 1.0;
+}
+
+.error {
+    font-size: 1em;
+    font-weight: bold;
+    color: red;
+    background-color: lightgray;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.error div {
+    height: 1.3em;
+}

@@ -11,17 +11,19 @@ use function var_dump;
 
 class AATTest extends TestCase {
 
-    public function testAllTerms() {
+
+// produces new json file with all terms mentioned in AAT ART_MEDIA and ART_TYPES
+//    public function testAllTerms() {
 //        $aat = new AAT();
-//        //$aat->generateJson();
-//        $term = "aat:300022457";
+//        $aat->generateJson();
+//        $term = "aat:300041273";
 //        $labels = $aat->getPreferredLabels($term);
-//        //echo $term;
+//        echo $term . "\n";
 //        foreach ($labels as $label) {
 //            fwrite(STDOUT, $label->getLanguage() . " => " . $label->getLiteral() . "\n");
 //        }
-        assertEquals(1, 1);
-    }
+//        assertEquals(1, 1);
+//    }
 
     public function testGetMedia() {
         $aat = new AAT();

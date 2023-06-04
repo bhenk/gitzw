@@ -6,6 +6,7 @@ use bhenk\gitzw\site\Menu;
 use bhenk\gitzw\site\Request;
 use function is_null;
 use function json_encode;
+use function str_contains;
 
 abstract class PageControl {
 
@@ -36,6 +37,25 @@ abstract class PageControl {
      * @return void
      */
     public abstract function renderPage(): void;
+
+    public function getReferrerUrl(): string|bool {
+        if (isset($_SERVER["HTTP_REFERER"])) {
+            return $_SERVER["HTTP_REFERER"];
+        }
+        return false;
+    }
+
+    public function getLocalReferrerUrl(): string|bool {
+        $url = $this->getReferrerUrl();
+        if ($url) {
+            if (isset($_SERVER["HTTP_HOST"])) {
+                if (str_contains($url, $_SERVER["HTTP_HOST"])) {
+                    return $url;
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * @return Request

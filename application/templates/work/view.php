@@ -11,7 +11,9 @@ $repr = $work->getRelations()->getPreferredRepresentation();
 $location_30 = $repr->getFileLocation(Images::IMG_30);
 $location_15 = $repr->getFileLocation(Images::IMG_15);
 $location_08 = $repr->getFileLocation(Images::IMG_08);
-$others = $work->getRelations()->getOtherWorkRepresentations([$repr->getID()])
+$others = $work->getRelations()->getOtherWorkRepresentations([$repr->getID()]);
+$exif_data = $repr->getSecureExifData();
+$exif_err = $exif_data["error"] ?? false;
 ?>
 
 <div id="work_view">
@@ -84,9 +86,48 @@ $others = $work->getRelations()->getOtherWorkRepresentations([$repr->getID()])
             <img src="/img/ico/right_triangle35.png" alt="to the future" title="to the past">
         </picture>
     </a>
+    <picture onclick="showExifData()" class="glower">
+        <source srcset="/img/ico/camera-35-w.png" media="(prefers-color-scheme: dark)">
+        <img src="/img/ico/camera-35.png" alt="show exif data" title="show exif data">
+    </picture>
     <a href="<?php echo $page->getPastUrl(); ?>" title="to the past">
         <div class="link_bar" onmouseover="pastLinkOver()" onmouseout="pastLinkOut()"></div>
     </a>
+</div>
+
+<div id="exif_data">
+    <div id="hide_exif">
+        <picture onclick="hideExifData()" class="glower">
+            <source srcset="/img/ico/x-35-w.png" media="(prefers-color-scheme: dark)">
+            <img src="/img/ico/x-35-w.png" alt="hide exif data" title="hide exif data">
+        </picture>
+    </div>
+    <div class="exif">
+        <h2>Exif data</h2>
+        <?php if ($exif_err) {
+            foreach ($exif_data as $key => $value) { ?>
+                <div class="exif_row exif_error">
+                    <label><?php echo $key; ?>: </label>
+                    <span><?php echo $value ?></span>
+                </div>
+            <?php } ?>
+        <?php } else {
+            foreach ($exif_data as $part => $contents) { ?>
+                <h3><?php echo $part; ?></h3>
+                <?php foreach ($contents as $key => $value) { ?>
+                    <div class="exif_row">
+                        <label><?php echo $key; ?>: </label>
+                        <span><?php if (gettype($value) == "array") {
+                                echo var_export($value, true);
+                            } else {
+                                echo $value;
+                            }?>
+                        </span>
+                    </div>
+                <?php } ?>
+            <?php } ?>
+        <?php } ?>
+    </div>
 </div>
 
 <script>
@@ -194,6 +235,16 @@ $others = $work->getRelations()->getOtherWorkRepresentations([$repr->getID()])
         do {
             currentDate = Date.now();
         } while (currentDate - date < milliseconds);
+    }
+
+    function showExifData() {
+        let exif = document.getElementById("exif_data");
+        exif.style.right = "0";
+    }
+
+    function hideExifData() {
+        let exif = document.getElementById("exif_data");
+        exif.style.right = "-800px";
     }
 </script>
 

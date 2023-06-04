@@ -1,0 +1,62 @@
+.glower {
+    opacity: var(--opacity);
+}
+
+.glower:hover {
+    opacity: 1.0;
+}
+
+#show_exif {
+    position: fixed;
+    right: 0;
+    top: 40px;
+    padding: 20px;
+}
+
+#hide_exif {
+    position: sticky;
+    left: 0;
+    top: 0;
+}
+
+#exif_data {
+    position: fixed;
+    right: -700px;
+    top: 0;
+    background-color: dimgray;
+    color: #DCDCDC;
+    width: 700px;
+    height: 100vh;
+    transition: right 0.5s;
+    overflow-y: auto;
+    font-size: 0.9em;
+}
+
+.exif {
+    margin: 10px;
+    padding-left: 15px;
+}
+
+.exif_row {
+    display: flex;
+    flex-direction: row;
+    margin: 1px;
+    padding: 2px 5px;
+    background-color: #444444;
+}
+
+.exif_row label {
+    width: 220px;
+}
+
+.exif_row span {
+    display: block;
+    word-break: break-word;
+    width: 400px;
+}
+
+.exif_error {
+    color: red;
+    font-weight: bold;
+    background-color: lightgray;
+}

@@ -37,6 +37,10 @@ class Creator implements StoredObjectInterface {
         return $this->creatorDo->getID();
     }
 
+    /**
+     * Returns the short 3-letter sequence after url in CRID
+     * @return string|null
+     */
     public function getShortCRID(): ?string {
         $crid = $this->creatorDo->getCRID();
         if (is_null($crid)) return null;

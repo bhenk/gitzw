@@ -12,6 +12,8 @@ use ReflectionException;
 use function exif_read_data;
 use function json_decode;
 use function json_encode;
+use function restore_error_handler;
+use function set_error_handler;
 use function str_replace;
 use function strrpos;
 
@@ -24,6 +26,7 @@ class Representation implements StoredObjectInterface {
     const IMG_DIR = "images";
 
     private RepresentationRelations $relations;
+    private array $errors = [];
 
     function __construct(private readonly RepresentationDo $repDo = new RepresentationDo()) {
         $this->initDateTrait($this->repDo);
@@ -126,6 +129,36 @@ class Representation implements StoredObjectInterface {
      */
     public function getExifData(): bool|array {
         return exif_read_data($this->getFilename(), 0, true);
+    }
+
+    /**
+     * Get exif data and handle warnings
+     *
+     * In case of error, first key in returned array reads 'error'.
+     *
+     * @return array Exif data or caught warning messages if no data available
+     * @throws Exception
+     */
+    public function getSecureExifData(): array {
+        $this->errors = [];
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+            $this->errors["error"] = "While reading '" . $this->getREPID() . "'";
+            $this->errors["errno"] = $errno;
+            $this->errors["errstr"] = $errstr;
+//            $this->errors["errfile"] = $errfile;
+//            $this->errors["errline"] = $errline;
+        });
+        $exif = exif_read_data($this->getFilename(), 0, true);
+        restore_error_handler();
+        if (!$exif) return $this->errors;
+        return $exif;
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrors(): array {
+        return $this->errors;
     }
 
     /**

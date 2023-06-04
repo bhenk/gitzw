@@ -3,11 +3,9 @@
 namespace bhenk\gitzw\handle;
 
 use bhenk\gitzw\base\Env;
-use bhenk\gitzw\base\Site;
 use bhenk\gitzw\site\Request;
 use bhenk\logger\log\Log;
 use bhenk\msdata\connector\MysqlConnector;
-use Exception;
 use Throwable;
 use function file_exists;
 use function file_get_contents;

@@ -7,6 +7,7 @@ use bhenk\gitzw\ctrl\Page3cControl;
 use bhenk\gitzw\dat\Representation;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\site\Request;
+use function is_null;
 use function substr;
 
 class ImageControl extends Page3cControl {
@@ -20,6 +21,7 @@ class ImageControl extends Page3cControl {
         parent::__construct($request);
         $this->addStylesheet("/css/admin/admin_header.css");
         $this->addStylesheet("/css/admin/image.css");
+        $this->setPageTitle("Edit image");
     }
 
     public function handleRequest(): void {
@@ -38,7 +40,7 @@ class ImageControl extends Page3cControl {
         $date = $_POST["date"] ?? $repr->getDate();
         $source =  $_POST["source"] ?? $repr->getSource();
         $repr->setDate($date);
-        if ($source) $repr->setSource($source);
+        if (!is_null($source)) $repr->setSource($source);
         $repr->setDescription($_POST["description"]);
         Store::representationStore()->persist($repr);
     }

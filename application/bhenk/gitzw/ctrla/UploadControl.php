@@ -150,12 +150,13 @@ class UploadControl extends Page3cControl {
             for ($i = 0; $i < count($files); $i++) {
                 if (in_array($i, $files_to_move)) {
                     $from = Env::public_html() . "/uploads/" . $files[$i];
-                    $to = $moveToDir . "/" . $files[$i];
+                    $toName = str_replace(" ", "-", $files[$i]);
+                    $to = $moveToDir . "/" . $toName;
                     if (is_file($to)) {
                         $this->error_msg .= " - file already exists: $to <br/>";
                     } else {
                         rename($from, $to);
-                        $rel = "$dir_select/" . $files[$i];
+                        $rel = "$dir_select/" . $toName;
                         $repid = str_replace(Representation::IMG_DIR . "/", "", $rel);
                         $rep = new Representation();
                         $rep->setREPID($repid);

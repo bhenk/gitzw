@@ -13,6 +13,8 @@ $work_rels = $repr->getRelations()->getWorkRelations();
 $works = $repr->getRelations()->getWorks();
 $exh_rels = $repr->getRelations()->getExhibitionRelations();
 $exhibits = $repr->getRelations()->getExhibitions();
+$exif_data = $repr->getSecureExifData();
+$exif_err = $exif_data["error"] ?? false;
 ?>
 
 <div id="edit_image">
@@ -23,7 +25,8 @@ $exhibits = $repr->getRelations()->getExhibitions();
         </div>
         <div class="img_form">
             <form id="edit_image" name="edit_image" action="/admin/image/<?php echo $repr->getREPID() ?>" method="post">
-                <h2>REPID: <span><?php echo $repr->getREPID(); ?></span>
+                <h2><a href="/admin/explore/images/<?php echo dirname($repr->getREPID()); ?>"> &#8678;&nbsp;&nbsp; </a>
+                    REPID: <span><?php echo $repr->getREPID(); ?></span>
                     <span title="copy REPID" class="copyprevious" onclick="copyPrevious(this)">&nbsp;&#9776; </span></h2>
                 <div>ID: <span><?php echo $repr->getID(); ?></span>
                     <span title="copy ID" class="copyprevious" onclick="copyPrevious(this)">&nbsp;&#9776; </span>
@@ -61,7 +64,8 @@ $exhibits = $repr->getRelations()->getExhibitions();
                 <hr/>
             </form>
             <div class="img_rels">
-                <h2>Work relations <?php echo count($works); ?></h2>
+                <h2>Work relations <?php echo count($works); ?> &nbsp;
+                    <a href="/admin/work/new/<?php echo $repr->getREPID(); ?>"> New </a></h2>
                 <?php foreach($works as $work) {
                     $rel = $work_rels[$work->getID()];
                     ?>
@@ -70,6 +74,8 @@ $exhibits = $repr->getRelations()->getExhibitions();
                         <a href="/<?php echo $work->getCanonicalUrl(); ?>">
                         <span id="resid"><?php echo $work->getRESID(); ?></span>
                         </a>
+                        <span style="display: none"><?php echo $work->getRESID(); ?></span>
+                        <span title="copy RESID" class="copyprevious" onclick="copyPrevious(this)">&nbsp;&#9776; </span>
                     </div>
                     <div class="form_row">
                         <label>Title: </label>
@@ -98,6 +104,48 @@ $exhibits = $repr->getRelations()->getExhibitions();
                 <h2>Exhibitions <?php echo count($exhibits); ?></h2>
             </div>
         </div>
+    </div>
+</div>
+
+<div id="show_exif">
+    <picture onclick="showExifData()" class="glower">
+        <source srcset="/img/ico/camera-35-w.png" media="(prefers-color-scheme: dark)">
+        <img src="/img/ico/camera-35.png" alt="show exif data" title="show exif data">
+    </picture>
+</div>
+
+<div id="exif_data">
+    <div id="hide_exif">
+        <picture onclick="hideExifData()" class="glower">
+            <source srcset="/img/ico/x-35-w.png" media="(prefers-color-scheme: dark)">
+            <img src="/img/ico/x-35.png" alt="hide exif data" title="hide exif data">
+        </picture>
+    </div>
+    <div class="exif">
+        <h2>Exif data</h2>
+        <?php if ($exif_err) {
+            foreach ($exif_data as $key => $value) { ?>
+                <div class="exif_row exif_error">
+                    <label><?php echo $key; ?>: </label>
+                    <span><?php echo $value ?></span>
+                </div>
+            <?php } ?>
+        <?php } else {
+            foreach ($exif_data as $part => $contents) { ?>
+                <h3><?php echo $part; ?></h3>
+                <?php foreach ($contents as $key => $value) { ?>
+                    <div class="exif_row">
+                        <label><?php echo $key; ?>: </label>
+                        <span><?php if (gettype($value) == "array") {
+                                echo var_export($value, true);
+                            } else {
+                                echo $value;
+                            }?>
+                        </span>
+                    </div>
+                <?php } ?>
+            <?php } ?>
+        <?php } ?>
     </div>
 </div>
 
@@ -148,4 +196,13 @@ $exhibits = $repr->getRelations()->getExhibitions();
         el.disabled = !el.disabled;
     }
 
+    function showExifData() {
+        let exif = document.getElementById("exif_data");
+        exif.style.right = "0";
+    }
+
+    function hideExifData() {
+        let exif = document.getElementById("exif_data");
+        exif.style.right = "-800px";
+    }
 </script>

@@ -124,6 +124,7 @@ class RepresentationStore {
         $arr = Dao::representationDao()->selectWhere("REPID='" . $REPID . "'");
         if (count($arr) == 1) return new Representation(array_values($arr)[0]);
         if (count($arr) > 1) Log::warning("REPID not unique: " . $REPID);
+        if (count($arr) == 0) Log::warning("REPID not found: " . $REPID);
         return false;
     }
 
