@@ -32,6 +32,29 @@ a {
     color: var(--link-color);
 }
 
+input[type=submit] {
+    min-width: 100px;
+    background: darkgray;
+    padding: 3px 5px;
+    border-radius: 3px;
+    color: #444;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+    border: 1px solid lightgray;
+    border-right-color: #555555;
+    border-bottom-color: #555555;
+    font-size: 0.85em;
+}
+
+input[type=submit]:hover:not([disabled]) {
+    background: dimgray;
+    color: white;
+}
+
+input[type=submit]:disabled {
+    color: lightgray;
+}
+
 .btn {
     border-radius: 5px;
     border: 2px solid white;

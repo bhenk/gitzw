@@ -116,6 +116,11 @@ trait RulesTrait {
                 . " not related to Work:" . $this->getOwnerID());
             return false;
         }
+        if (count($representations) == 1) {
+            $this->addMessage("Representation:" . $representation->getID()
+            . " cannot be removed. Last Representation of Work:" . $this->getOwnerID());
+            return false;
+        }
         $exhHasReps = $representation->getRelations()->getExhibitionRelations();
         if (!empty($exhHasReps)) {
             $this->addMessage("Representation:" . $representation->getID()

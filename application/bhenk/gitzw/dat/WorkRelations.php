@@ -150,7 +150,7 @@ class WorkRelations extends RepresentationOwner {
     /**
      * Get the preferred Representation
      *
-     * @return WorkRepresentation|null preferred, first or null
+     * @return Representation|null preferred, first or null
      * @throws Exception
      */
     public function getPreferredRepresentation(): ?Representation {

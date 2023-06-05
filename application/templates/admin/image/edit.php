@@ -86,12 +86,12 @@ $exif_err = $exif_data["error"] ?? false;
                         <span><?php echo $rel->getOrdinal(); ?></span>
                     </div>
                     <div class="form_row">
-                        <label>Hidden:</label>
-                        <span><?php echo $rel->isHidden() ? "true" : "false"; ?></span>
-                    </div>
-                    <div class="form_row">
                         <label>Preferred:</label>
                         <span><?php echo $rel->isPreferred() ? "true" : "false"; ?></span>
+                    </div>
+                    <div class="form_row">
+                        <label>Hidden:</label>
+                        <span><?php echo $rel->isHidden() ? "true" : "false"; ?></span>
                     </div>
                     <div class="form_row">
                         <label>Description: </label>

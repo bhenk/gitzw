@@ -17,6 +17,7 @@ use bhenk\gitzw\site\Request;
 use bhenk\logger\log\Log;
 use DateTimeImmutable;
 use Exception;
+use function array_merge;
 use function basename;
 use function floatval;
 use function intval;
@@ -36,6 +37,7 @@ class WorkControl extends Page3cControl {
     private string $date = "";
     private string $repid = "";
     private array $errors = [];
+    private array $add_errors = [];
 
     function __construct(Request $request) {
         parent::__construct($request);
@@ -52,6 +54,8 @@ class WorkControl extends Page3cControl {
             if ($_POST["action"] == "new") $this->doCheckNewWork();
             if ($_POST["action"] == "create") $this->doCreateNewWork();
             if ($_POST["action"] == "update") $this->doUpdateWork();
+            if (str_starts_with($_POST["action"], "rep_rel_")) $this->doUpdateRelation();
+            if ($_POST["action"] == "add_repid") $this->doAddRepresentation();
         } else {
             $act = $this->getRequest()->getUrlPart(2);
             if ($act == "new") $this->showNew();
@@ -148,13 +152,15 @@ class WorkControl extends Page3cControl {
 
     private function doUpdateWork(): void {
         $resid = $_POST["resid"] ?? "";
-        Log::info("Updating $resid");
         $work = Store::workStore()->selectByRESID($resid);
         if (!$work) {
             (new NotFoundHandler())->handleRequest($this->getRequest());
             return;
         }
+        $this->setPageTitle("Edit $resid");
+        $this->mode = self::MODE_EDIT;
 
+        Log::info("Updating $resid");
         $date = $_POST["date"] ?? $work->getDate();
         list($dt, $format) = DateUtil::validate($date);
         if (!$dt) {
@@ -191,9 +197,74 @@ class WorkControl extends Page3cControl {
         $work->setHidden(isset($_POST["hidden"]));
         $work->setLocation($_POST["location"] ?? "");
         $this->work = Store::workStore()->persist($work);
+    }
 
+    private function doUpdateRelation(): void {
+        if (!$this->setWork()) return;
+        Log::info("Updating relations of " . $this->work->getRESID());
+        $action = $_POST["action"];
+        $repr_id = intval(substr($action, 8));
+        $submit = $_POST["submit"] ?? "";
+        if ($submit == "Delete") {
+            $this->doDeleteRelation($repr_id);
+        } else if ($submit == "Save") {
+            $this->doSaveRelation($repr_id);
+        } else {
+            $this->errors[] = "Unknown submit action: $submit";
+        }
+    }
+
+    private function doSaveRelation(int $repr_id): void {
+        $workHasRep = $this->work->getRelations()->getRepRelations()[$repr_id];
+        $workHasRep->setOrdinal($_POST["ordinal_$repr_id"] ?? -1);
+        $workHasRep->setPreferred(isset($_POST["preferred_$repr_id"]) ?? false);
+        $workHasRep->setHidden(isset($_POST["hidden_$repr_id"]) ?? false);
+        $workHasRep->setDescription($_POST["description_$repr_id"] ?? "");
+        if ($workHasRep->isPreferred()) {
+            foreach ($this->work->getRelations()->getRepRelations() as $relation) {
+                if ($relation->getID() != $workHasRep->getID()) {
+                    $relation->setPreferred(false);
+                }
+            }
+        }
+        $this->work = Store::workStore()->persist($this->work);
+    }
+
+    private function doDeleteRelation(int $repr_id): void {
+        if ($this->work->getRelations()->removeRepresentation($repr_id)) {
+            $this->work = Store::workStore()->persist($this->work);
+        } else {
+            $this->errors = array_merge($this->errors, $this->work->getRelations()->getMessages());
+        }
+    }
+
+    private function doAddRepresentation(): void {
+        if (!$this->setWork()) return;
+        Log::info("Adding representation to " . $this->work->getRESID());
+        $repid = $_POST["add_repid"] ?? "";
+        $representation = Store::representationStore()->selectByREPID($repid);
+        if ($representation) {
+            if ($this->work->getRelations()->addRepresentation($representation)) {
+                $this->work = Store::workStore()->persist($this->work);
+            } else {
+                $this->add_errors = array_merge($this->add_errors, $this->work->getRelations()->getMessages());
+            }
+        } else {
+            $this->add_errors[] = "Representation with REPID '$repid' not found";
+        }
+    }
+
+    private function setWork(): bool {
+        $resid = $_POST["resid"] ?? "";
+        $work = Store::workStore()->selectByRESID($resid);
+        if (!$work) {
+            (new NotFoundHandler())->handleRequest($this->getRequest());
+            return false;
+        }
+        $this->work = $work;
         $this->setPageTitle("Edit $resid");
         $this->mode = self::MODE_EDIT;
+        return true;
     }
 
     public function renderHeader(): void {
@@ -261,6 +332,13 @@ class WorkControl extends Page3cControl {
      */
     public function getErrors(): array {
         return $this->errors;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAddErrors(): array {
+        return $this->add_errors;
     }
 
 

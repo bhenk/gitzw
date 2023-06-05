@@ -1,6 +1,6 @@
 
 #edit_work {
-    margin: 0 15px;
+    margin: 0 15px 40px 15px;
     font-size: 0.95em;
 }
 
@@ -11,7 +11,7 @@
 
 .work_form {
     margin: 0 70px 0 50px;
-    max-width: 690px;
+    max-width: 650px;
     min-width: 650px
 }
 
@@ -37,13 +37,6 @@
     margin: 10px 0;
 }
 
-/*.form_row label {
-    width: 85px;
-    min-width: 85px;
-    display: block;
-    margin-right: 3px;
-}*/
-
 .fm_label {
     width: 85px;
     min-width: 85px;
@@ -51,7 +44,7 @@
     margin-right: 3px;
 }
 
-input, select {
+input, select, textarea {
     background-color: lightgray;
     border: none;
 }
@@ -89,33 +82,11 @@ input[type=checkbox] {
     margin-right: 5px;
 }
 
-input[type=submit] {
-    min-width: 100px;
-    background: darkgray;
-    padding: 3px 5px;
-    border-radius: 3px;
-    color: #444;
-    cursor: pointer;
-    transition: background .2s ease-in-out;
-    border: 1px solid lightgray;
-    border-right-color: #555555;
-    border-bottom-color: #555555;
-    font-size: 0.85em;
-}
-
-input[type=submit]:hover {
-    background: dimgray;
-    color: white;
-}
-
-input[type=submit]:disabled {
-    color: lightgray;
-}
-
 .button_row {
     margin-top: 20px;
     display: flex;
     flex-direction: row-reverse;
+    max-width: 615px;
 }
 
 span[id^='count_'] {
@@ -141,4 +112,23 @@ span[id^='count_'] {
 
 .error div {
     height: 1.3em;
+}
+
+.rel_panel {
+    display: flex;
+    flex-direction: row;
+    margin: 20px 0;
+}
+
+.rel_img {
+    min-width: 150px;
+}
+
+.rel_form, .add_form {
+    margin-left: 20px;
+}
+
+input.add_repid {
+    margin-left: auto;
+    margin-right: 22px;
 }
