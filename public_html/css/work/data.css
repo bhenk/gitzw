@@ -24,7 +24,7 @@
 
 .data_term {
     display: table-cell;
-    margin-top: 10px;
+    padding: 3px 0;
     font-size: 0.9em;
     color: darkgoldenrod;
 }
@@ -72,5 +72,24 @@
 @media (prefers-color-scheme: dark) {
     .data_term {
         color: burlywood;
+    }
+}
+
+#qr_code div {
+    max-width: 200px;
+    max-height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#qr_code img {
+    max-width: 200px;
+}
+
+@media screen and (max-width: 1000px) {
+    /* kleiner dan */
+
+    #c3_content {
+        font-size: 1.1em;
     }
 }

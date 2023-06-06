@@ -19,7 +19,8 @@
     "ext-imagick": "*",
     "easyrdf/easyrdf": "^1.1",
     "ext-curl": "*",
-    "ext-fileinfo": "*"
+    "ext-fileinfo": "*",
+    "chillerlan/php-qrcode": "^4.3"
   },
   "require-dev": {
     "phpunit/phpunit": "^10.0",

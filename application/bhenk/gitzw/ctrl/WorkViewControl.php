@@ -23,6 +23,7 @@ class WorkViewControl extends WorkPageControl {
         parent::__construct($request);
         $this->addStylesheet("/css/work/view.css");
         $this->addStylesheet("/css/work/data.css");
+        //$this->setIncludeCopyright(false);
         $this->work = $request->getWork();
         $this->handleRequest();
 

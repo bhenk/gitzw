@@ -55,7 +55,7 @@ input[type=text], select {
 }
 
 input.larger {
-    min-width: 530px;
+    min-width: 470px;
 }
 
 input[type=text].smaller {
@@ -131,4 +131,8 @@ span[id^='count_'] {
 input.add_repid {
     margin-left: auto;
     margin-right: 22px;
+}
+
+#submit_edit_work {
+    ;
 }

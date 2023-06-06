@@ -2,7 +2,9 @@
 /** @var WorkViewControl $page */
 
 use bhenk\gitzw\base\AAT;
+use bhenk\gitzw\base\Env;
 use bhenk\gitzw\ctrl\WorkViewControl;
+use chillerlan\QRCode\QRCode;
 
 $page = $this;
 $work = $page->getWork();
@@ -113,8 +115,29 @@ $media = $aat->getMedia($work->getMedia());
                 <a href="<?php echo $work->getCreator()->getCRID(); ?>"><?php echo $work->getCreator()->getCRID(); ?></a>
             </div>
         </div>
+        <div>
+            <div class="data_term">location</div>
+            <div class="data_def"><?php echo $work->getLocation() ?></div>
+        </div>
+        <div>
+            <div class="data_term">ordinal</div>
+            <div class="data_def"><?php echo $work->getOrdinal() ?></div>
+        </div>
     </div>
+    <hr/>
     <div id="data_links">
-        <a href="/<?php echo $work->getCanonicalUrl() . '.json' ?>">[ json ]</a>
+        <div class="data_term">download</div>
+        <div class="data_def">
+            <a href="/<?php echo $work->getCanonicalUrl() . '.json' ?>">[ json ]</a>
+        </div>
+    </div>
+    <hr/>
+    <div id="qr_code">
+        <div>
+    <?php
+    $data = Env::HTTPS_URL . "/" . $work->getCanonicalUrl();
+    echo '<img src="'.(new QRCode)->render($data).'" alt="QR Code" />';
+    ?>
+        </div>
     </div>
 </div>

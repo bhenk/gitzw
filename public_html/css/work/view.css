@@ -52,10 +52,6 @@
     color: var(--link-color);
 }
 
-#column_3 {
-    display: none;
-}
-
 #left_button_group {
     width: 36px;
     height: 100%;
@@ -81,4 +77,52 @@
 .link_bar {
     width: 7vw;
     height: 80%;
+}
+
+#column_3 {
+    display: none;
+}
+
+#menu_head {
+    display: none;
+}
+
+@media screen and (max-width: 1000px) {
+    /* kleiner dan */
+
+    #work_view {
+        margin: 0;
+    }
+    .work {
+        max-width: 95vw;
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .image img, .ani {
+        max-width: 95vw;
+        max-height: 90vh;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #column_3 {
+        display: block;
+    }
+
+    #left_button_group, #right_button_group {
+        display: none;
+    }
+
+    #menu_head {
+        display: flex;
+        flex-direction: row;
+        padding: 0 10px;
+        margin: 50px 0;
+    }
+    #menu_head div:nth-child(2) {
+        margin-left: auto;
+    }
+    .others {
+        margin-bottom: 0;
+    }
 }

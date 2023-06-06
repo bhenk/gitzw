@@ -47,6 +47,25 @@ $exif_err = $exif_data["error"] ?? false;
     <?php } // if?>
 </div>
 
+<div id="menu_head">
+    <div>
+    <a href="<?php echo $page->getFutureUrl(); ?>">
+        <picture>
+            <source srcset="/img/ico/lefttrianglewhite35.png" media="(prefers-color-scheme: dark)">
+            <img src="/img/ico/left_triangle35.png" alt="to the future" title="to the future">
+        </picture>
+    </a>
+    </div>
+    <div>
+        <a href="<?php echo $page->getPastUrl(); ?>">
+            <picture>
+                <source srcset="/img/ico/righttrianglewhite35.png" media="(prefers-color-scheme: dark)">
+                <img src="/img/ico/right_triangle35.png" alt="to the future" title="to the past">
+            </picture>
+        </a>
+    </div>
+</div>
+
 <div id="left_button_group">
     <picture onclick="leftMenuIn()" class="glower" id="left_in">
         <source srcset="/img/ico/left-arrow-w35.png" media="(prefers-color-scheme: dark)">
@@ -141,7 +160,7 @@ $exif_err = $exif_data["error"] ?? false;
             leftMenuOut();
         }
         let right_data = getCookie("r_data");
-        if (right_data === "out") {
+        if (right_data === "out" || window.innerWidth < 1000) {
             rightDataOut();
         } else {
             rightDataIn();
@@ -245,6 +264,54 @@ $exif_err = $exif_data["error"] ?? false;
     function hideExifData() {
         let exif = document.getElementById("exif_data");
         exif.style.right = "-800px";
+    }
+
+    // swipe
+    document.addEventListener('touchstart', handleTouchStart, false);
+    document.addEventListener('touchmove', handleTouchMove, false);
+
+    let xDown = null;
+    let yDown = null;
+
+    function getLastPart(url) {
+        const parts = url.split('/');
+        return parts.at(-1);
+    }
+
+    function getTouches(evt) {
+        return evt.touches || evt.originalEvent.touches;
+    }
+
+    function handleTouchStart(evt) {
+        const firstTouch = getTouches(evt)[0];
+        xDown = firstTouch.clientX;
+        yDown = firstTouch.clientY;
+    }
+
+    function handleTouchMove(evt) {
+        if ( ! xDown || ! yDown ) {
+            return;
+        }
+
+        let xUp = evt.touches[0].clientX;
+        let yUp = evt.touches[0].clientY;
+
+        let xDiff = xDown - xUp;
+        let yDiff = yDown - yUp;
+
+        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
+            // swipe left or right
+            if ( xDiff > 0 ) {
+                /* right swipe */
+                window.location = "<?php echo $page->getPastUrl(); ?>";
+            } else {
+                /* left swipe */
+                window.location = "<?php echo $page->getFutureUrl(); ?>"
+            }
+        }
+        /* reset values */
+        xDown = null;
+        yDown = null;
     }
 </script>
 

@@ -7,6 +7,7 @@ use EasyRdf\Literal;
 use EasyRdf\RdfNamespace;
 use Exception;
 use function array_keys;
+use function array_merge;
 use function curl_close;
 use function curl_errno;
 use function curl_error;
@@ -20,6 +21,7 @@ use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function fopen;
+use function in_array;
 use function is_null;
 use function json_decode;
 use function json_encode;
@@ -102,7 +104,9 @@ class AAT {
         $all = [];
         foreach ($types as $type) {
             $term = self::ART_TYPES[strtolower($type)] ?? false;
-            if ($term) $all[$term] = $this->getPreferredLabels($term);
+            if ($term) {
+                $all[$term] = array_merge([new AATLabel("en", $type, $term)], $this->getPreferredLabels($term));
+            }
         }
         return $all;
     }

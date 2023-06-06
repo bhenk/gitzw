@@ -16,9 +16,9 @@ function copyPrevious(ele) {
 	let eles = document.getElementsByClassName("copyprevious");
 	for (i = 0; i < eles.length; i++) {
 		eles[i].style.color = "inherit"
-		eles[i].innerHTML = " &#9776; "
+		eles[i].innerHTML = "&nbsp; &#9776; "
 	}
-	ele.innerHTML = " &#9788; ";
+	ele.innerHTML = "&nbsp; &#9788; ";
 }
 
 /* end copy previous */

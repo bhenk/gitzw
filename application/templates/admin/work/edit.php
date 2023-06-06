@@ -18,7 +18,7 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
         </div>
         <div class="work_form">
             <form id="edit_work" name="edit_work" action="/admin/work/edit/<?php
-            echo $work->getRESID(); ?>" method="post">
+            echo $work->getRESID(); ?>" method="post" onchange="formChanged(this)" onkeyup="formChanged(this)">
                 <h2><?php $ref_url = $ctrl->getLocalReferrerUrl();
                     if ($ref_url && !str_contains($ref_url, "/admin/work/")) { ?>
                         <a href="<?php echo $ref_url; ?>"> &#8678;&nbsp;&nbsp; </a>
@@ -48,12 +48,16 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
                     <div class="form_row">
                         <label class="fm_label" for="title_nl">Title nl: </label>
                         <input class="larger" type="text" id="title_nl" name="title_nl"
-                               value="<?php echo $work->getTitleNl(); ?>">
+                               value="<?php echo $work->getTitleNl(); ?>"
+                               onchange="valueChanged(this, 255)" onkeyup="valueChanged(this, 255)">
+                        &nbsp; &nbsp;<span id="count_title_nl"></span>
                     </div>
                     <div class="form_row">
                         <label class="fm_label" for="title_en">Title en: </label>
                         <input class="larger" type="text" id="title_en" name="title_en"
-                               value="<?php echo $work->getTitleEn(); ?>">
+                               value="<?php echo $work->getTitleEn(); ?>"
+                               onchange="valueChanged(this, 255)" onkeyup="valueChanged(this, 255)">
+                        &nbsp; &nbsp;<span id="count_title_en"></span>
                     </div>
                     <div class="form_row">
                         <label class="fm_label" for="pref_lang">Preferred:</label>
@@ -90,12 +94,16 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
                     <div class="form_row">
                         <label class="fm_label" for="media">Media: </label>
                         <input class="larger" type="text" id="media" name="media"
-                               value="<?php echo $work->getMedia(); ?>">
+                               value="<?php echo $work->getMedia(); ?>"
+                               onchange="valueChanged(this, 255)" onkeyup="valueChanged(this, 255)">
+                        &nbsp; &nbsp;<span id="count_media"></span>
                     </div>
                     <div class="form_row">
                         <label class="fm_label" for="dim_extra">Dim. extra: </label>
                         <input class="larger" type="text" id="dim_extra" name="dim_extra"
-                               value="<?php echo $work->getDimExtra(); ?>">
+                               value="<?php echo $work->getDimExtra(); ?>"
+                               onchange="valueChanged(this, 255)" onkeyup="valueChanged(this, 255)">
+                        &nbsp; &nbsp;<span id="count_dim_extra"></span>
                     </div>
                     <div class="form_row">
                         <label class="fm_label" for="width">Width: </label>
@@ -125,12 +133,14 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
                         ?>></div>
                     <div class="form_row">
                         <label class="fm_label" for="location">Location: </label>
-                        <input type="text" id="location" name="location" value="<?php echo $work->getLocation(); ?>">
+                        <input type="text" id="location" name="location" value="<?php echo $work->getLocation(); ?>"
+                               onchange="valueChanged(this, 255)" onkeyup="valueChanged(this, 255)">
+                        &nbsp; &nbsp;<span id="count_location"></span>
                     </div>
                     <div class="button_row">
                         <input type="hidden" name="action" value="update">
                         <input type="hidden" name="resid" value="<?php echo $work->getRESID(); ?>">
-                        <input type="submit" id="submit" value="Save" name="submit">
+                        <input type="submit" id="submit_edit_work" value="Save" name="submit" disabled>
                     </div>
                 </div>
                 <hr/>
@@ -160,7 +170,8 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
                             <form id="repr_form_<?php
                             echo $id; ?>" name="repr_form_"<?php
                             echo $id; ?> action="/admin/work/edit/<?php
-                            echo $work->getRESID(); ?>" method="post">
+                            echo $work->getRESID(); ?>" method="post"
+                            onchange="formChanged(this)" onkeyup="formChanged(this)">
                                 <div class="form_row">
                                     <label class="fm_label" for="repid_<?php echo $id; ?>">REPID: </label>
                                     <span id="repid_<?php echo $id; ?>">
@@ -168,6 +179,8 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
                                             <?php echo $representation->getREPID(); ?>
                                         </a>
                                     </span>
+                                    <span style="display: none"><?php echo $representation->getREPID(); ?></span>
+                                    <span title="copy REPID" class="copyprevious" onclick="copyPrevious(this)">&nbsp;&#9776; </span>
                                 </div>
                                 <div class="form_row">
                                     <label class="fm_label" for="rel_ids_<?php echo $id; ?>">REL IDs: </label>
@@ -199,8 +212,8 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
                                 <div class="form_row">
                                     <label class="fm_label" for="description_<?php echo $id; ?>">Description: </label>
                                     <textarea id="description_<?php echo $id; ?>"
-                                              name="description_<?php echo $id; ?>" rows="2" cols="41"
-                                              onchange="valueChanged(this)" onkeyup="valueChanged(this)"
+                                              name="description_<?php echo $id; ?>" rows="2" cols="43"
+                                              onchange="valueChanged(this, 510)" onkeyup="valueChanged(this, 510)"
                                     ><?php echo $rep_rel->getDescription() ?></textarea>
                                 </div>
                                 <div class="form_row">
@@ -210,10 +223,10 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
                                 <div class="button_row">
                                     <input type="hidden" name="action" value="rep_rel_<?php echo $id; ?>">
                                     <input type="hidden" name="resid" value="<?php echo $work->getRESID(); ?>">
-                                    <input type="submit" id="submit_<?php echo $id; ?>" value="Save" name="submit">
+                                    <input type="submit" id="submit_repr_form_<?php echo $id; ?>"
+                                           value="Save" name="submit" disabled>
                                     <input type="submit" id="delete_<?php echo $id; ?>" value="Delete" name="submit"<?php
                                     echo (count($representations) == 1) ? " disabled" : ""?>>
-
                                 </div>
                             </form>
                             <hr/>
@@ -224,13 +237,13 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
 
             <div class="add_form">
                 <form id="add_rep" name="add_rep" action="/admin/work/edit/<?php
-                echo $work->getRESID(); ?>" method="post">
+                echo $work->getRESID(); ?>" method="post" onchange="formChanged(this)" onkeyup="formChanged(this)">
                     <div class="form_row">
                         <label class="fm_label" for="add_repid">REPID: </label>
                         <input type="text" id="add_repid" name="add_repid" value="">
                         <input type="hidden" name="resid" value="<?php echo $work->getRESID(); ?>">
                         <input type="hidden" name="action" value="add_repid">
-                        <input type="submit" class="add_repid" name="submit" value="Add">
+                        <input type="submit" id="submit_add_rep" class="add_repid" name="submit" value="Add" disabled>
                     </div>
                 </form>
                 <?php if (!empty($ctrl->getAddErrors())) { ?>
@@ -246,8 +259,15 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
 </div>
 
 <script>
-    function valueChanged(el) {
-        let max = 510;
+    window.addEventListener("DOMContentLoaded", () => {
+        const scrollTo = "<?php echo $ctrl->getScrollTo() ?>";
+        const element = document.getElementById(scrollTo);
+        if (scrollTo !== "") {
+            element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+        }
+    });
+
+    function valueChanged(el, max) {
         let id = "count_" + el.id;
         let counter = document.getElementById(id);
         let val = max - el.value.length;
@@ -262,5 +282,10 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
     function beep() {
         let snd = new Audio("data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=");
         snd.play();
+    }
+
+    function formChanged(form) {
+        let submit = document.getElementById("submit_" + form.id);
+        submit.disabled = false;
     }
 </script>

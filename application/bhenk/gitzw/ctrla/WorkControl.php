@@ -38,6 +38,7 @@ class WorkControl extends Page3cControl {
     private string $repid = "";
     private array $errors = [];
     private array $add_errors = [];
+    private string $scrollTo = "";
 
     function __construct(Request $request) {
         parent::__construct($request);
@@ -197,6 +198,7 @@ class WorkControl extends Page3cControl {
         $work->setHidden(isset($_POST["hidden"]));
         $work->setLocation($_POST["location"] ?? "");
         $this->work = Store::workStore()->persist($work);
+        $this->scrollTo = "edit_work";
     }
 
     private function doUpdateRelation(): void {
@@ -228,6 +230,7 @@ class WorkControl extends Page3cControl {
             }
         }
         $this->work = Store::workStore()->persist($this->work);
+        $this->scrollTo = "repr_form_$repr_id";
     }
 
     private function doDeleteRelation(int $repr_id): void {
@@ -235,6 +238,7 @@ class WorkControl extends Page3cControl {
             $this->work = Store::workStore()->persist($this->work);
         } else {
             $this->errors = array_merge($this->errors, $this->work->getRelations()->getMessages());
+            $this->scrollTo = "repr_form_$repr_id";
         }
     }
 
@@ -252,6 +256,7 @@ class WorkControl extends Page3cControl {
         } else {
             $this->add_errors[] = "Representation with REPID '$repid' not found";
         }
+        $this->scrollTo = "add_rep";
     }
 
     private function setWork(): bool {
@@ -341,6 +346,11 @@ class WorkControl extends Page3cControl {
         return $this->add_errors;
     }
 
-
+    /**
+     * @return string
+     */
+    public function getScrollTo(): string {
+        return $this->scrollTo;
+    }
 
 }
