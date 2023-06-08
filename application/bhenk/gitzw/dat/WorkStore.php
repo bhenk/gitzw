@@ -6,6 +6,7 @@ use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\WorkDo;
 use bhenk\gitzw\model\WorkCategories;
 use bhenk\logger\log\Log;
+use Closure;
 use Exception;
 use function array_values;
 use function count;
@@ -13,6 +14,7 @@ use function gettype;
 use function in_array;
 use function intval;
 use function is_null;
+use function str_ends_with;
 use function str_pad;
 use function strlen;
 use function substr;
@@ -179,6 +181,26 @@ class WorkStore {
         return array_values($up_array)[0];
     }
 
+    public function selectNearestUpByOrder(int $order): Work {
+        $where = "`ordering` < $order ORDER BY `ordering` DESC";
+        $down_array = $this->selectWhere($where, 0, 1);
+        if (empty($down_array)) {
+            $where = "`ordering` < " . PHP_INT_MAX . " ORDER BY `ordering` DESC";
+            $down_array = $this->selectWhere($where, 0, 1);
+        }
+        return array_values($down_array)[0];
+    }
+
+    public function selectNearestDownByOrder(int $order): Work {
+        $where = "`ordering` > $order ORDER BY `ordering` ASC";
+        $up_array = $this->selectWhere($where, 0, 1);
+        if (empty($up_array)) {
+            $where = "`ordering` > 0 ORDER BY `ordering` ASC";
+            $up_array = $this->selectWhere($where, 0, 1);
+        }
+        return array_values($up_array)[0];
+    }
+
     /**
      * Select Works with a where-clause
      * @param string $where expression
@@ -334,6 +356,29 @@ class WorkStore {
             . "GROUP BY category, `year` "
             . "ORDER BY category, `year` DESC";
         return Dao::workDao()->execute($sql);
+    }
+
+    /**
+     * Iterate all Works in result of $sql and offer each work to $func
+     *
+     * The given $sql must 'SELECT * FROM tbl_works ... '
+     * @param Closure $func
+     * @param string $sql
+     * @return void
+     * @throws Exception
+     */
+    public function iterate(Closure $func, string $where): void {
+        $offset = 0;
+        $limit = 10;
+        $count = 1;
+        do {
+            $works = $this->selectWhere($where, $offset, $limit);
+            foreach ($works as $work) {
+                $func($count++, $work);
+                $this->persist($work);
+            }
+            $offset += $limit;
+        } while (!empty($works));
     }
 
     /**

@@ -83,8 +83,9 @@ $media = $aat->getMedia($work->getMedia());
                     <br/>
                     <?php foreach ($labels as $label) { ?>
                         <div class="lang_term">
-                            <span class="term" lang="<?php echo $label->getLanguage(); ?>"><?php echo $label->getLiteral(); ?></span>
-                            <!--<span class="lang">&nbsp; (<?php /*echo $label->getLanguage(); */?>)</span>-->
+                            <span class="term"
+                                  lang="<?php echo $label->getLanguage(); ?>"><?php echo $label->getLiteral(); ?></span>
+                            <!--<span class="lang">&nbsp; (<?php /*echo $label->getLanguage(); */ ?>)</span>-->
                         </div>
                     <?php } ?>
                     <hr/>
@@ -101,8 +102,9 @@ $media = $aat->getMedia($work->getMedia());
                     <br/>
                     <?php foreach ($labels as $label) { ?>
                         <div class="lang_term">
-                            <!--<span class="lang"><?php /*echo $label->getLanguage(); */?>: </span>-->
-                            <span class="term" lang="<?php echo $label->getLanguage(); ?>"><?php echo $label->getLiteral(); ?></span>
+                            <!--<span class="lang"><?php /*echo $label->getLanguage(); */ ?>: </span>-->
+                            <span class="term"
+                                  lang="<?php echo $label->getLanguage(); ?>"><?php echo $label->getLiteral(); ?></span>
                         </div>
                     <?php } ?>
                     <hr/>
@@ -134,10 +136,10 @@ $media = $aat->getMedia($work->getMedia());
     <hr/>
     <div id="qr_code">
         <div>
-    <?php
-    $data = Env::HTTPS_URL . "/" . $work->getCanonicalUrl();
-    echo '<img src="'.(new QRCode)->render($data).'" alt="QR Code" />';
-    ?>
+            <?php
+            $data = Env::HTTPS_URL . "/" . $work->getCanonicalUrl();
+            echo '<img src="' . (new QRCode)->render($data) . '" alt="QR Code" />';
+            ?>
         </div>
     </div>
 </div>

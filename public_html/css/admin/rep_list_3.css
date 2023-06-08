@@ -1,8 +1,0 @@
-
-#admin_rep_list_3 {
-    position: fixed;
-    right: 0;
-    top: var(--heightheader);
-    width: var(--col3width);
-    padding: 10px;
-}

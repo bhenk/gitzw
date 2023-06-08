@@ -31,7 +31,7 @@ class WorkControl extends Page3cControl {
     const MODE_EDIT = 2;
     private int $mode = self::MODE_NEW;
     private ?Representation $representation = null;
-    private ?Work $work = null;
+    private Work|bool|null $work = null;
     private string $crid = "";
     private string $category = "";
     private string $date = "";
@@ -39,6 +39,8 @@ class WorkControl extends Page3cControl {
     private array $errors = [];
     private array $add_errors = [];
     private string $scrollTo = "";
+    private string $past_RESID = "";
+    private string $future_RESID = "";
 
     function __construct(Request $request) {
         parent::__construct($request);
@@ -147,6 +149,8 @@ class WorkControl extends Page3cControl {
             (new NotFoundHandler())->handleRequest($this->getRequest());
             return;
         }
+        $this->past_RESID = Store::workStore()->selectNearestUpByOrder($this->work->getOrder())->getRESID();
+        $this->future_RESID = Store::workStore()->selectNearestDownByOrder($this->work->getOrder())->getRESID();
         $this->setPageTitle("Edit $resid");
         $this->mode = self::MODE_EDIT;
     }
@@ -351,6 +355,20 @@ class WorkControl extends Page3cControl {
      */
     public function getScrollTo(): string {
         return $this->scrollTo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPastRESID(): string {
+        return $this->past_RESID;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFutureRESID(): string {
+        return $this->future_RESID;
     }
 
 }

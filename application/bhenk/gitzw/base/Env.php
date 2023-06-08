@@ -13,7 +13,7 @@ use function is_null;
 class Env {
 
     public const HTTP_URL = "http://gitzw.art";
-    public const HTTPS_URL = "https://gitzw.art";
+    public const HTTPS_URL = "http://169.254.165.103:8081"; //"https://gitzw.art";
 
     /**
      * Name of the directory where we expect this application
@@ -124,6 +124,7 @@ class Env {
         return self::dataDir() . "/cache";
     }
 
+    // from web_config.php
     private static function getEnvVariables(): array {
         if (empty(self::$env_variables)) {
             self::$env_variables = require_once self::configurationDir() . "/web_config.php";

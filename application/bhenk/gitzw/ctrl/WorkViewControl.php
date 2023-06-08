@@ -43,8 +43,8 @@ class WorkViewControl extends WorkPageControl {
         . $work->getTitles() . " - " . $work->getRESID());
         $this->setIncludeFooter(false);
 
-        $this->past_url = Store::workStore()->selectNearestUp($work->getID())->getCanonicalUrl();
-        $this->future_url = Store::workStore()->selectNearestDown($work->getID())->getCanonicalUrl();
+        $this->past_url = Store::workStore()->selectNearestUpByOrder($work->getOrder())->getCanonicalUrl();
+        $this->future_url = Store::workStore()->selectNearestDownByOrder($work->getOrder())->getCanonicalUrl();
 
         $this->setStructuredData($this->getPageStructuredData());
         $request->setUseCache(true);

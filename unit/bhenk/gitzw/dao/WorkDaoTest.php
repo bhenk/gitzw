@@ -12,7 +12,7 @@ use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertTrue;
 
-#[LogAttribute(false)]
+#[LogAttribute(true)]
 class WorkDaoTest extends TestCaseDb {
 
     /**
@@ -46,7 +46,12 @@ class WorkDaoTest extends TestCaseDb {
             "YYYY",
             false,
             5,
-            "paint"
+            "paint",
+        null,
+        null,
+        null,
+        42
+
         );
         $do2 = Dao::workDao()->insert($do);
         assertTrue($do->equals($do2));

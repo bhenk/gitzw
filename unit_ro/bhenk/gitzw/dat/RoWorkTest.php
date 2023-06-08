@@ -16,6 +16,7 @@ class RoWorkTest extends TestCaseRo {
         $work = Store::workStore()->selectByRESID("hnq.work.paint.2021.0022");
         $sd = $work->getStructuredData();
         assertEquals("VisualArtwork", $sd["@type"]);
+        assertEquals(179, $work->getOrder());
     }
 
     public function testGetWorkRepresentations() {

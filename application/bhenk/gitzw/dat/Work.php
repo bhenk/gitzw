@@ -157,6 +157,14 @@ class Work implements StoredObjectInterface {
         $this->workDo->setOrdinal($ordinal);
     }
 
+    public function getOrder(): int {
+        return $this->workDo->getOrder();
+    }
+
+    public function setOrder(int $order): void {
+        $this->workDo->setOrder($order);
+    }
+
     /**
      * @return WorkCategories|null
      */

@@ -88,6 +88,21 @@ class WorkRelations extends RepresentationOwner {
     }
 
     /**
+     * @return WorkHasRepDo[]
+     * @throws Exception
+     */
+    public function getRepRelationsOrdered(): array {
+        $copy = $this->getRepRelations();
+        uasort($copy, function ($a, $b) {
+            /** @var WorkHasRepDo $a */
+            /** @var WorkHasRepDo $b */
+            if ($a->getOrdinal() == $b->getOrdinal()) return 0;
+            return ($a->getOrdinal() > $b->getOrdinal()) ? 1 : -1;
+        });
+        return $copy;
+    }
+
+    /**
      * Persist relations kept by this Relations Object
      *
      * This action ingests, updates and deletes relations. After a call to this method all relations

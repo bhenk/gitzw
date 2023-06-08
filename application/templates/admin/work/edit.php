@@ -27,6 +27,9 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
                     </a>
                     <span style="display: none"><?php echo $work->getRESID(); ?></span>
                     <span title="copy RESID" class="copyprevious" onclick="copyPrevious(this)">&nbsp;&#9776; </span>
+                    &nbsp;
+                    <a href="/admin/work/edit/<?php echo $ctrl->getFutureRESID(); ?>" title="to the future"> &nbsp; < &nbsp; </a>
+                    <a href="/admin/work/edit/<?php echo $ctrl->getPastRESID(); ?>" title="to the past"> &nbsp; > &nbsp; </a>
                 </h2>
                 <div>ID: <span><?php echo $work->getID() ?? "not created"; ?></span>
                     <span title="copy ID" class="copyprevious" onclick="copyPrevious(this)">&nbsp;&#9776; </span>
@@ -124,6 +127,7 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
                         <label class="fm_label" for="ordinal">Ordinal: </label>
                         <input class="smaller" type="text" id="ordinal" name="ordinal"
                                value="<?php echo $work->getOrdinal(); ?>">
+                        <span> &nbsp; Order: <?php echo $work->getOrder(); ?></span>
                     </div>
                     <div class="form_row">
                         <label class="fm_label" for="hidden">Hide: </label>
@@ -154,11 +158,11 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
             <?php } ?>
 
             <div class="rel_form">
-                <?php $workHasRepDoes = $work->getRelations()->getRepRelations();
+                <?php $workHasRepDoes = $work->getRelations()->getRepRelationsOrdered();
                 $representations = $work->getRelations()->getRepresentations();
-                foreach ($representations as $representation) {
-                    $id = $representation->getID();
-                    $rep_rel = $workHasRepDoes[$id];
+                foreach ($workHasRepDoes as $rep_rel) {
+                    $id = $rep_rel->getFkRight();
+                    $representation = $representations[$id];
                     ?>
                     <div class="rel_panel">
                         <div class="rel_img">

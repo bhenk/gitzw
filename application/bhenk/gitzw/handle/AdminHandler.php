@@ -9,6 +9,7 @@ use bhenk\gitzw\ctrla\RepresentationsPageControl;
 use bhenk\gitzw\ctrla\SystemControl;
 use bhenk\gitzw\ctrla\UploadControl;
 use bhenk\gitzw\ctrla\WorkControl;
+use bhenk\gitzw\ctrla\WorksControl;
 use bhenk\gitzw\site\Request;
 
 class AdminHandler extends AbstractHandler {
@@ -20,6 +21,7 @@ class AdminHandler extends AbstractHandler {
             "explore" => new FileExplorerControl($request),
             "image" => new ImageControl($request),
             "work" => new WorkControl($request),
+            "works" => new WorksControl($request),
             "system" => new SystemControl($request),
             "representations" => new RepresentationsPageControl($request),
             default => new AdminControl($request),

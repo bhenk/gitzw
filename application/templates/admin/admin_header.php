@@ -23,6 +23,7 @@ $last_login = $this->getRequest()->getSessionUser()->getLastLogin();
         <button class="dd_button">Work</button>
         <div class="dd_content">
             <a href="/admin/work/new">New work</a>
+            <a href="/admin/works/order">Update order</a>
             <a href="#">menu B2 and a bit</a>
             <a href="#">menu B3</a>
         </div>
