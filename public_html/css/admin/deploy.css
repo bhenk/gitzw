@@ -1,0 +1,35 @@
+
+#deploy_page {
+    margin: 20px 100px;
+    max-width: 550px;
+}
+
+.info_row {
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+}
+
+.info_row label {
+    width: 10em;
+    display: block;
+}
+
+.button_panel {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 20px;
+}
+
+.progress {
+    color: var(--link-color);
+}
+
+.error {
+    font-size: 1em;
+    font-weight: bold;
+    color: red;
+    background-color: lightgray;
+    margin-top: 20px;
+    padding: 20px;
+}

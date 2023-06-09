@@ -7,12 +7,12 @@ use bhenk\gitzw\ctrl\Page3cControl;
 use bhenk\gitzw\site\Request;
 use function phpinfo;
 
-class SystemControl extends Page3cControl {
+class PhpInfoControl extends Page3cControl {
 
     function __construct(Request $request) {
         parent::__construct($request);
         $this->addStylesheet("/css/admin/admin_header.css");
-        $this->setPageTitle("System");
+        $this->setPageTitle("Php info");
     }
 
     public function handleRequest(): void {
@@ -27,9 +27,6 @@ class SystemControl extends Page3cControl {
     }
 
     public function renderColumn2(): void {
-        $act = $this->getRequest()->getUrlPart(2);
-        if ($act == "phpinfo") {
-            phpinfo();
-        }
+        phpinfo();
     }
 }

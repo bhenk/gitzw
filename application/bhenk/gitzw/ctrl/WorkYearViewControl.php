@@ -50,7 +50,7 @@ class WorkYearViewControl extends WorkPageControl {
             $offset = intval($request->getUrlPart(5));
         }
 
-        $where = "creatorId = $id AND YEAR(date) = $year AND category = '$cat_name' ORDER BY RESID DESC";
+        $where = "creatorId = $id AND YEAR(date) = $year AND category = '$cat_name' AND hidden = 0 ORDER BY RESID DESC";
         $this->total_works = Store::workStore()->countWhere($where);
         $this->works = Store::workStore()->selectWhere($where, $offset, $limit);
 
@@ -65,7 +65,7 @@ class WorkYearViewControl extends WorkPageControl {
             $previous = 0;
         }
 
-        $this->page = $offset / $limit + 1;
+        $this->page = intval($offset / $limit) + 1;
         $this->total_pages = intval(ceil($this->total_works / $limit));
         $url = "/" . $creator->getUriName() . "/work/" . $request->getWorkCategory()->value . "/$year";
         $this->url_next = $url . "/view/" . $next;
@@ -107,6 +107,10 @@ class WorkYearViewControl extends WorkPageControl {
 
     public function isPreviousEnabled(): string {
         return $this->previous_enabled ? "" : " disabled";
+    }
+
+    public function isDigitsEnabled(): string {
+        return ($this->next_enabled || $this->previous_enabled) ? "" : " disabled";
     }
 
     public function renderColumn1(): void {

@@ -30,8 +30,8 @@ $exif_err = $exif_data["error"] ?? false;
     <?php if (!empty($others)) { ?>
         <div class="others" >
             <?php foreach ($others as $other) { ?>
-                <div class="image">
-                    <picture>
+                <div class="work">
+                    <picture class="image">
                         <source srcset="<?php echo $other->getFileLocation(Images::IMG_08); ?>"
                                 media="(max-width: 600px)">
                         <source srcset="<?php echo $other->getFileLocation(Images::IMG_15); ?>"

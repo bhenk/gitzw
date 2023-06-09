@@ -177,6 +177,12 @@ class WorkRelations extends RepresentationOwner {
         return array_values($this->getRepresentations())[0] ?? null;
     }
 
+    /**
+     * Get WorkRepresentations, ordered by ordinal, except the ones in $excludeIDs
+     * @param array $excludedIDs
+     * @return WorkRepresentation[]
+     * @throws Exception
+     */
     public function getOtherWorkRepresentations(array $excludedIDs = []): array {
         return array_diff_key($this->getWorkRepresentations(), array_fill_keys($excludedIDs, 0));
     }

@@ -23,23 +23,20 @@ $last_login = $this->getRequest()->getSessionUser()->getLastLogin();
         <button class="dd_button">Work</button>
         <div class="dd_content">
             <a href="/admin/work/new">New work</a>
-            <a href="/admin/works/order">Update order</a>
-            <a href="#">menu B2 and a bit</a>
-            <a href="#">menu B3</a>
         </div>
     </div>
     <div class="dd_menu">
         <button class="dd_button">System</button>
         <div class="dd_content">
-            <a href="/admin/system/phpinfo">PHPInfo</a>
-            <a href="#">menu B2 and a bit</a>
-            <a href="#">menu B3</a>
+            <a href="/admin">Admin</a>
+            <a href="/admin/phpinfo">PHPInfo</a>
+            <a href="/admin/deploy">Deploy</a>
         </div>
     </div>
     <div class="dd_menu">
         <button class="dd_button">User</button>
         <div class="dd_content">
-            <a href="/logout">logout</a>
+            <a href="/logout">Logout</a>
         </div>
     </div>
     <span class="username"><?php echo $user . " " . $last_login; ?></span>

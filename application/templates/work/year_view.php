@@ -32,7 +32,7 @@ $works = $this->getWorks();
     <a href="<?php echo $page->getUrlPrevious(); ?>">
         <span class="page_btn<?php echo $page->isPreviousEnabled(); ?>"> &#9664; </span>
     </a>
-    <span class="page_dig">
+    <span class="page_dig<?php echo $page->isDigitsEnabled(); ?>">
         &nbsp;  &nbsp; <?php echo $page->getPage() . " : " . $page->getTotalPages() . " / ". $page->getTotalWorks(); ?>  &nbsp;  &nbsp; </span>
     <a href="<?php echo $page->getUrlNext(); ?>">
         <span class="page_btn<?php echo $page->isNextEnabled(); ?>"> &#9654; </span>
@@ -54,17 +54,11 @@ $works = $this->getWorks();
     window.addEventListener("DOMContentLoaded", () => {
 
         let left_menu = getCookie("l_menu");
-        if (left_menu === "in") {
+        if (left_menu === "in" && window.innerWidth > 1000) {
             document.getElementById("column_1").style.display = "none";
             leftMenuIn();
         } else {
             leftMenuOut();
-        }
-        let right_data = getCookie("r_data");
-        if (right_data === "out") {
-            rightDataOut();
-        } else {
-            rightDataIn();
         }
     });
 

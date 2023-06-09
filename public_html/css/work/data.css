@@ -69,12 +69,6 @@
     color: var(--link-color);
 }
 
-@media (prefers-color-scheme: dark) {
-    .data_term {
-        color: burlywood;
-    }
-}
-
 #qr_code div {
     max-width: 200px;
     max-height: 200px;
@@ -86,10 +80,17 @@
     max-width: 200px;
 }
 
+@media (prefers-color-scheme: dark) {
+    .data_term {
+        color: burlywood;
+    }
+}
+
 @media screen and (max-width: 1000px) {
     /* kleiner dan */
 
     #c3_content {
         font-size: 1.1em;
+        width: 100vw;
     }
 }

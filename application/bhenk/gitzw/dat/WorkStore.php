@@ -181,8 +181,9 @@ class WorkStore {
         return array_values($up_array)[0];
     }
 
-    public function selectNearestUpByOrder(int $order): Work {
-        $where = "`ordering` < $order ORDER BY `ordering` DESC";
+    public function selectNearestUpByOrder(int $order, bool $showHidden = false): Work {
+        $where = $showHidden ? "" : "hidden = 0 AND ";
+        $where .= "`ordering` < $order ORDER BY `ordering` DESC";
         $down_array = $this->selectWhere($where, 0, 1);
         if (empty($down_array)) {
             $where = "`ordering` < " . PHP_INT_MAX . " ORDER BY `ordering` DESC";
@@ -191,8 +192,9 @@ class WorkStore {
         return array_values($down_array)[0];
     }
 
-    public function selectNearestDownByOrder(int $order): Work {
-        $where = "`ordering` > $order ORDER BY `ordering` ASC";
+    public function selectNearestDownByOrder(int $order, bool $showHidden = false): Work {
+        $where = $showHidden ? "" : "hidden = 0 AND ";
+        $where .= "`ordering` > $order ORDER BY `ordering` ASC";
         $up_array = $this->selectWhere($where, 0, 1);
         if (empty($up_array)) {
             $where = "`ordering` > 0 ORDER BY `ordering` ASC";
