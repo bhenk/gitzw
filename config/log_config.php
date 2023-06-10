@@ -5,7 +5,7 @@ return [
         "channel" => "log",
         "log_file" => "gitzwlog/logger.log",
         "log_max_files" => 5,
-        "log_level" => \Psr\Log\LogLevel::DEBUG,
+        "log_level" => \Psr\Log\LogLevel::INFO,
         "err_file" => "gitzwerr/error.log",
         "err_max_files" => 5,
         "err_level" => \Psr\Log\LogLevel::ERROR,

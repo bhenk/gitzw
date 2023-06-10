@@ -15,7 +15,7 @@ class CreatorIterator {
     function __construct(private readonly string $where = "1=1") {}
 
     public function hasNext(): bool {
-        if (empty($this->creators) || $this->count > ($this->limit -1)) {
+        if (empty($this->creators) || $this->count >= ($this->limit)) {
             $this->loadMore();
         }
         return $this->count < count($this->creators);

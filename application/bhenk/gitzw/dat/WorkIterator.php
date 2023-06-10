@@ -16,7 +16,7 @@ class WorkIterator {
     function __construct(private readonly string $where = "1=1") {}
 
     public function hasNext(): bool {
-        if (empty($this->works) || $this->count > ($this->limit -1)) {
+        if (empty($this->works) || $this->count >= ($this->limit)) {
             $this->loadMore();
         }
         return $this->count < count($this->works);

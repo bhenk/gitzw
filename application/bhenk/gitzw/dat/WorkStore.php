@@ -352,9 +352,10 @@ class WorkStore {
      * @return array
      * @throws Exception
      */
-    public function selectCatYear(string $shortCrid): array {
+    public function selectCatYear(string $shortCrid, bool $showHidden = false): array {
+        $hidden = $showHidden ? "" : " AND `hidden` = 0 ";
         $sql = "SELECT category, YEAR(date) as `year` from tbl_works "
-            . "where RESID like '$shortCrid.%' "
+            . "where RESID like '$shortCrid.%' $hidden"
             . "GROUP BY category, `year` "
             . "ORDER BY category, `year` DESC";
         return Dao::workDao()->execute($sql);

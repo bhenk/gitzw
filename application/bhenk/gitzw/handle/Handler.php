@@ -12,6 +12,7 @@ use function file_get_contents;
 use function file_put_contents;
 use function is_null;
 use function ob_start;
+use function session_start;
 use function str_replace;
 use function strpos;
 use function substr_replace;
@@ -45,6 +46,11 @@ class Handler extends AbstractHandler {
     }
 
     public function handleRequest(Request $request): void {
+        session_start();
+        if ($request->getUrlPart(0) == "ajax") {
+            new AjaxResponse($request);
+            return;
+        }
         if (Env::useCache()) {
             $cache_filename = $request->getCacheFilename();
             if (file_exists($cache_filename)) {

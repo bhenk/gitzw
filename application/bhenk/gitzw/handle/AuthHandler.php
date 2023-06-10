@@ -42,7 +42,6 @@ class AuthHandler extends AbstractHandler {
      * @throws Exception
      */
     public function handleRequest(Request $request): void {
-        session_start();
         $first = $request->getUrlPart(0);
         if (isset($_SESSION["logged_in"]) and $_SESSION["logged_in"]) {
             if (!$this->setSessionUser($request)) return;

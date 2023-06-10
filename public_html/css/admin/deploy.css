@@ -21,8 +21,24 @@
     margin-top: 20px;
 }
 
+#result {
+    margin-right: auto;
+}
+
 .progress {
+    margin: 10px 0;
     color: var(--link-color);
+}
+
+.progress div:nth-child(1) {
+    background-color: #999999;
+    height: 0.6em;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.progress div:nth-child(2) {
+    text-align: center;
 }
 
 .error {

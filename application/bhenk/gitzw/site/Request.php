@@ -42,15 +42,17 @@ class Request {
      */
     function __construct() {
         $this->requestDate = date("Y-m-d H:i:s", $_SERVER["REQUEST_TIME"]);
-        Req::info("");
         $this->request = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-        Log::info("------------------- request: " . $this->request);
         $offset = str_starts_with($this->request, "/") ? 1 : 0;
         $clean = strtolower(preg_replace("/[^0-9a-zA-Z\/._ +]/", "-", $this->request));
         $this->cleanUrl = substr($clean, $offset);
         $this->url_array = explode('/', $this->cleanUrl);
         $this->id_array = explode('.', $this->cleanUrl);
         $this->clientIP = Site::clientIp();
+        if ($this->getUrlPart(0) != "ajax") {
+            Req::info("");
+            Log::info("------------------- request: " . $this->request);
+        }
     }
 
     /**

@@ -1,9 +1,4 @@
 
-/*.copyprevious {
-    cursor: copy;
-    font-size: 1.2em;
-}*/
-
 .center-screen {
     display: flex;
     justify-content: center;
@@ -18,13 +13,12 @@
 }
 
 .col-label {
-    width: 35%;
+    width: 100px;
     float: left;
     margin-top: 6px;
 }
 
 .col-input {
-    width: 65%;
     float: left;
     margin-top: 6px;
 }
