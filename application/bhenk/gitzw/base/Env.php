@@ -13,7 +13,7 @@ use function is_null;
 class Env {
 
     public const HTTP_URL = "http://gitzw.art";
-    public const HTTPS_URL = "http://localhost"; //"https://gitzw.art";
+    public const HTTPS_URL = "http://127.0.0.1"; //"https://gitzw.art";
 
     /**
      * Name of the directory where we expect this application

@@ -1,0 +1,47 @@
+
+#admin_page {
+    margin: 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+#actions, #statistics {
+    margin-left: 10vw;
+}
+
+.info_head {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin: 40px 0 10px 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.info_head span:nth-child(1) {
+    color: darkorange;
+    width: 100px;
+}
+
+.info_head span:nth-child(2) {
+    color: var(--link-color);
+}
+
+.info_row {
+    display: flex;
+    flex-direction: row;
+}
+
+.info_row label {
+    width: 110px;
+}
+
+.info_row span:nth-child(2) {
+    width: 250px;
+}
+
+@media screen and (max-width: 1200px) {
+    /* kleiner dan */
+    #admin_page {
+        flex-direction: column;
+    }
+}

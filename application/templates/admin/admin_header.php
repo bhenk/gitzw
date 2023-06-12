@@ -28,6 +28,7 @@ $last_login = $this->getRequest()->getSessionUser()->getLastLogin();
     <div class="dd_menu">
         <button class="dd_button">System</button>
         <div class="dd_content">
+            <a href="/">Home</a>
             <a href="/admin">Admin</a>
             <a href="/admin/phpinfo">PHPInfo</a>
             <a href="/admin/deploy">Deploy</a>

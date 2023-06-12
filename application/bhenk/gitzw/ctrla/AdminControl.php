@@ -11,6 +11,7 @@ class AdminControl extends Page3cControl {
     function __construct(Request $request) {
         parent::__construct($request);
         $this->addStylesheet("/css/admin/admin_header.css");
+        $this->addStylesheet("/css/admin/admin.css");
     }
 
     public function handleRequest(): void {
@@ -25,6 +26,8 @@ class AdminControl extends Page3cControl {
     }
 
     public function renderColumn2(): void {
-
+        require_once Env::templatesDir() . "/admin/admin.php";
     }
+
+
 }

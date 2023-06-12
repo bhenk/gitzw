@@ -19,8 +19,8 @@ use function substr_replace;
 
 class Handler extends AbstractHandler {
 
-    private Request $request;
     private bool $compiled = false;
+    private Request $request;
 
     public function handle(): void {
         try {
@@ -46,20 +46,20 @@ class Handler extends AbstractHandler {
     }
 
     public function handleRequest(Request $request): void {
+        $this->request = $request;
         session_start();
-        if ($request->getUrlPart(0) == "ajax") {
-            new AjaxResponse($request);
+        if ($this->request->getUrlPart(0) == "ajax") {
+            (new AjaxResponse())->handle($this->request);
             return;
         }
         if (Env::useCache()) {
-            $cache_filename = $request->getCacheFilename();
+            $cache_filename = $this->request->getCacheFilename();
             if (file_exists($cache_filename)) {
                 Log::info("Serving from cache");
                 echo file_get_contents($cache_filename);
                 return;
             }
         }
-        $this->request = $request;
         ob_start([$this, 'saveOutput']);
         $this->compiled = true;
         $this
@@ -68,7 +68,7 @@ class Handler extends AbstractHandler {
             ->setNextHandler(new WorkHandler())
             ->setNextHandler(new NotFoundHandler());
 
-        $this->getNextHandler()->handleRequest($request);
+        $this->getNextHandler()->handleRequest($this->request);
     }
 
     public function saveOutput(string $buffer): string {

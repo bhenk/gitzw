@@ -15,6 +15,10 @@
     display: block;
 }
 
+.info_row a {
+    margin-left: auto;
+}
+
 .button_panel {
     display: flex;
     flex-direction: row-reverse;

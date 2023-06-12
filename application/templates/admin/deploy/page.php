@@ -3,8 +3,10 @@
 
 use bhenk\gitzw\base\Env;
 use bhenk\gitzw\ctrla\DeployControl;
+use bhenk\gitzw\dajson\Registry;
 
 $ctrl = $this;
+$registry = Registry::actionRegistry();
 ?>
 
 <div id="deploy_page">
@@ -22,6 +24,10 @@ $ctrl = $this;
         <div class="info_row">
             <label>Total records:</label>
             <span><?php echo $ctrl->getTotalWorks(); ?></span>
+        </div>
+        <div class="info_row">
+            <label>Last modified:</label>
+            <span><?php echo $registry->getActionByAcid("UOOW")->getLastModifiedToString(); ?></span>
         </div>
         <form action="/admin/deploy" method="post">
             <div class="button_panel">
@@ -54,6 +60,10 @@ $ctrl = $this;
             <label>Current html files:</label>
             <span><?php echo count(glob(Env::cacheDir() . "/*.html")); ?></span>
         </div>
+        <div class="info_row">
+            <label>Last modified:</label>
+            <span><?php echo $registry->getActionByAcid("CACHE")->getLastModifiedToString(); ?></span>
+        </div>
         <form action="/admin/deploy" method="post">
             <div class="button_panel">
                 <input type="hidden" name="action" value="create_cache">
@@ -68,6 +78,34 @@ $ctrl = $this;
     </div>
     <div class="info_block">
         <h2>Create sitemap</h2>
+        <div class="info_row">
+            <label>Location SM:</label>
+            <span><?php echo $ctrl->getSitemapFilename(); ?></span>
+            <a href="/sitemap.xml" target="_blank">open &#10697;</a>
+        </div>
+        <div class="info_row">
+            <label>Current entries:</label>
+            <span><?php echo $ctrl->getCountSitemapEntries(); ?></span>
+        </div>
+        <div class="info_row">
+            <label>Location LM:</label>
+            <span><?php echo $ctrl->getSMLastModifiedFilename(); ?></span>
+        </div>
+        <div class="info_row">
+            <label>Last modified:</label>
+            <span><?php echo $registry->getActionByAcid("SITEMAP")->getLastModifiedToString(); ?></span>
+        </div>
+        <form action="/admin/deploy" method="post">
+            <div class="button_panel">
+                <input type="hidden" name="action" value="create_sitemap">
+                <input type="submit" name="submit" value="Create" onclick="startProgressBar('progress_sitemap')">
+            </div>
+        </form>
+        <div id="progress_sitemap" class="progress">
+            <div>&nbsp;</div>
+            <div><?php $c = $ctrl->getCreateSitemapCount(); echo $c == -1 ? "&nbsp;" : "100%"; ?></div>
+            <div>&nbsp;</div>
+        </div>
     </div>
 </div>
 
@@ -84,6 +122,7 @@ $ctrl = $this;
     window.addEventListener("DOMContentLoaded", function () {
         progressBar("progress_order");
         progressBar("progress_cache");
+        progressBar("progress_sitemap");
     });
 
 

@@ -13,18 +13,23 @@ use function session_write_close;
 
 readonly class AjaxResponse {
 
-    function __construct(private Request $request) {
-        $this->handle();
+
+    public function updateSession(array $args): void {
+        if (session_status() != PHP_SESSION_ACTIVE) session_start();
+        foreach ($args as $key => $value) {
+            $_SESSION[$key] = $value;
+        }
+        session_write_close();
     }
 
-    public function handle(): void {
-        $act = $this->request->getUrlPart(1);
+    public function handle(Request $request): void {
+        $act = $request->getUrlPart(1);
         if ($act == "progress") {
             $this->getProgress();
         } else {
             http_response_code(404);
+            echo "Unknown resource: " . $request->getRawUrl();
         }
-
     }
 
     private function getProgress(): void {

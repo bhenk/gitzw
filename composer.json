@@ -14,13 +14,14 @@
   ],
   "require": {
     "php": ">=8.2",
-    "bhenk/msdata": "dev-main",
-    "ext-exif": "*",
-    "ext-imagick": "*",
-    "easyrdf/easyrdf": "^1.1",
     "ext-curl": "*",
+    "ext-exif": "*",
     "ext-fileinfo": "*",
-    "chillerlan/php-qrcode": "^4.3"
+    "ext-xmlwriter": "*",
+    "ext-imagick": "*",
+    "bhenk/msdata": "dev-main",
+    "chillerlan/php-qrcode": "^4.3",
+    "easyrdf/easyrdf": "^1.1"
   },
   "require-dev": {
     "phpunit/phpunit": "^10.0",

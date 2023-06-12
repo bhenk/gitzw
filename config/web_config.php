@@ -1,6 +1,6 @@
 <?php
 
 return [
-    "useCache" => true,
+    "useCache" => false,
     "sessionExpirationMinutes" => PHP_INT_MAX,
 ];
