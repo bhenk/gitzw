@@ -15,8 +15,10 @@ abstract class Page3cControl extends PageControl {
     private bool $includeFooter = true;
     private bool $includeCopyright = true;
     private string $copyrightText;
+    private bool $stopRender = false;
 
     public function renderPage(): void {
+        if ($this->stopRender) return;
         if ($this->includeCopyright) {
             $this->copyrightText = "&#169;1977" . "&nbsp;-&nbsp;" . date('Y')
                 . " " . $this->getRequest()->getCreator()->getFullName()
@@ -24,6 +26,13 @@ abstract class Page3cControl extends PageControl {
         }
         $this->addStylesheet("/css/base/3cp.css");
         require_once Env::templatesDir() . "/base/3cp.php";
+    }
+
+    /**
+     * @param bool $stopRender
+     */
+    public function setStopRender(bool $stopRender): void {
+        $this->stopRender = $stopRender;
     }
 
     /**

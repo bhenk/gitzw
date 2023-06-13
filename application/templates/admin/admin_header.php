@@ -31,6 +31,7 @@ $last_login = $this->getRequest()->getSessionUser()->getLastLogin();
             <a href="/">Home</a>
             <a href="/admin">Admin</a>
             <a href="/admin/phpinfo">PHPInfo</a>
+            <a href="/admin/store">Store</a>
             <a href="/admin/deploy">Deploy</a>
         </div>
     </div>

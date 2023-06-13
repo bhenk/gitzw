@@ -58,6 +58,7 @@ class AuthHandler extends AbstractHandler {
         if ($first == "") {
             $ctrl = new HomePageControl($request);
             $ctrl->handleRequest();
+            $ctrl->renderPage();
             return;
         }
 

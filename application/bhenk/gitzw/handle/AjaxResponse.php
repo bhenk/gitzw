@@ -2,8 +2,8 @@
 
 namespace bhenk\gitzw\handle;
 
+use bhenk\gitzw\model\ProgressListener;
 use bhenk\gitzw\site\Request;
-use function header;
 use function http_response_code;
 use function intval;
 use function json_encode;
@@ -11,10 +11,10 @@ use function session_start;
 use function session_status;
 use function session_write_close;
 
-readonly class AjaxResponse {
+class AjaxResponse {
 
 
-    public function updateSession(array $args): void {
+    public function updateStatus(array $args): void {
         if (session_status() != PHP_SESSION_ACTIVE) session_start();
         foreach ($args as $key => $value) {
             $_SESSION[$key] = $value;

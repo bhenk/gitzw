@@ -74,6 +74,16 @@ class ActionRegistryTest extends TestCase {
                 "location" => "Admin/System > Deploy",
                 "path" => "/admin/deploy"
             ],
+            "STORE_S" => [
+                "name" => "Serialize store",
+                "location" => "Admin/System > Store",
+                "path" => "/admin/store"
+            ],
+            "STORE_D" => [
+                "name" => "Deserialize store",
+                "location" => "Admin/System > Store",
+                "path" => "/admin/store"
+            ],
         ];
         $registry = new ActionRegistry();
         foreach ($actions as $acid => $data) {

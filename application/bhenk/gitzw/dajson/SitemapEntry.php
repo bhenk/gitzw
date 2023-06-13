@@ -40,7 +40,7 @@ class SitemapEntry implements JsonSerializable {
     public function setSha1(string $sha1): bool {
         if ($sha1 != $this->sha1) {
             $this->sha1 = $sha1;
-            $this->lastModified = (new DateTime())->format("Y-m-d");
+            $this->lastModified = (new DateTime())->format("Y-m-d H:i:s");
             return true;
         }
         return false;

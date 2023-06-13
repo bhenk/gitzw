@@ -1,5 +1,5 @@
 
-#deploy_page {
+#store_page {
     margin: 20px 100px;
     max-width: 609px;
 }
@@ -7,6 +7,20 @@
 .info_block {
     margin-bottom: 30px;
     margin-left: 50px;
+}
+
+.info_sub_block {
+    margin: 10px 0;
+}
+
+.info_sub_block label {
+
+}
+
+.info_head {
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
 }
 
 .info_row {
@@ -20,7 +34,7 @@
     display: block;
 }
 
-.info_row a {
+.info_row a, .info_sub_block a {
     margin-left: auto;
 }
 
@@ -48,6 +62,19 @@
 
 .progress div:nth-child(2) {
     text-align: center;
+}
+
+input[type=submit].serious {
+    background: red;
+    color: white;
+}
+input[type=submit].serious:hover:not([disabled]) {
+    background: orange;
+    color: black;
+}
+span.serious {
+    color: red;
+    margin-right: 20px;
 }
 
 .error {

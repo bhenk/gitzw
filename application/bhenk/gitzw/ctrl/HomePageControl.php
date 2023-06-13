@@ -3,22 +3,19 @@
 namespace bhenk\gitzw\ctrl;
 
 use bhenk\gitzw\base\Env;
-use bhenk\gitzw\base\Site;
 use bhenk\gitzw\site\Request;
 
-class HomePageControl extends Page3cControl {
+class HomePageControl extends Page1cControl {
 
     function __construct(Request $request) {
-        $this->setIncludeCopyright(false);
         parent::__construct($request);
+        $this->addStylesheet("/css/home/home.css");
     }
     public function handleRequest(): void {
-        $this->setPageTitle(Site::hostName());
-        $this->setIncludeHeader(false);
-        $this->renderPage();
+        $this->setPageTitle("GITZW.ART");
     }
 
-    public function renderColumn1(): void {
-        require_once Env::templatesDir() ."/base/logo.php";
+    public function renderContainer(): void {
+        require_once Env::templatesDir() ."/home/home.php";
     }
 }

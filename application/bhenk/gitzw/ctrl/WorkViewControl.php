@@ -103,7 +103,6 @@ class WorkViewControl extends WorkPageControl {
         $format = $request->getFormat();
         if ($format == 'jsonld' or $format == 'json') {
             $str = json_encode($this->getPageStructuredData(), JSON_PRETTY_PRINT+JSON_UNESCAPED_SLASHES);
-            Log::info(">>>>>>" . $str);
             $contentType = 'application/json';
             $ext = '.json';
             $filename = $request->getWork()->getRESID() . $ext;

@@ -4,13 +4,18 @@ namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\base\Env;
 use bhenk\gitzw\dao\Dao;
+use bhenk\gitzw\model\ProgressListener;
 use bhenk\gitzw\model\WorkCategories;
 use Exception;
+use function array_diff;
+use function array_merge;
+use function array_sum;
 use function end;
 use function intval;
 use function is_dir;
 use function is_null;
 use function mkdir;
+use function scandir;
 use function str_pad;
 use function strrpos;
 use function substr;
@@ -32,6 +37,20 @@ class Store {
     private static ?WorkStore $workStore = null;
     private static ?CreatorStore $creatorStore = null;
     private static ?ExhibitionStore $exhibitionStore = null;
+
+    /**
+     * Get all stores in array [serializationDirectory => Store]
+     *
+     * @return array<string, StoreInterface>
+     */
+    public static function getStores(): array {
+        return [
+            self::creatorStore()->getName() => self::creatorStore(),
+            self::representationStore()->getName() => self::representationStore(),
+            self::workStore()->getName() => self::workStore(),
+            self::exhibitionStore()->getName() => self::exhibitionStore(),
+        ];
+    }
 
     /**
      * Get the store for Creators
@@ -121,7 +140,6 @@ class Store {
      * Get the data store directory for (de)serialization
      *
      * @return string data store directory
-     * @throws Exception if data store directory not found
      */
     public static function getDataStore(): string {
         $store_dir = Env::dataDir() . DIRECTORY_SEPARATOR . self::STORE_DIR;
@@ -132,28 +150,33 @@ class Store {
     }
 
     /**
-     * @return int[] counts of serialized business objects
+     * @param ?ProgressListener $pl
+     * @return array<string,int> counts of serialized business objects
      * @throws Exception
      */
-    public static function serialize(): array {
-        $counts = [];
+    public static function serialize(?ProgressListener $pl = null): array {
+        if (is_null($pl)) {
+            $pl = new ProgressListener("store", array_sum(self::serializationStats()), 100);
+        }
         $datastore = self::getDataStore();
-        $counts["creators"] = self::creatorStore()->serialize($datastore);
-        $counts["representations"] = self::representationStore()->serialize($datastore);
-        $countWorks = self::workStore()->serialize($datastore);
-        $counts["works"] = $countWorks[0];
-        $counts["work_relations"] = $countWorks[1];
-        $countExhibitions = self::exhibitionStore()->serialize($datastore);
-        $counts["exhibitions"] = $countExhibitions[0];
-        $counts["exhibition_relations"] = $countExhibitions[1];
-        return $counts;
+        return array_merge(
+            self::creatorStore()->serialize($datastore, $pl),
+            self::representationStore()->serialize($datastore, $pl),
+            self::workStore()->serialize($datastore, $pl),
+            self::exhibitionStore()->serialize($datastore, $pl)
+        );
     }
 
     /**
+     * @param ?ProgressListener $pl
      * @return int[] counts of deserialized business objects
      * @throws Exception
      */
-    public static function deserialize(): array {
+    public static function deserialize(?ProgressListener $pl = null): array {
+        if (is_null($pl)) {
+            $pl = new ProgressListener("store", array_sum(self::serializationStats()), 100);
+        }
+        $pl->updateMessage("Dropping tables");
         Dao::exhHasRepDao()->dropTable();
         Dao::workHasRepDao()->dropTable();
         Dao::workDao()->dropTable();
@@ -161,6 +184,7 @@ class Store {
         Dao::representationDao()->dropTable();
         Dao::exhibitionDao()->dropTable();
 
+        $pl->updateMessage("Creating tables");
         Dao::exhibitionDao()->createTable();
         Dao::creatorDao()->createTable();
         Dao::representationDao()->createTable();
@@ -168,17 +192,41 @@ class Store {
         Dao::workHasRepDao()->createTable();
         Dao::exhHasRepDao()->createTable();
 
-        $counts = [];
         $datastore = self::getDataStore();
-        $counts["creators"] = self::creatorStore()->deserialize($datastore);
-        $counts["representations"] = self::representationStore()->deserialize($datastore);
-        $countWorks = self::workStore()->deserialize($datastore);
-        $counts["works"] = $countWorks[0];
-        $counts["work_relations"] = $countWorks[1];
-        $countExhibitions = self::exhibitionStore()->deserialize($datastore);
-        $counts["exhibitions"] = $countExhibitions[0];
-        $counts["exhibition_relations"] = $countExhibitions[1];
-        return $counts;
+        return array_merge(
+            self::creatorStore()->deserialize($datastore, $pl),
+            self::representationStore()->deserialize($datastore, $pl),
+            self::workStore()->deserialize($datastore, $pl),
+            self::exhibitionStore()->deserialize($datastore, $pl)
+        );
+    }
+
+    /**
+     * Count the current number of serialization files per store
+     *
+     * @return array<string, int>
+     */
+    public static function serializationStats(): array {
+        $stats = [];
+        foreach (self::getStores() as $name => $store) {
+            $dir = self::getDataStore() . DIRECTORY_SEPARATOR . $store->getName();
+            $files = array_diff(scandir($dir), array('..', '.'));
+            $stats[$name] = count($files);
+        }
+        return $stats;
+    }
+
+    /**
+     * Count current number of objects per store
+     *
+     * @return array<string, int>
+     */
+    public static function storeStats(): array {
+        $stats = [];
+        foreach (self::getStores() as $name => $store) {
+            $stats[$name] = $store->getObjectCount();
+        }
+        return $stats;
     }
 
 }

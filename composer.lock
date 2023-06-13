@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f5e6aa80f1a0de63d0000719e892a64",
+    "content-hash": "57b5b201a75f7d9b6d2db70993368b72",
     "packages": [
         {
             "name": "bhenk/logger",
@@ -2094,7 +2094,8 @@
         "ext-exif": "*",
         "ext-fileinfo": "*",
         "ext-xmlwriter": "*",
-        "ext-imagick": "*"
+        "ext-imagick": "*",
+        "ext-zlib": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"

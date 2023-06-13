@@ -27,9 +27,7 @@ use function curl_setopt;
 use function date;
 use function glob;
 use function is_null;
-use function session_start;
-use function session_status;
-use function session_write_close;
+use function rename;
 use function set_time_limit;
 use function sha1;
 use function time;
@@ -47,6 +45,7 @@ class DeployControl extends Page3cControl {
     private int $update_order_count = -1;
     private int $create_cache_count = -1;
     private int $create_sitemap_count = -1;
+    private int $sitemaps_changed = 0;
     private array $errors = [];
     private ?AjaxResponse $ajax_response = null;
 
@@ -79,12 +78,18 @@ class DeployControl extends Page3cControl {
 
     private function updateSession(array $args): void {
         if (is_null($this->ajax_response)) $this->ajax_response = new AjaxResponse();
-        $this->ajax_response->updateSession($args);
+        $this->ajax_response->updateStatus($args);
     }
 
     private function createSitemap(): void {
+        if (!Env::useCache()) {
+            $this->errors[] = "useCache = off: No Sitemap is made.";
+            return;
+        }
         $this->create_sitemap_count = 0;
-        $filename = $this->getSitemapFilename();
+        $this->sitemaps_changed = 0;
+        $sm_filename = $this->getSitemapFilename();
+        $tmp_filename = $sm_filename . ".new";
         $sm_registry = Registry::sitemapRegistry();
         $total = count($sm_registry->getEntries());
         if ($total < 2) $total = 300;
@@ -92,7 +97,7 @@ class DeployControl extends Page3cControl {
         $_SESSION["progress_" . self::ID_PROGRESS_SITEMAP] = 0;
 
         $xw = new XMLWriter();
-        $xw->openUri($filename);
+        $xw->openUri($tmp_filename);
         $xw->setIndent(true);
         $xw->setIndentString("   ");
         $xw->startDocument('1.0', 'UTF-8');
@@ -111,11 +116,12 @@ class DeployControl extends Page3cControl {
         $xw->endDocument();
         $xw->flush();
         $sm_registry->persist();
+        rename($tmp_filename, $sm_filename);
         $this->updateSession([
             "total_" . self::ID_PROGRESS_SITEMAP => $this->create_sitemap_count,
             "progress_" . self::ID_PROGRESS_SITEMAP => $this->create_sitemap_count,
             "msg_" . self::ID_PROGRESS_SITEMAP => date("H:i:s", time())
-                . " created $this->create_sitemap_count entries",
+                . " created $this->create_sitemap_count entries, $this->sitemaps_changed pages have changed",
         ]);
         $registry = Registry::actionRegistry();
         $registry->getActionByAcid("SITEMAP")
@@ -226,7 +232,8 @@ class DeployControl extends Page3cControl {
         $content = curl_multi_getcontent($handle);
         curl_close($handle);
         $entry = Registry::sitemapRegistry()->getEntryByPath($loc);
-        $entry->setSha1(sha1($content));
+        $changed = $entry->setSha1(sha1($content));
+        if ($changed) $this->sitemaps_changed++;
         return $entry->getLastModified();
     }
 

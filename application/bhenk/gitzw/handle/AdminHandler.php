@@ -7,6 +7,7 @@ use bhenk\gitzw\ctrla\DeployControl;
 use bhenk\gitzw\ctrla\FileExplorerControl;
 use bhenk\gitzw\ctrla\ImageControl;
 use bhenk\gitzw\ctrla\PhpInfoControl;
+use bhenk\gitzw\ctrla\StoreControl;
 use bhenk\gitzw\ctrla\UploadControl;
 use bhenk\gitzw\ctrla\WorkControl;
 use bhenk\gitzw\ctrla\WorksControl;
@@ -24,6 +25,7 @@ class AdminHandler extends AbstractHandler {
             "works" => new WorksControl($request),
             "phpinfo" => new PhpInfoControl($request),
             "deploy" => new DeployControl($request),
+            "store" => new StoreControl($request),
             default => new AdminControl($request),
         };
         $ctrl->handleRequest();

@@ -4,6 +4,7 @@ namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\CreatorDo;
 use bhenk\gitzw\dao\Dao;
+use bhenk\gitzw\model\ProgressListener;
 use bhenk\logger\log\Log;
 use Exception;
 use function array_diff;
@@ -24,7 +25,7 @@ use function str_contains;
  * Stores Creators
  *
  */
-class CreatorStore {
+class CreatorStore implements StoreInterface {
     use RulesTrait;
 
     const SERIALIZATION_DIRECTORY = "creators";
@@ -231,14 +232,31 @@ class CreatorStore {
         return array_values($creators)[0] ?? false;
     }
 
+    public function countWhere(string $where): int {
+        // SELECT COUNT(*) FROM `tbl_creators` WHERE
+        $sql = "SELECT COUNT(*) FROM " . Dao::creatorDao()->getTableName() . " WHERE " . $where . ";";
+        $result = Dao::creatorDao()->execute($sql);
+        return $result[0]["COUNT(*)"];
+    }
+
+    public function getName(): string {
+        return self::SERIALIZATION_DIRECTORY;
+    }
+
+    public function getObjectCount(): int {
+        return $this->countWhere("1=1");
+    }
+
     /**
      * Serialize all the Creators
      * @param string $datastore directory for serialization files
-     * @return int count of serialized creators
+     * @param ProgressListener $pl
+     * @return array<string, int> count of serialized creators
      * @throws Exception
      * @noinspection DuplicatedCode
      */
-    public function serialize(string $datastore): int {
+    public function serialize(string $datastore, ProgressListener $pl): array {
+        $pl->updateMessage("Serializing Creators");
         $count = 0;
         $offset = 0;
         $limit = 10;
@@ -252,21 +270,24 @@ class CreatorStore {
                     . sprintf("%05d", $creator->getID()) . ".json";
                 file_put_contents($file, $creator->serialize());
                 $count++;
+                $pl->increase();
             }
             $offset += $limit;
         } while (!empty($creators));
         Log::info("Serialized " . $count . " Creators");
-        return $count;
+        return [self::SERIALIZATION_DIRECTORY => $count];
     }
 
 
     /**
      * Deserialize from serialization files and store Creators
      * @param string $datastore directory where to find serialization files
-     * @return int count of deserialized creators
+     * @param ProgressListener $pl
+     * @return array<string, int> count of deserialized creators
      * @throws Exception
      */
-    public function deserialize(string $datastore): int {
+    public function deserialize(string $datastore, ProgressListener $pl): array {
+        $pl->updateMessage("Deserializing Creators");
         $count = 0;
         $storage = $datastore . DIRECTORY_SEPARATOR . self::SERIALIZATION_DIRECTORY;
         $filenames = array_diff(scandir($storage), array("..", ".", ".DS_Store"));
@@ -275,8 +296,10 @@ class CreatorStore {
                 file_get_contents($storage . DIRECTORY_SEPARATOR . $filename));
             Dao::creatorDao()->insert($creator->getCreatorDo(), true);
             $count++;
+            $pl->increase();
         }
-        return $count;
+        Log::info("Deserialized " . $count . " Creators");
+        return [self::SERIALIZATION_DIRECTORY => $count];
     }
 
 }

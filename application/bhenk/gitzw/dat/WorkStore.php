@@ -4,6 +4,7 @@ namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\WorkDo;
+use bhenk\gitzw\model\ProgressListener;
 use bhenk\gitzw\model\WorkCategories;
 use bhenk\logger\log\Log;
 use Closure;
@@ -23,7 +24,7 @@ use function var_export;
 /**
  * Store for obtaining and persisting Works
  */
-class WorkStore {
+class WorkStore implements StoreInterface {
     use RulesTrait;
 
     const SERIALIZATION_DIRECTORY = "works";
@@ -384,14 +385,24 @@ class WorkStore {
         } while (!empty($works));
     }
 
+    public function getName(): string {
+        return self::SERIALIZATION_DIRECTORY;
+    }
+
+    public function getObjectCount(): int {
+        return $this->countWhere("1=1");
+    }
+
     /**
      * Serialize all the Works
      * @param string $datastore directory for serialization files
-     * @return array [count of serialized works, count of serialized relations]
+     * @param ProgressListener $pl
+     * @return array<string, int>
      * @throws Exception
      * @noinspection DuplicatedCode
      */
-    public function serialize(string $datastore): array {
+    public function serialize(string $datastore, ProgressListener $pl): array {
+        $pl->updateMessage("Serializing Works");
         $count = 0;
         $countRelations = 0;
         $offset = 0;
@@ -400,27 +411,30 @@ class WorkStore {
         if (!is_dir($storage)) mkdir($storage);
         array_map('unlink', array_filter((array)glob($storage . DIRECTORY_SEPARATOR . "*")));
         do {
-            $resources = $this->selectWhere("1 = 1", $offset, $limit);
-            foreach ($resources as $resource) {
+            $works = $this->selectWhere("1 = 1", $offset, $limit);
+            foreach ($works as $resource) {
                 $file = $storage . DIRECTORY_SEPARATOR . "work_"
                     . sprintf("%05d", $resource->getID()) . ".json";
                 file_put_contents($file, $resource->serialize());
                 $count++;
                 $countRelations += count($resource->getRelations()->getRepRelations());
+                $pl->increase();
             }
             $offset += $limit;
-        } while (!empty($resources));
-        Log::info("Serialized " . $count . " Works");
-        return [$count, $countRelations];
+        } while (!empty($works));
+        Log::info("Serialized " . $count . " Works, " . $countRelations . " relations");
+        return [self::SERIALIZATION_DIRECTORY => $count, "work_relations" => $countRelations];
     }
 
     /**
      * Deserialize from serialization files and store Works and WorkRelations
      * @param string $datastore directory where to find serialization files
-     * @return array array[count of deserialized works, count of deserialized relations]
+     * @param ProgressListener $pl
+     * @return array<string, int>
      * @throws Exception
      */
-    public function deserialize(string $datastore): array {
+    public function deserialize(string $datastore, ProgressListener $pl): array {
+        $pl->updateMessage("Deserializing Works");
         $count = 0;
         $relationCount = 0;
         $storage = $datastore . DIRECTORY_SEPARATOR . self::SERIALIZATION_DIRECTORY;
@@ -431,8 +445,10 @@ class WorkStore {
             Dao::workDao()->insert($resource->getWorkDo(), true);
             $relationCount += $resource->getRelations()->deserialize();
             $count++;
+            $pl->increase();
         }
-        return [$count, $relationCount];
+        Log::info("Deserialized " . $count . " Works, " . $relationCount . " relations");
+        return [self::SERIALIZATION_DIRECTORY => $count, "work_relations" => $relationCount];
     }
 
 }

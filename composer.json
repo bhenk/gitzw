@@ -21,7 +21,8 @@
     "ext-imagick": "*",
     "bhenk/msdata": "dev-main",
     "chillerlan/php-qrcode": "^4.3",
-    "easyrdf/easyrdf": "^1.1"
+    "easyrdf/easyrdf": "^1.1",
+    "ext-zlib": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^10.0",

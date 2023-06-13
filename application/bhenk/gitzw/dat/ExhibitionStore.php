@@ -4,13 +4,14 @@ namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dao\ExhibitionDo;
+use bhenk\gitzw\model\ProgressListener;
 use bhenk\logger\log\Log;
 use Exception;
 
 /**
  * Store for obtaining and persisting Exhibitions
  */
-class ExhibitionStore {
+class ExhibitionStore implements StoreInterface {
 
     const SERIALIZATION_DIRECTORY = "exhibitions";
 
@@ -207,14 +208,31 @@ class ExhibitionStore {
         return $exhids;
     }
 
+    public function countWhere(string $where): int {
+        // SELECT COUNT(*) FROM `tbl_exhibitions` WHERE
+        $sql = "SELECT COUNT(*) FROM " . Dao::exhibitionDao()->getTableName() . " WHERE " . $where . ";";
+        $result = Dao::exhibitionDao()->execute($sql);
+        return $result[0]["COUNT(*)"];
+    }
+
+    public function getName(): string {
+        return self::SERIALIZATION_DIRECTORY;
+    }
+
+    public function getObjectCount(): int {
+        return $this->countWhere("1=1");
+    }
+
     /**
      * Serialize all the Exhibitions
      * @param string $datastore directory for serialization files
-     * @return array [count of serialized exhibitions, count of serialized relations]
+     * @param ProgressListener $pl
+     * @return array<string, int>
      * @throws Exception
      * @noinspection DuplicatedCode
      */
-    public function serialize(string $datastore): array {
+    public function serialize(string $datastore, ProgressListener $pl): array {
+        $pl->updateMessage("Serializing Exhibitions");
         $count = 0;
         $countRelations = 0;
         $offset = 0;
@@ -230,20 +248,23 @@ class ExhibitionStore {
                 file_put_contents($file, $resource->serialize());
                 $count++;
                 $countRelations += count($resource->getRelations()->getRepRelations());
+                $pl->increase();
             }
             $offset += $limit;
         } while (!empty($resources));
         Log::info("Serialized " . $count . " Exhibitions");
-        return [$count, $countRelations];
+        return [self::SERIALIZATION_DIRECTORY => $count, "exhibition_relations" => $countRelations];
     }
 
     /**
      * Deserialize from serialization files and store Exhibitions and ExhibitionRelations
      * @param string $datastore directory where to find serialization files
-     * @return array array[count of deserialized exhibitions, count of deserialized relations]
+     * @param ProgressListener $pl
+     * @return array<string, int>
      * @throws Exception
      */
-    public function deserialize(string $datastore): array {
+    public function deserialize(string $datastore, ProgressListener $pl): array {
+        $pl->updateMessage("Deserializing Exhibitions");
         $count = 0;
         $relationCount = 0;
         $storage = $datastore . DIRECTORY_SEPARATOR . self::SERIALIZATION_DIRECTORY;
@@ -254,8 +275,9 @@ class ExhibitionStore {
             Dao::exhibitionDao()->insert($resource->getExhibitionDo(), true);
             $relationCount += $resource->getRelations()->deserialize();
             $count++;
+            $pl->increase();
         }
-        return [$count, $relationCount];
+        return [self::SERIALIZATION_DIRECTORY => $count, "exhibition_relations" => $relationCount];
     }
 
 }

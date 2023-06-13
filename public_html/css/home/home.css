@@ -1,0 +1,27 @@
+
+#home_div1 {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+#home_div2 {
+    margin: auto;
+}
+
+#home_logo {
+    font-size: 10vw;
+    font-weight: bold;
+}
+
+#home_band {
+    display: flex;
+    flex-direction: row;
+}
+
+.band_part {
+    margin: 0 15px;
+}
+
+.band_end {
+    margin-left: auto;
+}
