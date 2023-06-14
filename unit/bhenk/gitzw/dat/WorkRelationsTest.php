@@ -14,6 +14,7 @@ use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
+use function var_dump;
 
 #[LogAttribute(false)]
 class WorkRelationsTest extends TestCaseDb {
@@ -52,8 +53,9 @@ class WorkRelationsTest extends TestCaseDb {
         assertFalse($resRel->addRepresentation(42));
         assertFalse($resRel->addRepresentation($repr));
 
-        assertTrue($resRel->removeRepresentation($repr));
-        assertEquals(1, count($resRel->getRepRelations()));
-        assertEmpty($resRel->getRepresentations());
+        $result = $resRel->removeRepresentation($repr);
+        assertFalse($result);
+        assertEquals("* Representation:42 cannot be removed. Last Representation of Work:",
+            $resRel->getMessagesAsString());
     }
 }

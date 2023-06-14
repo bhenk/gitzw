@@ -33,6 +33,8 @@ $last_login = $this->getRequest()->getSessionUser()->getLastLogin();
             <a href="/admin/phpinfo">PHPInfo</a>
             <a href="/admin/store">Store</a>
             <a href="/admin/deploy">Deploy</a>
+            <a href="/foo/bar/baz">Not found page</a>
+            <a href="/admin/error_page">Error page</a>
         </div>
     </div>
     <div class="dd_menu">

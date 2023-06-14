@@ -1,0 +1,43 @@
+
+#nf_div1 {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+#nf_div2 {
+    margin: auto;
+}
+
+#nf_dig {
+    font-size: 20vw;
+    font-weight: bold;
+    text-align: center;
+}
+
+#nf_text {
+    color: var(--font-accent);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+#nf_text span {
+    color: var(--link-color);
+}
+
+.home_link {
+    width: 25px;
+    height: 20px;
+    background: url("/img/ico/home-d-25-b.png") no-repeat;
+    margin: 0 7px 5px 20px;
+}
+
+.home_link:hover {
+    background: url("/img/ico/home-d-25-o.png") no-repeat;
+}
+
+@media (prefers-color-scheme: dark) {
+    .home_link {
+        background: url("/img/ico/home-d-25-w.png") no-repeat;
+    }
+}

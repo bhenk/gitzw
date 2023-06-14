@@ -53,16 +53,16 @@ abstract class WorkPageControl extends Page3cControl {
             }
             $menu_label->addItem(new MenuItem($href_ . $year, $year, ($year == $uri_year && $cat == $uri_cat)));
         }
-        if ($this->getRequest()->hasSessionUser() && !Env::useCache()) {
-            $work = $this->getRequest()->getWork();
-            $menu_label = $this->menu->addMenuLabel("admin", "menu_label_admin");
-            $menu_label->addItem(new MenuItem("/admin", "admin", false));
-            if ($work) {
-                $menu_label->addItem(new MenuItem("/admin/work/edit/"
-                    . $work->getRESID(), "edit", false));
-            }
-            $menu_label->addItem(new MenuItem("/logout", "logout", false));
-        }
+//        if ($this->getRequest()->hasSessionUser() && !Env::useCache()) {
+//            $work = $this->getRequest()->getWork();
+//            $menu_label = $this->menu->addMenuLabel("admin", "menu_label_admin");
+//            $menu_label->addItem(new MenuItem("/admin", "admin", false));
+//            if ($work) {
+//                $menu_label->addItem(new MenuItem("/admin/work/edit/"
+//                    . $work->getRESID(), "edit", false));
+//            }
+//            $menu_label->addItem(new MenuItem("/logout", "logout", false));
+//        }
     }
 
 }

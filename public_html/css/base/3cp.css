@@ -118,7 +118,7 @@
 	#copyright {
 		position: fixed;
 		left: 105px;
-		bottom: 15px;
+		bottom: 20px;
 		font-style: italic;
 		font-size: 0.8em;
 		padding-bottom: 5px;
@@ -128,7 +128,7 @@
 	.license {
 		position: fixed;
 		left: 5px;
-		bottom: 15px;
+		bottom: 20px;
 	}
 
 }

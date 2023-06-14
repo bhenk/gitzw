@@ -27,3 +27,20 @@
     font-size: 0.3em;
 }
 
+.home_link {
+    width: 25px;
+    height: 20px;
+    background: url("/img/ico/home-d-25-b.png") no-repeat;
+    margin: 0 7px 25px 0;
+}
+
+.home_link:hover {
+    background: url("/img/ico/home-d-25-o.png") no-repeat;
+}
+
+@media (prefers-color-scheme: dark) {
+    .home_link {
+        background: url("/img/ico/home-d-25-w.png") no-repeat;
+    }
+}
+

@@ -2,6 +2,7 @@
 
 namespace bhenk\gitzw\handle;
 
+use bhenk\gitzw\ctrl\ErrorControl;
 use bhenk\gitzw\ctrla\AdminControl;
 use bhenk\gitzw\ctrla\DeployControl;
 use bhenk\gitzw\ctrla\FileExplorerControl;
@@ -12,6 +13,8 @@ use bhenk\gitzw\ctrla\UploadControl;
 use bhenk\gitzw\ctrla\WorkControl;
 use bhenk\gitzw\ctrla\WorksControl;
 use bhenk\gitzw\site\Request;
+use Exception;
+use PHPUnit\Event\Code\Throwable;
 
 class AdminHandler extends AbstractHandler {
 
@@ -26,6 +29,7 @@ class AdminHandler extends AbstractHandler {
             "phpinfo" => new PhpInfoControl($request),
             "deploy" => new DeployControl($request),
             "store" => new StoreControl($request),
+            "error_page" => (new ErrorControl($request))->setError(new Exception("TestError", 200)),
             default => new AdminControl($request),
         };
         $ctrl->handleRequest();

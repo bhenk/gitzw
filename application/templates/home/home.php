@@ -12,13 +12,8 @@ use bhenk\gitzw\dat\Store;
                 <div class="band_part">
                     <a href="/<?php echo Store::workStore()->selectNearestUpByOrder(9999)->getCanonicalUrl(); ?>">archive</a>
                 </div>
-                <!--<div class="band_part">
-                    <a href="">exhibitions</a>
-                </div>
-                <div class="band_part">
-                    <a href="">phone blogs</a>
-                </div>-->
-                <div class="band_part">
+
+                <div class="band_end">
                     <a href="/login">login</a>
                 </div>
             </div>

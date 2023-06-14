@@ -67,7 +67,9 @@ class AuthHandler extends AbstractHandler {
                 $ctrl = new LoginPageControl($request);
                 $ctrl->handleRequest();
             } else {
-                (new NotFoundHandler())->handleRequest($request);
+                //(new NotFoundHandler())->handleRequest($request);
+                $ctrl = new LoginPageControl($request);
+                $ctrl->handleRequest();
             }
             return;
         }

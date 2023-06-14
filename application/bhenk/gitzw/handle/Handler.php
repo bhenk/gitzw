@@ -3,6 +3,7 @@
 namespace bhenk\gitzw\handle;
 
 use bhenk\gitzw\base\Env;
+use bhenk\gitzw\ctrl\ErrorControl;
 use bhenk\gitzw\site\Request;
 use bhenk\logger\log\Log;
 use bhenk\msdata\connector\MysqlConnector;
@@ -13,7 +14,6 @@ use function file_put_contents;
 use function is_null;
 use function ob_start;
 use function session_start;
-use function str_replace;
 use function strpos;
 use function substr_replace;
 
@@ -23,23 +23,16 @@ class Handler extends AbstractHandler {
     private Request $request;
 
     public function handle(): void {
+        $request = new Request();
         try {
-            $this->handleRequest(new Request());
+            $this->handleRequest($request);
         } catch (Throwable $e) {
             Log::error("Caught exception while serving request: " . $_SERVER["REQUEST_URI"],
                 [$_SERVER, $e]);
-            echo "<h1>potsblitz</h1> Caught exception while serving request: " . $_SERVER["REQUEST_URI"];
-            do {
-                echo "<h2>" . $e::class . "</h2>" . $e->getMessage();
-                echo $e->getFile() . ":" . $e->getLine() . "<br/>"
-                    . str_replace("\n", "<br/>", $e->getTraceAsString());
-                $e = $e->getPrevious();
-            } while (!is_null($e));
-            echo "<h2>SERVER values</h2>";
-            foreach($_SERVER as $key => $value) {
-                if ($key != "argv") echo $key . " = " . $value;
-                echo "<br/>";
-            }
+            $ctrl = new ErrorControl($request);
+            $ctrl->setError($e);
+            $ctrl->handleRequest();
+            $ctrl->renderPage();
         } finally {
             if ($this->compiled) MysqlConnector::closeConnection();
         }
@@ -82,6 +75,15 @@ class Handler extends AbstractHandler {
         return $buffer;
     }
 
+    private function addStructuredData(string $buffer): string {
+        $sd = $this->request->getStructuredData();
+        if (!is_null($sd)) {
+            $pos = strpos($buffer, '</head>');
+            $buffer = substr_replace($buffer, $sd, $pos, 0);
+        }
+        return $buffer;
+    }
+
     private function sanitize_output($buffer): string {
 
         $search = array(
@@ -99,14 +101,5 @@ class Handler extends AbstractHandler {
         );
 
         return preg_replace($search, $replace, $buffer);
-    }
-
-    private function addStructuredData(string $buffer): string {
-        $sd = $this->request->getStructuredData();
-        if (!is_null($sd)) {
-            $pos = strpos($buffer, '</head>');
-            $buffer = substr_replace($buffer, $sd, $pos, 0);
-        }
-        return $buffer;
     }
 }

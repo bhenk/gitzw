@@ -10,6 +10,7 @@ use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\model\ProgressListener;
 use bhenk\gitzw\site\Request;
 use bhenk\logger\log\Log;
+use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use Phar;
 use PharData;

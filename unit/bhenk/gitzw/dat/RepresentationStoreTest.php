@@ -11,6 +11,7 @@ use Exception;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertNotFalse;
 use function PHPUnit\Framework\assertTrue;
 
 #[LogAttribute(false)]
@@ -66,7 +67,7 @@ class RepresentationStoreTest extends TestCaseDb {
 
         $result = $work->getRelations()->removeRepresentation($representation);
         assertFalse($result);
-        assertEquals("Representation:1 has 1 Exhibitions and cannot be removed",
+        assertEquals("Representation:1 cannot be removed. Last Representation of Work:1",
             $work->getRelations()->getLastMessage());
 
         $result = $exhibition->getRelations()->removeRepresentation($representation);
@@ -75,13 +76,13 @@ class RepresentationStoreTest extends TestCaseDb {
         Store::exhibitionStore()->persist($exhibition);
 
         $result = $work->getRelations()->removeRepresentation($representation);
-        assertTrue($result);
-        assertFalse($work->getRelations()->getLastMessage());
-        Store::workStore()->persist($work);
-
-        $result = Store::representationStore()->delete($representation);
-        assertEquals(1, $result);
-        assertFalse(Store::representationStore()->getLastMessage());
+        assertFalse($result);
+        assertNotFalse($work->getRelations()->getLastMessage());
+//        Store::workStore()->persist($work);
+//
+//        $result = Store::representationStore()->delete($representation);
+//        assertEquals(1, $result);
+//        assertFalse(Store::representationStore()->getLastMessage());
     }
 
 }

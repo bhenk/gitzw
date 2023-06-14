@@ -12,7 +12,7 @@ use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertTrue;
 
-#[LogAttribute(true)]
+#[LogAttribute(false)]
 class WorkDaoTest extends TestCaseDb {
 
     /**

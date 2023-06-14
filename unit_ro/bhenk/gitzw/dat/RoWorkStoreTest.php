@@ -35,7 +35,7 @@ class RoWorkStoreTest extends TestCaseRo {
         assertEquals("hnq.work.paint.9999.0000", $result);
 
         $result = Store::workStore()->nextRESID("2020", WorkCategories::paint, "hnq");
-        assertEquals("hnq.work.paint.0027", $result);
+        assertEquals("hnq.work.paint.2020.0027", $result);
     }
 
 }

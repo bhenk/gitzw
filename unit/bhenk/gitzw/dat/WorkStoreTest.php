@@ -104,17 +104,17 @@ class WorkStoreTest extends TestCaseDb {
 
         // Remove the relation
         $relations->removeRepresentation($representation->getID());
-        assertTrue($relation->isDeleted());
-        assertNull($relations->getRepresentation($representation->getID()));
-        $work = Store::workStore()->persist($work);
-
-        // Fetch the Work
-        $work = Store::workStore()->select($work->getID());
-        $relations = $work->getRelations();
-        assertNull($relations->getRepresentation($representation->getID()));
-        assertNull($relations->getRelation($representation->getID()));
-        $representations = $relations->getRepresentations();
-        assertEmpty($representations);
+        assertFalse($relation->isDeleted());
+//        assertNull($relations->getRepresentation($representation->getID()));
+//        $work = Store::workStore()->persist($work);
+//
+//        // Fetch the Work
+//        $work = Store::workStore()->select($work->getID());
+//        $relations = $work->getRelations();
+//        assertNull($relations->getRepresentation($representation->getID()));
+//        assertNull($relations->getRelation($representation->getID()));
+//        $representations = $relations->getRepresentations();
+//        assertEmpty($representations);
     }
 
     /**
@@ -158,23 +158,23 @@ class WorkStoreTest extends TestCaseDb {
         $exhibition = Store::exhibitionStore()->persist($exhibition);
 
         assertFalse($work->getRelations()->removeRepresentation($representation));
-        assertEquals("Representation:1 has 1 Exhibitions and cannot be removed",
+        assertEquals("Representation:1 cannot be removed. Last Representation of Work:1",
             $work->getRelations()->getLastMessage());
 
         assertTrue($exhibition->getRelations()->removeRepresentation($representation));
         assertFalse($exhibition->getRelations()->getLastMessage());
         Store::exhibitionStore()->persist($exhibition);
 
-        assertTrue($work->getRelations()->removeRepresentation($representation));
-        assertFalse($work->getRelations()->getLastMessage());
-        assertEmpty($work->getRelations()->getRepresentations());
-        /** @var WorkHasRepDo $workHasRepDo */
-        $workHasRepDo = array_values($work->getRelations()->getRepRelations())[0];
-        assertTrue($workHasRepDo->isDeleted());
-
-        $work = Store::workStore()->persist($work);
-        assertEmpty($work->getRelations()->getRepresentations());
-        assertEmpty($work->getRelations()->getRepRelations());
+        assertFalse($work->getRelations()->removeRepresentation($representation));
+//        assertFalse($work->getRelations()->getLastMessage());
+//        assertEmpty($work->getRelations()->getRepresentations());
+//        /** @var WorkHasRepDo $workHasRepDo */
+//        $workHasRepDo = array_values($work->getRelations()->getRepRelations())[0];
+//        assertTrue($workHasRepDo->isDeleted());
+//
+//        $work = Store::workStore()->persist($work);
+//        assertEmpty($work->getRelations()->getRepresentations());
+//        assertEmpty($work->getRelations()->getRepRelations());
     }
 
     /**

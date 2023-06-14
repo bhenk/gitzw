@@ -1,11 +1,17 @@
 <?php
 
 use bhenk\gitzw\base\Site;
+use chillerlan\QRCode\QRCode;
 
 ?>
 <!-- login.php -->
 <div class="center-screen">
     <div id="login-container">
+        <div>
+            <a href="/" title="home">
+                <div class="home_link"></div>
+            </a>
+        </div>
         <div>Login <?php echo Site::hostName() ?></div>
         <hr>
         <?php if ($this->getSessionUser()) { ?>
@@ -61,6 +67,7 @@ use bhenk\gitzw\base\Site;
             <span title="copy hash" class="copyprevious"
                   onclick="copyPrevious(this)" style="color: inherit;">&nbsp;&#10064; </span>
         <?php } ?>
+
     </div>
 </div>
 <!-- /login.php -->
