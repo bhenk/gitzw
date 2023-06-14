@@ -7,6 +7,7 @@ use function file_get_contents;
 use function str_replace;
 
 class CreatorDao extends AbstractDao {
+    use GitDao;
 
     const TABLE_NAME = "tbl_creators";
     const TABLE_DEFINITION_FILE = __DIR__ . "/sql/tbl_creators.sql";
@@ -32,4 +33,5 @@ class CreatorDao extends AbstractDao {
         return str_replace("%tbl_name%", $this->getTableName(),
             file_get_contents(self::TABLE_DEFINITION_FILE));
     }
+
 }

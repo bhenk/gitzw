@@ -7,6 +7,7 @@ use function file_get_contents;
 use function str_replace;
 
 class WorkHasRepDao extends AbstractJoinDao {
+    use GitDao;
 
     const TABLE_NAME = "tbl_work_rep";
     const TABLE_DEFINITION_FILE = __DIR__ . "/sql/tbl_work_rep.sql";

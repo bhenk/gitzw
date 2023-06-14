@@ -202,7 +202,7 @@ class Store {
     }
 
     /**
-     * Count the current number of serialization files per store
+     * Count current number of serialization files per store
      *
      * @return array<string, int>
      */

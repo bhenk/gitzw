@@ -2,6 +2,7 @@
 
 use bhenk\gitzw\ctrla\StoreControl;
 use bhenk\gitzw\dajson\Registry;
+use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dat\Store;
 
 /** @var StoreControl $ctrl */
@@ -9,11 +10,13 @@ $ctrl = $this;
 $registry = Registry::actionRegistry();
 $serializationStats = $ctrl->getSerializationStats();
 $storeStats = $ctrl->getStoreStats();
+$daoCounts = Dao::countWhere();
+$ans = $ctrl->getTableAnalysis();
 ?>
 
 <div id="store_page">
+    <div id="store_block">
     <h1>Store</h1>
-
     <div class="info_block">
         <h2>Serialize</h2>
         <div class="info_row">
@@ -61,6 +64,12 @@ $storeStats = $ctrl->getStoreStats();
             <div class="info_row">
                 <label>- <?php echo $name; ?>:</label>
                 <span><?php echo $count; ?></span>
+            </div>
+        <?php } ?>
+        <?php if (!empty($ctrl->getSerializationResult())) { ?>
+            <div class="info_row">
+                <label>- Total files:</label>
+                <span><?php echo array_sum($ctrl->getSerializationResult()); ?></span>
             </div>
         <?php } ?>
     </div>
@@ -121,6 +130,72 @@ $storeStats = $ctrl->getStoreStats();
                 <span><?php echo $count; ?></span>
             </div>
         <?php } ?>
+        <?php if (!empty($ctrl->getStoreResult())) { ?>
+            <div class="info_row">
+                <label>- Total records:</label>
+                <span><?php echo array_sum($ctrl->getStoreResult()); ?></span>
+            </div>
+        <?php } ?>
+    </div>
+    </div>
+
+    <div id="dao_block">
+        <h1>Dao</h1>
+        <div class="info_block">
+            <h2>Data objects</h2>
+            <div class="info_sub_block">
+                <div class="info_head">
+                    Data objects per Access
+                </div>
+                <?php foreach ($daoCounts as $name => $count) { ?>
+                    <div class="info_row">
+                        <label><?php echo $name; ?>:</label>
+                        <span><?php echo $count; ?></span>
+                    </div>
+                <?php } ?>
+                <div class="info_row">
+                    <label>Total objects:</label>
+                    <span><?php echo array_sum($daoCounts); ?></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info_block">
+            <h2>Analyze tables</h2>
+            <div class="info_row">
+                <code>
+                    <?php echo Dao::getAnalyzeTablesStatement(); ?>
+                </code>
+            </div>
+            <form action="/admin/store" method="post">
+                <div class="left_button">
+                    <input type="hidden" name="action" value="analyze_tables">
+                    <input type="submit" name="submit" value="Analyze">
+                </div>
+            </form>
+            <?php if (!empty($ans)) { ?>
+            <div class="table_block">
+                <table>
+                    <thead>
+                    <tr>
+                    <?php foreach (array_keys($ans[0]) as $key ) { ?>
+                        <th><?php echo $key; ?></th>
+                    <?php } ?>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($ans as $row) { ?>
+                        <tr>
+                            <?php foreach ($row as $data) { ?>
+                                <td><?php echo $data; ?></td>
+                            <?php } ?>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php } ?>
+        </div>
     </div>
 </div>
 

@@ -7,6 +7,7 @@ use function file_get_contents;
 use function str_replace;
 
 class ExhibitionDao extends AbstractDao {
+    use GitDao;
 
     const TABLE_NAME = "tbl_exhibitions";
     const TABLE_DEFINITION_FILE = __DIR__ . "/sql/tbl_exhibitions.sql";

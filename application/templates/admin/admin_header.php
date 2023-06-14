@@ -4,6 +4,7 @@ $last_login = $this->getRequest()->getSessionUser()->getLastLogin();
 ?>
 
 <div id="admin_header">
+    <a href="/" title="home"><div class="home_link"></div></a>
     <div class="dd_menu">
         <button class="dd_button">File</button>
         <div class="dd_content">
@@ -28,7 +29,6 @@ $last_login = $this->getRequest()->getSessionUser()->getLastLogin();
     <div class="dd_menu">
         <button class="dd_button">System</button>
         <div class="dd_content">
-            <a href="/">Home</a>
             <a href="/admin">Admin</a>
             <a href="/admin/phpinfo">PHPInfo</a>
             <a href="/admin/store">Store</a>

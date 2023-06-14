@@ -2,6 +2,10 @@
 
 namespace bhenk\gitzw\dao;
 
+use bhenk\msdata\abc\AbstractDao;
+use Exception;
+use function array_map;
+use function implode;
 use function is_null;
 
 final class Dao {
@@ -12,6 +16,20 @@ final class Dao {
     private static ?CreatorDao $creatorDao = null;
     private static ?ExhibitionDao $exhibitionDao = null;
     private static ?ExhHasRepDao $exhHasRepDao = null;
+
+    /**
+     * @return array<string, GitDao>
+     */
+    public static function getDaos(): array {
+        return [
+            "CreatorDao" => self::creatorDao(),
+            "RepresentationDao" => self::representationDao(),
+            "WorkDao" => self::workDao(),
+            "WorkHasRepDao" => self::workHasRepDao(),
+            "ExhibitionDao" => self::exhibitionDao(),
+            "ExhHasRepDao" => self::exhHasRepDao()
+        ];
+    }
 
     /**
      * @return RepresentationDao
@@ -71,6 +89,29 @@ final class Dao {
             self::$exhHasRepDao = new ExhHasRepDao();
         }
         return self::$exhHasRepDao;
+    }
+
+    /**
+     * @return array<string, int>
+     * @throws Exception
+     */
+    public static function countWhere(string $where = "1=1"): array {
+        $counts = [];
+        foreach (self::getDaos() as $name => $dao) {
+            $counts[$name] = $dao->countWhere($where);
+        }
+        return $counts;
+    }
+
+    public static function analyzeTables(): array {
+        return self::creatorDao()->execute(self::getAnalyzeTablesStatement());
+    }
+
+    public static function getAnalyzeTablesStatement(): string {
+        $tbl_names = array_map(function ($x) {
+            return $x->getTableName();
+        }, self::getDaos());
+        return "ANALYZE NO_WRITE_TO_BINLOG TABLE " . implode(", ", $tbl_names);
     }
 
 }

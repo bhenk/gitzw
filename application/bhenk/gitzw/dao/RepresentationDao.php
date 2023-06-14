@@ -10,6 +10,7 @@ use function str_repeat;
 use function str_replace;
 
 class RepresentationDao extends AbstractDao {
+    use GitDao;
 
     const TABLE_NAME = "tbl_representations";
     const TABLE_DEFINITION_FILE = __DIR__ . "/sql/tbl_representations.sql";

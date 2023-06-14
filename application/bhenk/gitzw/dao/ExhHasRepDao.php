@@ -7,6 +7,7 @@ use function file_get_contents;
 use function str_replace;
 
 class ExhHasRepDao extends AbstractJoinDao {
+    use GitDao;
 
     const TABLE_NAME = "tbl_exh_rep";
     const TABLE_DEFINITION_FILE = __DIR__ . "/sql/tbl_exh_rep.sql";

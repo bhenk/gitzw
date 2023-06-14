@@ -1,7 +1,13 @@
 
 #store_page {
-    margin: 20px 100px;
-    max-width: 609px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#store_block, #dao_block {
+    margin: 20px 50px;
+    max-width: 609px
 }
 
 .info_block {
@@ -84,4 +90,21 @@ span.serious {
     background-color: lightgray;
     margin-top: 20px;
     padding: 20px;
+}
+
+.left_button {
+    margin-top: 20px;
+}
+
+.table_block {
+    margin-top: 30px;
+}
+
+td, th {
+    padding: 2px 10px;
+}
+th {
+    background-color: var(--font-color);
+    margin: 0;
+    color: var(--background);
 }

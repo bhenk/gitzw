@@ -5,6 +5,7 @@ namespace bhenk\gitzw\ctrla;
 use bhenk\gitzw\base\Env;
 use bhenk\gitzw\ctrl\Page3cControl;
 use bhenk\gitzw\dajson\Registry;
+use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\model\ProgressListener;
 use bhenk\gitzw\site\Request;
@@ -31,6 +32,7 @@ class StoreControl extends Page3cControl {
     private bool $showDeserialize = false;
     private array $storeResult = [];
     private int $storedObjectCount = -1;
+    private array $tableAnalysis = [];
 
     function __construct(Request $request) {
         parent::__construct($request);
@@ -48,6 +50,7 @@ class StoreControl extends Page3cControl {
             if ($_POST["action"] == "serialize") $this->serialize();
             if ($_POST["action"] == "try_deserialize") $this->showDeserialize = true;
             if ($_POST["action"] == "do_deserialize" && $_POST["submit"] == "Deserialize") $this->deserialize();
+            if ($_POST["action"] == "analyze_tables") $this->analyzeTables();
         } else {
             $act = $this->getRequest()->getUrlPart(2);
             if ($act == "store.tar.gz") $this->downloadStore();
@@ -111,6 +114,10 @@ class StoreControl extends Page3cControl {
         $this->setPageTitle("Store - deserialized files");
     }
 
+    private function analyzeTables(): void {
+        $this->tableAnalysis = Dao::analyzeTables();
+    }
+
     /**
      * @return array<string, int>
      */
@@ -156,6 +163,13 @@ class StoreControl extends Page3cControl {
      */
     public function getStoredObjectCount(): int {
         return $this->storedObjectCount;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTableAnalysis(): array {
+        return $this->tableAnalysis;
     }
 
 
