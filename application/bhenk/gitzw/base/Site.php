@@ -42,12 +42,12 @@ class Site {
         return self::hostName().$path;
     }
 
-    public static function redirect(string $path) : string {
+    public static function redirect(string $path) : void {
         $location = self::redirectLocation($path);
         self::$redirected = true;
         Log::info("Redirecting, location=$location");
         header("Location: ".$location, TRUE, 301);
-        return $location;
+        exit();
     }
 
     public static function isRedirected(): bool {

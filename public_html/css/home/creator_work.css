@@ -1,0 +1,130 @@
+
+#container {
+    display: flex;
+    flex-direction: column;
+}
+
+#panel {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+}
+
+#logo_small {
+    display: block;
+    background-color: var(--logo-color);
+    padding: 6px;
+    margin-bottom: 5px;
+    width: 110px;
+    height: 90px;
+}
+
+#logo_small svg {
+    width: 120px;
+    height: 100px;
+    transition-duration: 5s;
+    transition-property: fill;
+    transition-timing-function: cubic-bezier(0.1, 0.7, 1, 0.1);
+}
+
+#logo_small svg:hover {
+    fill: yellow;
+    /*stroke: cornflowerblue;*/ /* = color of text and border of rect */
+    font-weight: bold;
+}
+
+#name_container {
+    display: flex;
+    margin-left: 150px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    flex-direction: row;
+    align-items: baseline;
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+#cars_container {
+    /*margin-left: calc(max(calc(100vw - 350px - 120vh), var(--left-gap)));*/
+    margin-left: 150px;
+}
+
+.car_block {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 0;
+}
+
+.cat_name {
+    font-size: 2em;
+    font-weight: bold;
+    width: 100px;
+    height: 100%;
+}
+
+.cat_name:hover {
+    color: coral;
+}
+
+.image_block {
+    display: flex;
+    flex-direction: column;
+    width: 120vh;
+    overflow: hidden;
+}
+
+.img_car {
+    display: flex;
+    flex-direction: row;
+    width: 210vh;
+    position: relative;
+    left: -45vh;
+    top: 0;
+}
+
+.image a img {
+    filter: blur(0);
+    transition: filter 3s;
+    max-width: 25vh;
+    max-height: 25vh;
+    margin: auto auto 0 auto;
+}
+
+.image a {
+    display: block;
+    margin: auto auto 0 auto;
+}
+
+.image {
+    width: 30vh;
+    height: 25vh;
+    /*background-color: var(--background);*/
+    display: flex;
+    overflow: hidden;
+    transition: width 3s;
+}
+
+.image_sub {
+    align-content: center;
+    margin: 4px 0;
+    font-size: 0.9em;
+    font-style: italic;
+    text-align: center;
+}
+
+@media screen and (max-width: 900px) {
+    #name_container {
+        margin-bottom: 70px;
+    }
+    .car_block {
+        display: flex;
+        flex-direction: column;
+        margin: 10px 0;
+    }
+    #cars_container {
+        margin-left: 5px;
+    }
+    .image_sub {
+        /*display: none;*/
+    }
+}

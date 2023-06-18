@@ -3,14 +3,21 @@
 namespace bhenk\gitzw\dat;
 
 use bhenk\gitzw\dao\CreatorDo;
+use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\model\PersonTrait;
 use bhenk\gitzw\model\StoredObjectInterface;
+use bhenk\gitzw\model\WorkCategories;
 use Exception;
 use ReflectionException;
+use function addslashes;
+use function array_reverse;
+use function array_shift;
 use function is_null;
 use function json_decode;
 use function json_encode;
+use function str_replace;
 use function substr;
+use function urldecode;
 
 class Creator implements StoredObjectInterface {
     use PersonTrait;
@@ -63,6 +70,63 @@ class Creator implements StoredObjectInterface {
      */
     public function getWorks(int $offset = 0, int $limit = PHP_INT_MAX): array {
         return Store::workStore()->selectByCreator($this, $offset, $limit);
+    }
+
+    /**
+     * Get all categories of this creator
+     * @param bool $showHidden
+     * @return WorkCategories[]
+     */
+    public function getCategories(bool $showHidden = false): array {
+        return Store::workStore()->getCategories("creatorId=" . $this->getID(), $showHidden);
+    }
+
+    /**
+     * Get image data for carousel
+     * @return array rows
+     * @throws Exception
+     */
+    public function getImageData(WorkCategories $cat, int $size = 400, int $offset = 0, int $limit = 100): array {
+        $sql = "SELECT w.RESID, w.title_nl, w.title_en, w.preferred, YEAR(w.date) as `year`, r.REPID, wr.ordinal FROM tbl_works w "
+            . "INNER JOIN tbl_work_rep wr ON w.ID = wr.FK_LEFT "
+            . "INNER JOIN tbl_representations r ON wr.FK_RIGHT = r.ID "
+            . "WHERE w.creatorId = " . $this->getID() . " AND w.category = '" . $cat->name . "' AND w.hidden = 0 "
+            . "ORDER BY w.ordering DESC, wr.ordinal LIMIT $offset,$limit;";
+        $rows = Dao::workDao()->execute($sql);
+        $images = [];
+        $titles = [];
+        $resids = [];
+        $urls = [];
+        foreach ($rows as $row) {
+            $images[] = "/img/resized/" . $size . "x" . $size . "/" . $row["REPID"];
+            $title = "-no title-";
+            if ($row["preferred"] == "nl") {
+                $first = $row["title_nl"];
+                $second = $row["title_en"];
+            } else {
+                $first = $row["title_en"];
+                $second = $row["title_nl"];
+            }
+            if ($first and $second) {
+                $title = $first . " (" . $second . ")";
+            } elseif ($first) {
+                $title = $first;
+            } elseif ($second) {
+                $title = $second;
+            }
+            $title .= " (" . $row["year"] . ")";
+            $titles[] = addslashes($title);
+            $resids[] = $row["RESID"];
+            // hnq.work.paint.1993.0009
+            $urls[] = "/" . $this->getUriName() . "/work/" . $cat->value
+                . "/" . str_replace(".", "/", substr($row["RESID"], -9));
+        }
+        $b = array_reverse($titles);
+        $b[] = array_shift($b);
+        $b[] = array_shift($b);
+        $b[] = array_shift($b);
+        $titles = array_reverse($b);
+        return ["images" => $images, "titles" => $titles, "resids" => $resids, "urls" => $urls];
     }
 
 }

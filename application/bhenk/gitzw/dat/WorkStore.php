@@ -9,6 +9,7 @@ use bhenk\gitzw\model\WorkCategories;
 use bhenk\logger\log\Log;
 use Closure;
 use Exception;
+use function array_map;
 use function array_values;
 use function count;
 use function gettype;
@@ -350,6 +351,7 @@ class WorkStore implements StoreInterface {
     /**
      * Select category, year for given creator shortCRID
      * @param string $shortCrid
+     * @param bool $showHidden
      * @return array
      * @throws Exception
      */
@@ -362,12 +364,23 @@ class WorkStore implements StoreInterface {
         return Dao::workDao()->execute($sql);
     }
 
+    public function getCategories(string $where, bool $showHidden = false): array {
+        // SELECT DISTINCT `category` FROM tbl_works WHERE `creatorId`=1 [AND `hidden`=0]
+        $hidden = $showHidden ? ";" : " AND `hidden`=0;";
+        $sql = "SELECT DISTINCT `category` FROM " . Dao::workDao()->getTableName()
+            . " WHERE " . $where . $hidden;
+        $names = Dao::workDao()->execute($sql);
+        return array_map(function ($x) {
+            return WorkCategories::forName($x["category"]);
+        }, $names);
+    }
+
     /**
-     * Iterate all Works in result of $sql and offer each work to $func
+     * Iterate all Works in result of $where and offer each work to $func
      *
      * The given $sql must 'SELECT * FROM tbl_works ... '
      * @param Closure $func
-     * @param string $sql
+     * @param string $where
      * @return void
      * @throws Exception
      */

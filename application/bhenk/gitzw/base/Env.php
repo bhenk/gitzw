@@ -140,4 +140,12 @@ class Env {
         return self::getEnvVariables()["sessionExpirationMinutes"];
     }
 
+    public static function version(): string {
+        return self::getEnvVariables()["version"];
+    }
+
+    public static function versionDate() {
+        return self::getEnvVariables()["versionDate"];
+    }
+
 }

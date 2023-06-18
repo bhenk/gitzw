@@ -3,7 +3,7 @@
 namespace bhenk\gitzw\handle;
 
 use bhenk\gitzw\base\Site;
-use bhenk\gitzw\ctrl\CreatorPageControl;
+use bhenk\gitzw\ctrl\CreatorWorkControl;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\site\Request;
 
@@ -28,12 +28,18 @@ class CreatorHandler extends AbstractHandler {
             }
         }
         $request->setCreator($creator);
-        $act = $request->getUrlPart(1);
-        if ($act != "") {
-            $this->getNextHandler()->handleRequest($request);
+        $act1 = $request->getUrlPart(1);
+        if ($act1 == "") {
+            $this->goCreatorPage($request);
             return;
+        } elseif ($act1 == "work") {
+            $act2 = $request->getUrlPart(2);
+            if ($act2 == "") {
+                $this->goCreatorWorkPage($request);
+                return;
+            }
         }
-        $this->goCreatorPage($request);
+        $this->getNextHandler()->handleRequest($request);
     }
 
     private function goCreatorPage(Request $request): void {
@@ -41,7 +47,19 @@ class CreatorHandler extends AbstractHandler {
         if ($request->getCleanUrl() != $canonical) {
             Site::redirect("/" . $canonical);
         } else {
-            $ctrl = new CreatorPageControl($request);
+            // voorlopig
+            $ctrl = new CreatorWorkControl($request);
+            $ctrl->handleRequest();
+            $ctrl->renderPage();
+        }
+    }
+
+    private function goCreatorWorkPage(Request $request): void {
+        $canonical = $request->getCreator()->getUriName() . "/work";
+        if ($request->getCleanUrl() != $canonical) {
+            Site::redirect("/" . $canonical);
+        } else {
+            $ctrl = new CreatorWorkControl($request);
             $ctrl->handleRequest();
             $ctrl->renderPage();
         }

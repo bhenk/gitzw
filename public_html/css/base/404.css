@@ -25,6 +25,12 @@
     color: var(--link-color);
 }
 
+.ip_text {
+    margin-top: 5px;
+    text-align: center;
+    line-height: 2;
+}
+
 .home_link {
     width: 25px;
     height: 20px;

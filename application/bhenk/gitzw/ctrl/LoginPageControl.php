@@ -12,19 +12,50 @@ use function print_r;
 
 class LoginPageControl extends Page3cControl {
 
+    const MODE_REDIRECT = 0;
+    const MODE_NOT_ALLOWED = 1;
+    const MODE_LOGIN = 2;
+
     private string $message = "";
     private string $username = "";
     private bool $name_error = false;
     private bool $pass_error = false;
     private string $hash = "";
     private User|bool $sessionUser = false;
+    private int $mode;
 
     function __construct(Request $request) {
+        Log::info("Login page request from " . $request->getClientIP());
         $this->setIncludeCopyright(false);
         parent::__construct($request);
+        $hasKnownIP = !empty(Registry::userRegistry()->getUsersByIp($request->getClientIP()));
+        $notBruteForce = Registry::loginRegistry()->isNotBruteForce($request);
+        if ($hasKnownIP && $notBruteForce) {
+            $this->mode = self::MODE_LOGIN;
+        } elseif ($notBruteForce) {
+            $this->mode = self::MODE_NOT_ALLOWED;
+        } else {
+            $this->mode = self::MODE_REDIRECT;
+        }
     }
 
     public function handleRequest(): void {
+        if ($this->mode == self::MODE_REDIRECT) {
+            Log::warning("Login attempt with brute force");
+            $ctrl = new NotFoundControl($this->getRequest());
+            $ctrl->setErrorCode(403);
+            $ctrl->handleRequest();
+            $ctrl->renderPage();
+            return;
+        } elseif ($this->mode == self::MODE_NOT_ALLOWED) {
+            Log::info("Login attempt with wrong ip");
+            $ctrl = new NotFoundControl($this->getRequest());
+            $ctrl->setErrorCode(403);
+            $ctrl->setShowIP(true);
+            $ctrl->handleRequest();
+            $ctrl->renderPage();
+            return;
+        }
         $this->sessionUser = $this->getRequest()->getSessionUser() ?? false;
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $this->handlePost();

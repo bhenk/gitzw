@@ -63,14 +63,8 @@ class AuthHandler extends AbstractHandler {
         }
 
         if ($first == "login") {
-            if ($this->canLogin($request)) {
-                $ctrl = new LoginPageControl($request);
-                $ctrl->handleRequest();
-            } else {
-                //(new NotFoundHandler())->handleRequest($request);
-                $ctrl = new LoginPageControl($request);
-                $ctrl->handleRequest();
-            }
+            $ctrl = new LoginPageControl($request);
+            $ctrl->handleRequest();
             return;
         }
 
@@ -149,8 +143,4 @@ class AuthHandler extends AbstractHandler {
         return false;
     }
 
-    private function canLogin(Request $request): bool {
-        $hasKnownIP = !empty(Registry::userRegistry()->getUsersByIp($request->getClientIP()));
-        return $hasKnownIP && Registry::loginRegistry()->isNotBruteForce($request);
-    }
 }

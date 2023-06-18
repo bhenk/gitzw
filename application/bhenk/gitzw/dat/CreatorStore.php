@@ -220,7 +220,14 @@ class CreatorStore implements StoreInterface {
     /**
      * Select a creator by name
      *
-     * Discovers name in *CRID* or *url*
+     * Discovers name in *CRID* or *url*. Creates where-clause as one of
+     *
+     * ```
+     *    CRID='{http_url}/{CRID}'
+     *    url='{https_url}/{full-name}'
+     * ```
+     * Decides which on presence of "-" in $name.
+     *
      * @param string $name
      * @return bool|Creator
      * @throws Exception

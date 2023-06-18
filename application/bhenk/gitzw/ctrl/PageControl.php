@@ -4,6 +4,7 @@ namespace bhenk\gitzw\ctrl;
 
 use bhenk\gitzw\site\Menu;
 use bhenk\gitzw\site\Request;
+use function gettype;
 use function is_null;
 use function json_encode;
 use function str_contains;
@@ -13,7 +14,7 @@ abstract class PageControl {
     private string $pageTitle = "gitzw.art";
     private array $stylesheets = [];
     private array $scriptLinks = [];
-    private array $structuredData = [];
+    private array|string $structuredData = [];
     private Request $request;
 
     /**
@@ -104,16 +105,20 @@ abstract class PageControl {
         return $this->structuredData;
     }
 
-    public function setStructuredData(array $structuredData): void {
+    public function setStructuredData(array|string $structuredData): void {
         $this->structuredData = $structuredData;
     }
 
     public function renderStructuredData(): void {
         if (!empty($this->structuredData)) {
-            $json = "\n".'<script type="application/ld+json">'."\n";
-            $json .= json_encode($this->structuredData, JSON_PRETTY_PRINT+JSON_UNESCAPED_SLASHES);
-            $json .= "\n".'</script>'."\n";
-            $this->getRequest()->setStructuredData($json);
+            $sd = "\n".'<script type="application/ld+json">'."\n";
+            if (gettype($this->structuredData) == "array") {
+                $sd .= json_encode($this->structuredData, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES);
+            } else {
+                $sd .= $this->structuredData;
+            }
+            $sd .= "\n".'</script>'."\n";
+            $this->getRequest()->setStructuredData($sd);
         }
     }
 

@@ -9,6 +9,7 @@ use Exception;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertStringStartsWith;
+use function var_dump;
 
 #[LogAttribute(false)]
 class RoWorkStoreTest extends TestCaseRo {
@@ -36,6 +37,11 @@ class RoWorkStoreTest extends TestCaseRo {
 
         $result = Store::workStore()->nextRESID("2020", WorkCategories::paint, "hnq");
         assertEquals("hnq.work.paint.2020.0027", $result);
+    }
+
+    public function testGetCategories() {
+        $result = Store::workStore()->getCategories("creatorId=1");
+        self::assertInstanceOf(WorkCategories::class, $result[0]);
     }
 
 }

@@ -83,9 +83,10 @@ class StoreControl extends Page3cControl {
         Log::info("Serializing Store");
         $pl = new ProgressListener("progress_store_s", array_sum($this->getSerializationStats()));
         $this->serializationResult = Store::serialize($pl);
+        $this->serializationStats = null;
         $this->serializedRecordCount = $pl->getProgress();
         $pl->updateStatus([
-            "total_" . self::ID_SERIALIZE => array_sum(Store::serializationStats()),
+            "total_" . self::ID_SERIALIZE => array_sum($this->getSerializationStats()),
             "progress_" . self::ID_SERIALIZE => $this->serializedRecordCount,
             "msg_" . self::ID_SERIALIZE => date("H:i:s", time())
                 . " serialized $this->serializedRecordCount business objects to files",
@@ -99,11 +100,12 @@ class StoreControl extends Page3cControl {
 
     private function deserialize(): void {
         Log::info("Serializing Store");
-        $pl = new ProgressListener("progress_store_d", array_sum($this->getSerializationStats()));
+        $pl = new ProgressListener("progress_store_d", array_sum($this->getStoreStats()));
         $this->storeResult = Store::deserialize($pl);
+        $this->storeStats = null;
         $this->storedObjectCount = $pl->getProgress();
         $pl->updateStatus([
-            "total_" . self::ID_DESERIALIZE => array_sum(Store::storeStats()),
+            "total_" . self::ID_DESERIALIZE => array_sum($this->getStoreStats()),
             "progress_" . self::ID_DESERIALIZE => $this->storedObjectCount,
             "msg_" . self::ID_DESERIALIZE => date("H:i:s", time())
                 . " deserialized $this->storedObjectCount business objects from file",

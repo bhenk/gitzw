@@ -7,7 +7,7 @@
 
 #store_block, #dao_block {
     margin: 20px 50px;
-    max-width: 609px
+    width: 609px;
 }
 
 .info_block {

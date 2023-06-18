@@ -12,7 +12,18 @@ use bhenk\gitzw\dat\Store;
                 <div class="band_part">
                     <a href="/<?php echo Store::workStore()->selectNearestUpByOrder(9999)->getCanonicalUrl(); ?>">archive</a>
                 </div>
-
+                <div class="band_part">
+                    <a href="/henk-van-den-berg">hnq</a>
+                </div>
+                <div class="band_part">
+                    <a href="/henk-van-den-berg/drawing">draw</a>
+                </div>
+                <div class="band_part">
+                    <a href="/henk-van-den-berg/drypoint">dry</a>
+                </div>
+                <div class="band_part">
+                    <a href="/henk-van-den-berg/painting">paint</a>
+                </div>
                 <div class="band_end">
                     <a href="/login">login</a>
                 </div>

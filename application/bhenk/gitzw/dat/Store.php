@@ -210,6 +210,7 @@ class Store {
         $stats = [];
         foreach (self::getStores() as $name => $store) {
             $dir = self::getDataStore() . DIRECTORY_SEPARATOR . $store->getName();
+            if (!is_dir($dir)) mkdir($dir, 0777, true);
             $files = array_diff(scandir($dir), array('..', '.'));
             $stats[$name] = count($files);
         }

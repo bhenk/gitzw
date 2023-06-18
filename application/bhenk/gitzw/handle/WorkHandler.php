@@ -9,6 +9,7 @@ use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\model\WorkCategories;
 use bhenk\gitzw\site\Request;
 use Exception;
+use http\Exception\RuntimeException;
 use function count;
 use function is_null;
 use function strlen;
@@ -109,7 +110,8 @@ class WorkHandler extends AbstractHandler {
     }
 
     private function goWorkControl(Request $request): void {
-        echo "work control = under construction";
+        throw new RuntimeException($request->getCleanUrl()
+            . " should have been handled by " . CreatorHandler::class);
     }
 
 }

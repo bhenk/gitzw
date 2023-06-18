@@ -265,6 +265,10 @@ class DeployControl extends Page3cControl {
     }
 
     private function createCache(): void {
+        if (!Env::useCache()) {
+            $this->errors[] = "useCache = off: Cannot create cache";
+            return;
+        }
         $total = count(glob(Env::cacheDir() . "/*.html"));
         if ($total < 2) $total = 300;
         $_SESSION["total_" . self::ID_PROGRESS_CACHE] = $total;
@@ -272,12 +276,10 @@ class DeployControl extends Page3cControl {
 
         $this->errors = [];
         $this->create_cache_count = 0;
-        if (!Env::useCache()) {
-            $this->errors[] = "useCache = false: Cannot create cache";
-            return;
-        }
+
         set_time_limit(0);
         $this->clearCache();
+        $this->createCreatorViewCache();
         $this->createYearViewCache();
         $this->createWorkViewCache();
         $this->updateSession([
@@ -301,6 +303,23 @@ class DeployControl extends Page3cControl {
         $files = glob(Env::cacheDir() . "/*.html");
         foreach ($files as $file) {
             unlink($file);
+        }
+    }
+
+    private function createCreatorViewCache(): void {
+        Log::info("Creating cache for creator views");
+        $this->updateSession([
+            "msg_" . self::ID_PROGRESS_CACHE => "Creating creator view pages",
+        ]);
+        $iter = new CreatorIterator();
+        while ($iter->hasNext()) {
+            $creator = $iter->next();
+            $href = "/" . $creator->getUriName();
+            $this->callUrl($href);
+            $this->create_cache_count++;
+            $this->updateSession([
+                "progress_" . self::ID_PROGRESS_CACHE => $this->create_cache_count,
+            ]);
         }
     }
 
