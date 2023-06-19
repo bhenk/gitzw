@@ -4,30 +4,51 @@ namespace bhenk\gitzw\ctrl;
 
 use bhenk\gitzw\base\Env;
 use bhenk\gitzw\dat\Creator;
+use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\model\WorkCategories;
 use bhenk\gitzw\site\Request;
 
 class CreatorWorkControl extends Page1cControl {
 
+    const MODE_WORK = 0;
+    const MODE_CAT = 1;
     private Creator $creator;
+    private WorkCategories $category;
+    private int $mode;
 
     function __construct(Request $request) {
         parent::__construct($request);
         $this->creator = $request->getCreator();
-        $this->addStylesheet("/css/home/creator_work.css");
+        if ($request->hasWorkCategory()) {
+            $this->category = $request->getWorkCategory();
+            $this->addStylesheet("/css/home/creator_cat.css");
+            $this->mode = self::MODE_CAT;
+        } else {
+            $this->addStylesheet("/css/home/creator_work.css");
+            $this->mode = self::MODE_WORK;
+        }
         $request->setUseCache(true);
     }
 
     public function handleRequest(): void {
-        $this->setPageTitle($this->creator->getFullName());
+        $pf = ($this->mode == self::MODE_CAT) ? " - " . $this->getCategory()->value : "";
+        $this->setPageTitle($this->creator->getFullName() . $pf);
     }
 
     function renderContainer(): void {
-        require_once Env::templatesDir() . "/home/creator_work.php";
+        $template = match ($this->mode) {
+            self::MODE_WORK => "/home/creator_work.php",
+            self::MODE_CAT => "/home/creator_cat.php"
+        };
+        require_once Env::templatesDir() . $template;
     }
 
     public function getCreator(): Creator {
         return $this->creator;
+    }
+
+    public function getCategory(): WorkCategories {
+        return $this->category;
     }
 
     public function getData(): array {
@@ -37,5 +58,22 @@ class CreatorWorkControl extends Page1cControl {
             $data[$cat->name] = $this->getCreator()->getImageData($cat, 400, 0, 200);
         }
         return $data;
+    }
+
+    public function getCatData(): array {
+        return $this->getCreator()->getImageData($this->getCategory(), 1500, 0, 200);
+    }
+
+    public function getCatYears(): array {
+        $years = [];
+        $result = Store::workStore()->selectCatYear($this->creator->getShortCRID());
+        foreach ($result as $item) {
+            if ($item["category"] == $this->getCategory()->name) {
+                $url = "/" . $this->creator->getUriName() . "/work/"
+                    . $this->getCategory()->value . "/" . $item["year"];
+                $years[$item["year"]] = $url;
+            }
+        }
+        return $years;
     }
 }

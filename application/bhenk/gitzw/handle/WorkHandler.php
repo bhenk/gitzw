@@ -3,13 +3,14 @@
 namespace bhenk\gitzw\handle;
 
 use bhenk\gitzw\base\Site;
+use bhenk\gitzw\ctrl\CreatorWorkControl;
 use bhenk\gitzw\ctrl\WorkViewControl;
 use bhenk\gitzw\ctrl\WorkYearViewControl;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\model\WorkCategories;
 use bhenk\gitzw\site\Request;
+use bhenk\logger\log\Log;
 use Exception;
-use http\Exception\RuntimeException;
 use function count;
 use function is_null;
 use function strlen;
@@ -26,6 +27,7 @@ class WorkHandler extends AbstractHandler {
      * @throws Exception
      */
     public function handleRequest(Request $request): void {
+        Log::debug("Handled by " . self::class);
         $act = $request->getUrlPart(1);
         if ($act != "work") {
             $this->getNextHandler()->handleRequest($request);
@@ -38,9 +40,9 @@ class WorkHandler extends AbstractHandler {
             if ($request->getCleanUrl() != $canonical) {
                 Site::redirect("/" . $canonical);
             } else {
-                $this->goWorkControl($request);
+                $this->goCreatorControl($request);
+                return;
             }
-            return;
         } else {
             $category = WorkCategories::get($cat);
             if (is_null($category)) {
@@ -56,7 +58,7 @@ class WorkHandler extends AbstractHandler {
             if ($request->getCleanUrl() != $canonical) {
                 Site::redirect("/" . $canonical);
             } else {
-                $this->goWorkCatControl($request);
+                $this->goCreatorControl($request);
             }
             return;
         }
@@ -91,7 +93,6 @@ class WorkHandler extends AbstractHandler {
         if ($format) $cleanUrl = substr($request->getCleanUrl(), 0, - (strlen($format) + 1));
         if ($cleanUrl != $canonical) {
             Site::redirect("/" . $canonical);
-            return;
         }
         $request->setFormat($format);
         $this->goWorkViewControl($request);
@@ -105,13 +106,10 @@ class WorkHandler extends AbstractHandler {
         $ctrl = new WorkYearViewControl($request);
     }
 
-    private function goWorkCatControl(Request $request): void {
-        echo "work cat control = under construction";
-    }
-
-    private function goWorkControl(Request $request): void {
-        throw new RuntimeException($request->getCleanUrl()
-            . " should have been handled by " . CreatorHandler::class);
+    private function goCreatorControl(Request $request): void {
+        $ctrl = new CreatorWorkControl($request);
+        $ctrl->handleRequest();
+        $ctrl->renderPage();
     }
 
 }

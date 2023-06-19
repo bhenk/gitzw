@@ -1,4 +1,15 @@
 
+#name_container {
+    display: flex;
+    margin-left: 80px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    flex-direction: row;
+    align-items: baseline;
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
 #works_year_view {
     display: flex;
     flex-wrap: wrap;

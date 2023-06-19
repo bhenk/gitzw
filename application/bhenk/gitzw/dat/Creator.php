@@ -96,6 +96,7 @@ class Creator implements StoredObjectInterface {
         $rows = Dao::workDao()->execute($sql);
         $images = [];
         $titles = [];
+        $years = [];
         $resids = [];
         $urls = [];
         foreach ($rows as $row) {
@@ -117,6 +118,7 @@ class Creator implements StoredObjectInterface {
             }
             $title .= " (" . $row["year"] . ")";
             $titles[] = addslashes($title);
+            $years[] = $row["year"];
             $resids[] = $row["RESID"];
             // hnq.work.paint.1993.0009
             $urls[] = "/" . $this->getUriName() . "/work/" . $cat->value
@@ -127,7 +129,13 @@ class Creator implements StoredObjectInterface {
         $b[] = array_shift($b);
         $b[] = array_shift($b);
         $titles = array_reverse($b);
-        return ["images" => $images, "titles" => $titles, "resids" => $resids, "urls" => $urls];
+
+        $b = array_reverse($years);
+        $b[] = array_shift($b);
+        $b[] = array_shift($b);
+        $b[] = array_shift($b);
+        $years = array_reverse($b);
+        return ["images" => $images, "titles" => $titles, "years" => $years, "resids" => $resids, "urls" => $urls];
     }
 
 }

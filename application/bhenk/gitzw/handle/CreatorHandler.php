@@ -32,12 +32,6 @@ class CreatorHandler extends AbstractHandler {
         if ($act1 == "") {
             $this->goCreatorPage($request);
             return;
-        } elseif ($act1 == "work") {
-            $act2 = $request->getUrlPart(2);
-            if ($act2 == "") {
-                $this->goCreatorWorkPage($request);
-                return;
-            }
         }
         $this->getNextHandler()->handleRequest($request);
     }
@@ -48,17 +42,6 @@ class CreatorHandler extends AbstractHandler {
             Site::redirect("/" . $canonical);
         } else {
             // voorlopig
-            $ctrl = new CreatorWorkControl($request);
-            $ctrl->handleRequest();
-            $ctrl->renderPage();
-        }
-    }
-
-    private function goCreatorWorkPage(Request $request): void {
-        $canonical = $request->getCreator()->getUriName() . "/work";
-        if ($request->getCleanUrl() != $canonical) {
-            Site::redirect("/" . $canonical);
-        } else {
             $ctrl = new CreatorWorkControl($request);
             $ctrl->handleRequest();
             $ctrl->renderPage();

@@ -21,7 +21,7 @@ $data = $ctrl->getData();
 
     <?php foreach ($categories as $cat) { ?>
         <div class="car_block" id="block_<?php echo $cat->name ?>">
-            <a href="/<?php echo $creator->getUriName() . "/" . $cat->value; ?>">
+            <a href="/<?php echo $creator->getUriName() . "/work/" . $cat->value; ?>">
                 <div class="cat_name"><?php echo $cat->name ?></div>
             </a>
             <div class="image_block">

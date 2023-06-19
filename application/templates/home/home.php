@@ -16,13 +16,13 @@ use bhenk\gitzw\dat\Store;
                     <a href="/henk-van-den-berg">hnq</a>
                 </div>
                 <div class="band_part">
-                    <a href="/henk-van-den-berg/drawing">draw</a>
+                    <a href="/henk-van-den-berg/work/drawing">draw</a>
                 </div>
                 <div class="band_part">
-                    <a href="/henk-van-den-berg/drypoint">dry</a>
+                    <a href="/henk-van-den-berg/work/drypoint">dry</a>
                 </div>
                 <div class="band_part">
-                    <a href="/henk-van-den-berg/painting">paint</a>
+                    <a href="/henk-van-den-berg/work/painting">paint</a>
                 </div>
                 <div class="band_end">
                     <a href="/login">login</a>

@@ -6,10 +6,26 @@ use bhenk\gitzw\dat\Work;
 
 /** @var WorkYearViewControl $page */
 $page = $this;
+$creator = $page->getRequest()->getCreator();
+$category = $page->getRequest()->getWorkCategory();
+$year = $page->getRequest()->getUrlPart(3);
 /** @var Work[] $works */
 $works = $this->getWorks();
 
 ?>
+<div id="name_container">
+    <div>
+        <a href="<?php echo "/" . $creator->getUriName(); ?>">
+            <?php echo $creator->getShortCRID(); ?>
+        </a> /
+        <a href="<?php echo "/" . $creator->getUriName() . "/work"; ?>">
+            work
+        </a> /
+        <a href="<?php echo "/" . $creator->getUriName() . "/work/" . $category->value; ?>">
+            <?php echo $category->name ?>
+        </a> / <?php echo $year ?>
+    </div>
+</div>
 <div id="works_year_view">
     <?php foreach ($works as $work) { ?>
         <div class="work">

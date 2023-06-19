@@ -28,7 +28,7 @@
 }
 
 #logo_small svg:hover {
-    fill: yellow;
+    fill: aqua;
     /*stroke: cornflowerblue;*/ /* = color of text and border of rect */
     font-weight: bold;
 }
@@ -48,45 +48,59 @@
     margin-left: 150px;
 }
 
+#year_block {
+    display: flex;
+    flex-direction: column;
+}
+
+#year_block a {
+    height: 100%;
+    color: #ececec;
+}
+
+.year_name {
+    font-size: 0.9em;
+    width: 4rem;
+    height: 100%;
+}
+
+.year_name:hover {
+    color: coral;
+}
+
+.year_accent {
+    color: cornflowerblue;
+}
+
 .car_block {
     display: flex;
     flex-direction: row;
     margin: 10px 0;
 }
 
-.cat_name {
-    font-size: 2em;
-    font-weight: bold;
-    width: 100px;
-    height: 100%;
-}
-
-.cat_name:hover {
-    color: coral;
-}
-
 .image_block {
     display: flex;
     flex-direction: column;
-    width: 120vh;
+    width: 384vh;
     overflow: hidden;
 }
 
 .img_car {
     display: flex;
     flex-direction: row;
-    width: 210vh;
+    width: 672vh;
     position: relative;
-    left: -45vh;
+    left: -280vh;
     top: 0;
 }
 
 .image a img {
     filter: blur(0);
     transition: filter 3s;
-    max-width: 25vh;
-    max-height: 25vh;
+    max-width: 90vh;
+    max-height: 80vh;
     margin: auto auto 0 auto;
+    /*border: 20px solid lightgrey;*/
 }
 
 .image a {
@@ -95,8 +109,8 @@
 }
 
 .image {
-    width: 30vh;
-    height: 25vh;
+    width: 96vh;
+    height: 80vh;
     /*background-color: var(--background);*/
     display: flex;
     overflow: hidden;
@@ -104,26 +118,13 @@
 }
 
 .image_sub {
-    align-content: center;
     margin: 4px 0;
     font-size: 0.9em;
     font-style: italic;
-    text-align: center;
 }
 
-@media screen and (max-width: 900px) {
-    #name_container {
-        margin-bottom: 70px;
-    }
-    .car_block {
-        display: flex;
-        flex-direction: column;
-        margin: 10px 0;
-    }
-    #cars_container {
-        margin-left: 5px;
-    }
-    .image_sub {
-        /*display: none;*/
+@media (prefers-color-scheme: dark) {
+    #year_block a {
+        color: #555555;
     }
 }
