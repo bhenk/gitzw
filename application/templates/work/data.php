@@ -1,13 +1,13 @@
 <?php
-/** @var WorkViewControl $page */
+/** @var WorkViewControl $ctrl */
 
 use bhenk\gitzw\base\AAT;
 use bhenk\gitzw\base\Env;
 use bhenk\gitzw\ctrl\WorkViewControl;
 use chillerlan\QRCode\QRCode;
 
-$page = $this;
-$work = $page->getWork();
+$ctrl = $this;
+$work = $ctrl->getWork();
 $fullUrl = $work->getCanonicalUrl(null, true);
 $aat = new AAT();
 $types = $aat->getTypes($work->getTypes());
@@ -21,6 +21,9 @@ $media = $aat->getMedia($work->getMedia());
         <span class="resourceId"><?php echo $work->getRESID(); ?></span>
         <span title="copy ID" class="copyprevious"
               onclick="copyPrevious(this)" style="color: inherit;"> &#9776; </span>
+        <?php if ($ctrl->getRequest()->hasSessionUser()) { ?>
+            <span><a href="<?php echo "/admin/work/edit/" . $work->getRESID(); ?>" title="edit">  &#128280; </a></span>
+        <?php } ?>
     </div>
     <div id="data_content">
         <div>

@@ -16,6 +16,7 @@
 #home_band {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .band_part {

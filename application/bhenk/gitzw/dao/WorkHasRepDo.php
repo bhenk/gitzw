@@ -14,7 +14,9 @@ class WorkHasRepDo extends Join {
         private ?string $description = null,
         private bool    $hidden = false,
         private bool    $preferred = false,
-        private int     $ordinal = -1) {
+        private int     $ordinal = -1,
+        private bool    $carousel = true
+    ) {
         parent::__construct($ID, $FK_LEFT, $FK_RIGHT, $deleted);
     }
 
@@ -72,6 +74,20 @@ class WorkHasRepDo extends Join {
      */
     public function setOrdinal(int $ordinal): void {
         $this->ordinal = $ordinal;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCarousel(): bool {
+        return $this->carousel;
+    }
+
+    /**
+     * @param bool $carousel
+     */
+    public function setCarousel(bool $carousel): void {
+        $this->carousel = $carousel;
     }
 
 

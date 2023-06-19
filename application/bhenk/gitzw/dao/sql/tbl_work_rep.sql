@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `%tbl_name%`
     `hidden`      BOOLEAN,
     `preferred`   BOOLEAN,
     `ordinal`     INT,
+    `carousel`    BOOLEAN,
     FOREIGN KEY (FK_LEFT) REFERENCES tbl_works (ID),
     FOREIGN KEY (FK_RIGHT) REFERENCES tbl_representations (ID),
     PRIMARY KEY (`ID`)

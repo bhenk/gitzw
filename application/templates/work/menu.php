@@ -36,9 +36,15 @@ $menu = $this->getMenu();
         const collection = document.getElementsByClassName("menu_label");
         for (let i = 0; i < collection.length; i++) {
             if (collection[i] === el) {
-                collection[i].style.outline = "gray 1px solid";
-                collection[i].setAttribute("class", "menu_label active");
-                collection[i].nextElementSibling.style.display="flex";
+                if (collection[i].nextElementSibling.style.display ==="flex") {
+                    collection[i].style.outline = "";
+                    collection[i].setAttribute("class", "menu_label");
+                    collection[i].nextElementSibling.style.display="none";
+                } else {
+                    collection[i].style.outline = "gray 1px solid";
+                    collection[i].setAttribute("class", "menu_label active");
+                    collection[i].nextElementSibling.style.display = "flex";
+                }
             } else if (collection[i].id !== "<?php echo $menu->getActiveMenuId(); ?>") {
                 collection[i].style.outline = "";
                 collection[i].setAttribute("class", "menu_label");

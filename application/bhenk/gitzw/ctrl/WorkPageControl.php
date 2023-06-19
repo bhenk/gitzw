@@ -22,7 +22,7 @@ abstract class WorkPageControl extends Page3cControl {
     }
 
     public function renderColumn1(): void {
-        require_once Env::templatesDir() ."/base/logo.php";
+        require_once Env::templatesDir() ."/base/logo_small.php";
         require_once Env::templatesDir() ."/work/menu.php";
     }
 

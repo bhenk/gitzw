@@ -3,6 +3,7 @@
 namespace bhenk\gitzw\base;
 
 use bhenk\logger\log\Log;
+use JetBrains\PhpStorm\NoReturn;
 use function header;
 use function implode;
 use function in_array;
@@ -42,7 +43,7 @@ class Site {
         return self::hostName().$path;
     }
 
-    public static function redirect(string $path) : void {
+    #[NoReturn] public static function redirect(string $path) : void {
         $location = self::redirectLocation($path);
         self::$redirected = true;
         Log::info("Redirecting, location=$location");

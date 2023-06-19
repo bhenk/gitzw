@@ -206,6 +206,14 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
                                     ?>>
                                 </div>
                                 <div class="form_row">
+                                    <label class="fm_label" for="carousel_<?php echo $id; ?>">Carousel: </label>
+                                    <input type="checkbox" id="carousel_<?php echo $id; ?>"
+                                           name="carousel_<?php echo $id; ?>"
+                                           value="<?php echo $rep_rel->isCarousel(); ?>"<?php
+                                    echo ($rep_rel->isCarousel()) ? " checked" : ""
+                                    ?>>
+                                </div>
+                                <div class="form_row">
                                     <label class="fm_label" for="hidden_<?php echo $id; ?>">Hide: </label>
                                     <input type="checkbox" id="hidden_<?php echo $id; ?>"
                                            name="hidden_<?php echo $id; ?>"

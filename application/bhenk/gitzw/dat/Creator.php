@@ -90,7 +90,8 @@ class Creator implements StoredObjectInterface {
         $sql = "SELECT w.RESID, w.title_nl, w.title_en, w.preferred, YEAR(w.date) as `year`, r.REPID, wr.ordinal FROM tbl_works w "
             . "INNER JOIN tbl_work_rep wr ON w.ID = wr.FK_LEFT "
             . "INNER JOIN tbl_representations r ON wr.FK_RIGHT = r.ID "
-            . "WHERE w.creatorId = " . $this->getID() . " AND w.category = '" . $cat->name . "' AND w.hidden = 0 "
+            . "WHERE w.creatorId = " . $this->getID()
+            . " AND w.category = '" . $cat->name . "' AND w.hidden = 0 AND wr.carousel = 1 "
             . "ORDER BY w.ordering DESC, wr.ordinal LIMIT $offset,$limit;";
         $rows = Dao::workDao()->execute($sql);
         $images = [];

@@ -156,16 +156,14 @@ class WorkControl extends Page3cControl {
     }
 
     private function doUpdateWork(): void {
-        $resid = $_POST["resid"] ?? "";
-        $work = Store::workStore()->selectByRESID($resid);
-        if (!$work) {
-            (new NotFoundHandler())->handleRequest($this->getRequest());
-            return;
-        }
-        $this->setPageTitle("Edit $resid");
+        if (!$this->setWork()) return;
+        $this->past_RESID = Store::workStore()->selectNearestUpByOrder($this->work->getOrder())->getRESID();
+        $this->future_RESID = Store::workStore()->selectNearestDownByOrder($this->work->getOrder())->getRESID();
+        $this->setPageTitle("Edit " . $this->getWork()->getRESID());
         $this->mode = self::MODE_EDIT;
 
-        Log::info("Updating $resid");
+        Log::info("Updating " . $this->work->getRESID());
+        $work = $this->work;
         $date = $_POST["date"] ?? $work->getDate();
         list($dt, $format) = DateUtil::validate($date);
         if (!$dt) {
@@ -222,6 +220,7 @@ class WorkControl extends Page3cControl {
 
     private function doSaveRelation(int $repr_id): void {
         $workHasRep = $this->work->getRelations()->getRepRelations()[$repr_id];
+        $workHasRep->setCarousel(isset($_POST["carousel_$repr_id"]) ?? false);
         $workHasRep->setOrdinal($_POST["ordinal_$repr_id"] ?? -1);
         $workHasRep->setPreferred(isset($_POST["preferred_$repr_id"]) ?? false);
         $workHasRep->setHidden(isset($_POST["hidden_$repr_id"]) ?? false);
@@ -271,6 +270,8 @@ class WorkControl extends Page3cControl {
             return false;
         }
         $this->work = $work;
+        $this->past_RESID = Store::workStore()->selectNearestUpByOrder($this->work->getOrder())->getRESID();
+        $this->future_RESID = Store::workStore()->selectNearestDownByOrder($this->work->getOrder())->getRESID();
         $this->setPageTitle("Edit $resid");
         $this->mode = self::MODE_EDIT;
         return true;

@@ -81,7 +81,7 @@ class StoreControl extends Page3cControl {
 
     private function serialize(): void {
         Log::info("Serializing Store");
-        $pl = new ProgressListener("progress_store_s", array_sum($this->getSerializationStats()));
+        $pl = new ProgressListener("progress_store_s", array_sum($this->getStoreStats()));
         $this->serializationResult = Store::serialize($pl);
         $this->serializationStats = null;
         $this->serializedRecordCount = $pl->getProgress();
@@ -100,7 +100,7 @@ class StoreControl extends Page3cControl {
 
     private function deserialize(): void {
         Log::info("Serializing Store");
-        $pl = new ProgressListener("progress_store_d", array_sum($this->getStoreStats()));
+        $pl = new ProgressListener("progress_store_d", array_sum($this->getSerializationStats()));
         $this->storeResult = Store::deserialize($pl);
         $this->storeStats = null;
         $this->storedObjectCount = $pl->getProgress();
