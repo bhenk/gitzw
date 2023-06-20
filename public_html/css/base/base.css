@@ -4,8 +4,8 @@
     --font-color: #232323;
     --font-accent: blue;
     --logo-color: silver;
-    /*--link-color: forestgreen;*/
     --link-color: darkslategray;
+    color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -48,12 +48,24 @@
     margin-left: 150px;
 }
 
-#year_block {
+#year_block_below {
+    display: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: 5px;
+}
+
+#year_block_below a {
+    height: inherit;
+    color: #ececec;
+}
+
+#year_block_left {
     display: flex;
     flex-direction: column;
 }
 
-#year_block a {
+#year_block_left a {
     height: 100%;
     color: #ececec;
 }
@@ -70,6 +82,9 @@
 
 .year_accent {
     color: cornflowerblue;
+    font-size: 0.9em;
+    width: 4rem;
+    height: 100%;
 }
 
 .car_block {
@@ -100,7 +115,6 @@
     max-width: 90vh;
     max-height: 80vh;
     margin: auto auto 0 auto;
-    /*border: 20px solid lightgrey;*/
 }
 
 .image a {
@@ -111,20 +125,50 @@
 .image {
     width: 96vh;
     height: 80vh;
-    /*background-color: var(--background);*/
     display: flex;
     overflow: hidden;
     transition: width 3s;
 }
 
 .image_sub {
-    margin: 4px 0;
+    margin: 4px;
     font-size: 0.9em;
     font-style: italic;
 }
 
 @media (prefers-color-scheme: dark) {
-    #year_block a {
+    #year_block_left a, #year_block_below a {
         color: #555555;
+    }
+}
+
+@media (orientation: portrait) {
+    #year_block_below {
+        display: flex;
+    }
+
+    #year_block_left {
+        display: none;
+    }
+    #panel {
+        position: relative;
+    }
+    #name_container {
+        margin: 5px;
+    }
+    #cars_container {
+        margin: 0;
+    }
+    .image {
+        width: 100vw;
+        height: 97vh;
+    }
+    .image a img {
+        max-width: 95vw;
+        max-height: 93vh;
+    }
+    .img_car {
+        width: 900vw;
+        left: -300vw;
     }
 }
