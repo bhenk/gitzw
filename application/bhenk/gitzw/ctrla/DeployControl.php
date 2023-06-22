@@ -317,6 +317,11 @@ class DeployControl extends Page3cControl {
             $href = "/" . $creator->getUriName();
             $this->callUrl($href);
             $this->create_cache_count++;
+            foreach (WorkCategories::cases() as $cat) {
+                $href_ = $href . "/work/" . $cat->value;
+                $this->callUrl($href_);
+                $this->create_cache_count++;
+            }
             $this->updateSession([
                 "progress_" . self::ID_PROGRESS_CACHE => $this->create_cache_count,
             ]);

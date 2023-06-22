@@ -85,17 +85,21 @@ $years = $ctrl->getCatYears();
     });
 
     function detectOrientation() {
-        switch (screen.orientation.type) {
-            case "landscape-primary":
-            case "landscape-secondary":
-                or_hor = true;
-                break;
-            case "portrait-secondary":
-            case "portrait-primary":
-                or_hor = false;
-                break;
-            default:
-                or_hor = false;
+        try {
+            switch (screen.orientation.type) {
+                case "landscape-primary":
+                case "landscape-secondary":
+                    or_hor = true;
+                    break;
+                case "portrait-secondary":
+                case "portrait-primary":
+                    or_hor = false;
+                    break;
+                default:
+                    or_hor = false;
+            }
+        } catch (error) {
+            console.error(error);
         }
 
     }

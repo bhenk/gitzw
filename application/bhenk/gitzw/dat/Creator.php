@@ -2,6 +2,7 @@
 
 namespace bhenk\gitzw\dat;
 
+use bhenk\gitzw\base\Images;
 use bhenk\gitzw\dao\CreatorDo;
 use bhenk\gitzw\dao\Dao;
 use bhenk\gitzw\model\PersonTrait;
@@ -86,7 +87,7 @@ class Creator implements StoredObjectInterface {
      * @return array rows
      * @throws Exception
      */
-    public function getImageData(WorkCategories $cat, int $size = 400, int $offset = 0, int $limit = 100): array {
+    public function getImageData(WorkCategories $cat, array $size = Images::IMG_04, int $offset = 0, int $limit = 100): array {
         $sql = "SELECT w.RESID, w.title_nl, w.title_en, w.preferred, YEAR(w.date) as `year`, r.REPID, wr.ordinal FROM tbl_works w "
             . "INNER JOIN tbl_work_rep wr ON w.ID = wr.FK_LEFT "
             . "INNER JOIN tbl_representations r ON wr.FK_RIGHT = r.ID "
@@ -100,7 +101,7 @@ class Creator implements StoredObjectInterface {
         $resids = [];
         $urls = [];
         foreach ($rows as $row) {
-            $images[] = "/img/resized/" . $size . "x" . $size . "/" . $row["REPID"];
+            $images[] = "/img/resized/" . $size[0] . "x" . $size[1] . "/" . $row["REPID"];
             $title = "-no title-";
             if ($row["preferred"] == "nl") {
                 $first = $row["title_nl"];

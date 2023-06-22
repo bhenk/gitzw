@@ -99,7 +99,6 @@ $data = $ctrl->getData();
         let img_div = document.createElement("div");
         img_div.className = "image";
         img_div.innerHTML = '<a href="' + url + '"><img src="' + image + '" alt=""></a>';
-        img_div.firstElementChild.firstElementChild.style.filter = "blur(20px)";
         car.appendChild(img_div);
         setTimeout(moveAndBlur, to, index);
     }
@@ -112,9 +111,6 @@ $data = $ctrl->getData();
         let car = document.getElementById(id);
         car.nextElementSibling.innerText = "...";
         car.firstElementChild.style.width = "0";
-        let coll = car.children;
-        coll[2].firstElementChild.firstElementChild.style.filter = "blur(20px)";
-        coll[5].firstElementChild.firstElementChild.style.filter = "blur(0)";
         setTimeout(unload, to, index);
     }
 

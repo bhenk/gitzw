@@ -9,6 +9,8 @@ use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\site\Request;
 use Exception;
 use function array_diff;
+use function basename;
+use function dirname;
 use function glob;
 use function is_dir;
 use function scandir;
@@ -21,6 +23,9 @@ class FileExplorerControl extends Page3cControl {
     const MODE_DIRECTORY_VIEW = 1;
 
     private int $mode = self::MODE_OVERVIEW;
+
+    private array $imageFiles = [];
+    private bool $imagesScanned = false;
 
     function __construct(Request $request) {
         parent::__construct($request);
@@ -55,10 +60,16 @@ class FileExplorerControl extends Page3cControl {
         require_once Env::templatesDir() . $template;
     }
 
+    /**
+     * Side effect: $this->imageFiles array is filled.
+     * @return array
+     */
     public function getImageDirectories(): array {
+        $this->imageFiles = [];
         $base = Env::dataDir() . "/images";
         $array = [];
         $this->scanImageDirs($base, "images", $array);
+        $this->imagesScanned = true;
         return $array;
     }
 
@@ -79,6 +90,9 @@ class FileExplorerControl extends Page3cControl {
         $bytes = 0;
         foreach ($allFiles as $file) {
             $bytes += stat($file)["size"];
+            $this->imageFiles[] = basename(dirname($file, 2))
+                . "/" . basename(dirname($file, 1))
+                . "/" . basename($file);
         }
         return [$dirs, $files, $bytes];
     }
@@ -89,7 +103,7 @@ class FileExplorerControl extends Page3cControl {
 
     /**
      * @param string $path
-     * @return array<int, Representation[]>
+     * @return array<int, Representation[], string[]>
      * @throws Exception
      */
     public function getDirectoryContents(string $path): array {
@@ -102,6 +116,17 @@ class FileExplorerControl extends Page3cControl {
             $repids[] = $repStart . "/$file";
             $bytes += stat("$dir/$file")["size"];
         }
-        return [$bytes, Store::representationStore()->selectBatchByRepid($repids)];
+        return [$bytes, Store::representationStore()->selectBatchByRepid($repids), $files];
+    }
+
+    public function getREPIDS(): array {
+        return  Store::representationStore()->getREPIDS();
+    }
+
+    public function getImageNames(): array {
+        if (!$this->imagesScanned) {
+            $this->getImageDirectories();
+        }
+        return $this->imageFiles;
     }
 }

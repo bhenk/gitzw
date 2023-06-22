@@ -10,6 +10,13 @@ use bhenk\gitzw\site\Request;
 use function is_null;
 use function substr;
 
+/**
+ * Class handles editing of Representations
+ *
+ * Path: /admin/image/{REPID}
+ *
+ * How to get there a.o.: Admin > File > Explore, choose directory, choose image
+ */
 class ImageControl extends Page3cControl {
 
     const MODE_EDIT = 0;

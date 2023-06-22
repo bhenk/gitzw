@@ -1,0 +1,35 @@
+
+#overview_page {
+    margin: 0 15px;
+    font-size: 0.9em;
+}
+
+#columns {
+    display: flex;
+    flex-direction: row;
+}
+
+.col_head {
+    font-size: 1.2em;
+}
+
+.listing {
+    margin-left: 100px;
+}
+
+.listing div {
+    margin: 10px;
+    width: 350px;
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    align-items: start;
+}
+
+.span1 {
+    text-align: right;
+    width: 35px;
+    margin-right: 10px;
+}
+
+

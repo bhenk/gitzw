@@ -4,8 +4,27 @@
     font-size: 0.9em;
 }
 
-.directories {
+#columns {
+    display: flex;
+    flex-direction: row;
+}
+
+.col_head {
+    font-size: 1.2em;
+}
+
+.directories, .deltas {
     margin-left: 100px;
+}
+
+.deltas div {
+    margin: 10px;
+}
+
+.deltas span {
+    margin: 15px 10px 15px 0;
+    display: block;
+    font-size: 1.0em;
 }
 
 .directories div {

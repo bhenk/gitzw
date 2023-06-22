@@ -7,9 +7,11 @@ use bhenk\gitzw\dao\RepresentationDo;
 use bhenk\gitzw\model\ProgressListener;
 use bhenk\logger\log\Log;
 use Exception;
+use function array_map;
 use function array_values;
 use function count;
 use function gettype;
+use function intval;
 use function is_null;
 use function str_repeat;
 use function substr;
@@ -260,6 +262,12 @@ class RepresentationStore implements StoreInterface {
         return Dao::representationDao()->deleteBatch($IDs);
     }
 
+    /**
+     * Count Representations with a where clause
+     * @param string $where
+     * @return int
+     * @throws Exception
+     */
     public function countWhere(string $where): int {
         // SELECT COUNT(*) FROM `tbl_representations` WHERE
         $sql = "SELECT COUNT(*) FROM " . Dao::representationDao()->getTableName() . " WHERE " . $where . ";";
@@ -267,19 +275,62 @@ class RepresentationStore implements StoreInterface {
         return $result[0]["COUNT(*)"];
     }
 
+    /**
+     * Get the name of the serialization directory
+     *
+     * @see RepresentationStore::SERIALIZATION_DIRECTORY
+     * @return string
+     */
     public function getName(): string {
         return self::SERIALIZATION_DIRECTORY;
     }
 
+    /**
+     * Count Representations
+     *
+     * Same as {@link RepresentationStore::countWhere()} with $where = "1-1";
+     * @return int
+     * @throws Exception
+     */
     public function getObjectCount(): int {
         return $this->countWhere("1=1");
+    }
+
+    /**
+     * Get all REPIDs
+     * @param string $where
+     * @return string[]
+     * @throws Exception
+     */
+    public function getREPIDS(string $where = "1=1"):array {
+        $sql = "SELECT `REPID` FROM " . Dao::representationDao()->getTableName()
+            . " WHERE " . $where . " ORDER BY `REPID`;";
+        return array_map(function($x) {
+            return $x["REPID"];
+        }, Dao::representationDao()->execute($sql));
+    }
+
+    public function countByYear(string $where = "1=1"): array {
+        //SELECT SUBSTR(REPID, 1, 8) as rep_year, COUNT(*) as count FROM tbl_representations
+        //WHERE source = "OpticFilm 8200i"
+        //GROUP BY rep_year;
+        $sql = "SELECT SUBSTR(REPID, 1, 8) as rep_year, COUNT(*) as count FROM "
+            . Dao::representationDao()->getTableName()
+            . " WHERE " . $where
+            . " GROUP BY rep_year";
+        $rows = Dao::representationDao()->execute($sql);
+        $result = [];
+        foreach ($rows as $row) {
+            $result[$row["rep_year"]] = intval($row["count"]);
+        }
+        return  $result;
     }
 
     /**
      * Serialize all the Representations
      * @param string $datastore directory for serialization files
      * @param ProgressListener $pl
-     * @return int count of serialized representations
+     * @return array<string, int> count of serialized representations
      * @throws Exception
      * @noinspection DuplicatedCode
      */

@@ -3,6 +3,7 @@
 namespace bhenk\gitzw\ctrl;
 
 use bhenk\gitzw\base\Env;
+use bhenk\gitzw\base\Images;
 use bhenk\gitzw\dat\Creator;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\model\WorkCategories;
@@ -55,13 +56,13 @@ class CreatorWorkControl extends Page1cControl {
         $data = [];
         $categories = [WorkCategories::paint, WorkCategories::draw, WorkCategories::dry];
         foreach ($categories as $cat) {
-            $data[$cat->name] = $this->getCreator()->getImageData($cat, 400, 0, 200);
+            $data[$cat->name] = $this->getCreator()->getImageData($cat, Images::IMG_04, 0, 200);
         }
         return $data;
     }
 
     public function getCatData(): array {
-        return $this->getCreator()->getImageData($this->getCategory(), 1500, 0, 200);
+        return $this->getCreator()->getImageData($this->getCategory(), Images::IMG_15, 0, 200);
     }
 
     public function getCatYears(): array {

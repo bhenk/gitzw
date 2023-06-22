@@ -44,4 +44,11 @@ class Images {
         return "/img/resized/$dim/" . $REPID;
     }
 
+    public static function createImages(string $REPID): void {
+        $sizes = [self::IMG_01, self::IMG_04, self::IMG_08, self::IMG_15, self::IMG_30];
+        foreach ($sizes as $dimensions) {
+            self::locationForREPID($REPID, $dimensions);
+        }
+    }
+
 }

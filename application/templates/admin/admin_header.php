@@ -13,9 +13,9 @@ $last_login = $this->getRequest()->getSessionUser()->getLastLogin();
         </div>
     </div>
     <div class="dd_menu">
-        <button class="dd_button">Image</button>
+        <button class="dd_button">Representation</button>
         <div class="dd_content">
-            <a href="#">Bla bla</a>
+            <a href="/admin/reps/explore">Explore</a>
             <a href="#">menu B2 and a bit</a>
             <a href="#">menu B3</a>
         </div>
