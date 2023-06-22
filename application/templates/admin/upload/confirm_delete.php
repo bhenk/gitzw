@@ -1,16 +1,17 @@
 <?php
 
-use bhenk\gitzw\ctrla\UploadControl;
+use bhenk\gitzw\ctrla\FileUploadControl;
 
-/** @var UploadControl $ctrl */
+/** @var FileUploadControl $ctrl */
 $ctrl = $this;
 $files_to_handle = $ctrl->getFilesToHandle();
+echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 ?>
 
 <div id="upload_area">
     <h2>Confirm delete</h2>
 
-    <form id="confirm_delete" action="/admin/upload" method="post">
+    <form id="confirm_delete" action="/admin/file/upload" method="post">
         <?php include "show_selected_files.php"; ?>
         <div class="button_panel">
             <input type="hidden" name="action" value="confirmDelete">

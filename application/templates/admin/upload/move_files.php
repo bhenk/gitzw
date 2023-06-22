@@ -1,12 +1,13 @@
 <?php
 
 use bhenk\gitzw\base\Env;
-use bhenk\gitzw\ctrla\UploadControl;
+use bhenk\gitzw\ctrla\FileUploadControl;
 
-/** @var UploadControl $ctrl */
+/** @var FileUploadControl $ctrl */
 $ctrl = $this;
 $files_to_handle = $ctrl->getFilesToHandle();
 $options = $ctrl->getDestinationOptions();
+echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 ?>
 <div id="upload_area">
 
@@ -14,7 +15,7 @@ $options = $ctrl->getDestinationOptions();
 
     <?php include "show_selected_files.php"; ?>
 
-    <form id="move_selected" action="/admin/upload" method="post">
+    <form id="move_selected" action="/admin/file/upload" method="post">
         <label for="dir_select">Destination: </label>
         <select name="dir_select" id="dir_select" onchange="selectionChanged(this)">
             <?php foreach ($options as $option) { ?>

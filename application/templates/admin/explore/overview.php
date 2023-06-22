@@ -11,6 +11,7 @@ $bc = 0;
 
 $repids = $ctrl->getREPIDS();
 $img_names = $ctrl->getImageNames();
+echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 ?>
 
 <div id="overview_page">
@@ -35,7 +36,7 @@ $img_names = $ctrl->getImageNames();
                         <span class="span1"><?php echo $counts[0]; ?></span>
                         <span class="span1"><?php echo $counts[1]; ?></span>
                         <span class="span2"><?php echo round($counts[2] / 1000 / 1000, 1); ?></span>
-                        <a href="<?php echo "/admin/explore/$dir"; ?>"><?php echo $dir; ?></a>
+                        <a href="<?php echo "/admin/file/explore/$dir"; ?>"><?php echo $dir; ?></a>
                     </div>
                 <?php } ?>
                 <div>

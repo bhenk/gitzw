@@ -15,6 +15,7 @@ use function glob;
 use function is_dir;
 use function scandir;
 use function stat;
+use function str_contains;
 use function substr;
 
 class FileExplorerControl extends Page3cControl {
@@ -38,7 +39,7 @@ class FileExplorerControl extends Page3cControl {
         $this->setIncludeCopyright(false);
         $this->setIncludeColumn1(false);
         $this->setIncludeColumn3(false);
-        $act = $this->getRequest()->getUrlPart(2);
+        $act = $this->getRequest()->getUrlPart(3);
         if ($act == "") {
             $this->mode = self::MODE_OVERVIEW;
             $this->setPageTitle("File explorer");
@@ -98,7 +99,21 @@ class FileExplorerControl extends Page3cControl {
     }
 
     public function getPath(): string {
-        return substr($this->getRequest()->getCleanUrl(), 14);
+        // admin/file/explore/{path}
+        // {path} = images/hnq/2020
+        return "/" . $this->getRequest()->getLastParts(3);
+    }
+
+    public function getBackUrl(): string {
+        $ref = $this->getLocalReferrerUrl();
+        if ($ref) {
+            if (str_contains($ref, "admin/file/explore")) {
+                $ref = "/admin/file/explore";
+            } elseif (str_contains($ref, "admin/representation")) {
+                $ref = "/admin/representation/explore";
+            }
+        }
+        return $ref ?: "admin/file/explore";
     }
 
     /**
@@ -110,7 +125,7 @@ class FileExplorerControl extends Page3cControl {
         $dir = Env::dataDir() . "/$path";
         $files = array_diff(scandir($dir), array('..', '.'));
         $repids = [];
-        $repStart = substr($path, 7);
+        $repStart = substr($path, 8);
         $bytes = 0;
         foreach ($files as $file) {
             $repids[] = $repStart . "/$file";

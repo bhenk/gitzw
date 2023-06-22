@@ -17,7 +17,7 @@ use function substr;
  *
  * How to get there a.o.: Admin > File > Explore, choose directory, choose image
  */
-class ImageControl extends Page3cControl {
+class RepEditControl extends Page3cControl {
 
     const MODE_EDIT = 0;
 
@@ -53,7 +53,8 @@ class ImageControl extends Page3cControl {
     }
 
     public function getRepresentation(): Representation {
-        $repid = substr($this->getRequest()->getCleanUrl(), 12);
+        // admin/representation/edit/{REPID}
+        $repid = $this->getRequest()->getLastParts(3);
         return Store::representationStore()->selectByREPID($repid);
     }
 
@@ -63,7 +64,7 @@ class ImageControl extends Page3cControl {
 
     public function renderColumn2(): void {
         $template = match ($this->mode) {
-            self::MODE_EDIT => "/admin/image/edit.php",
+            self::MODE_EDIT => "/admin/reps/edit.php",
         };
         require_once Env::templatesDir() . $template;
     }

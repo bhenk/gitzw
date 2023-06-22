@@ -67,7 +67,9 @@ class WorkControl extends Page3cControl {
     }
 
     private function showNew(): void {
-        $repid = substr($this->getRequest()->getCleanUrl(), 15);
+        //
+        //$repid = substr($this->getRequest()->getCleanUrl(), 15);
+        $repid = $this->getRequest()->getLastParts(-1);
         $repr = Store::representationStore()->selectByREPID($repid);
         if ($repr) {
             $this->representation = $repr;

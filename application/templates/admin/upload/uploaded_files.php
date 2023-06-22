@@ -5,12 +5,13 @@ use bhenk\gitzw\base\Env;
 $dir = Env::public_html() . "/uploads";
 $files = array_diff(scandir($dir), array('..', '.'));
 $count = 0;
+echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 ?>
 
 <div id="upload_area">
     <h2>Upload files</h2>
 
-    <form id="upload" action="/admin/upload" method="post" enctype="multipart/form-data">
+    <form id="upload" action="/admin/file/upload" method="post" enctype="multipart/form-data">
         <input type="file" id="fileToUpload" name="the_files[]" multiple="multiple">
         <div>
             <input type="hidden" name="action" value="upload">
@@ -22,7 +23,7 @@ $count = 0;
     <h2>Uploaded <?php echo count($files) ?></h2>
 
     <?php if (!empty($files)) { ?>
-    <form id="uploaded" action="/admin/upload" method="post">
+    <form id="uploaded" action="/admin/file/upload" method="post">
         <div class="img_uploads">
             <?php foreach ($files as $name) {
                 $src_name = "/uploads/$name";

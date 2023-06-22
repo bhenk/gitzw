@@ -12,6 +12,7 @@ $serializationStats = $ctrl->getSerializationStats();
 $storeStats = $ctrl->getStoreStats();
 $daoCounts = Dao::countWhere();
 $ans = $ctrl->getTableAnalysis();
+echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 ?>
 
 <div id="store_page">

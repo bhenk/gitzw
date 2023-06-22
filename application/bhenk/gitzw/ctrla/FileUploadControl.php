@@ -35,7 +35,7 @@ use function str_starts_with;
  * * action = confirmDelete => doDelete() > 1
  * * action = moveFiles => doMoveFiles() > 1 or directory
  */
-class UploadControl extends Page3cControl {
+class FileUploadControl extends Page3cControl {
 
     const MODE_UPLOADED_FILES = 1;
     const MODE_CONFIRM_DELETE = 2;
@@ -156,28 +156,32 @@ class UploadControl extends Page3cControl {
                         $this->error_msg .= " - file already exists: $to <br/>";
                     } else {
                         rename($from, $to);
+
                         $rel = "$dir_select/" . $toName;
                         $repid = str_replace(Representation::IMG_DIR . "/", "", $rel);
-                        $rep = new Representation();
-                        $rep->setREPID($repid);
-                        set_error_handler(function ($errno, $errstr, $errfile, $errline) {
-                            $msg = " - while reading exif data<br/>"
-                                . " - - errno=$errno<br/>"
-                                . " - - errstr=$errstr<br/>"
-                                . " - - errfile=$errfile<br/>"
-                                . " - - errline=$errline<br/>";
-                            $this->error_msg .= $msg;
-                        });
-                        $exif = $rep->getExifData();
-                        restore_error_handler();
-                        $dateTime = $exif["EXIF"]["DateTimeOriginal"] ?? null;
-                        if (is_null($dateTime)) {
-                            $dateTime = $exif["IFD0"]["DateTime"] ?? null;
+                        // phone images cannot be representations
+                        if (!str_starts_with($repid, "phone")) {
+                            $rep = new Representation();
+                            $rep->setREPID($repid);
+                            set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+                                $msg = " - while reading exif data<br/>"
+                                    . " - - errno=$errno<br/>"
+                                    . " - - errstr=$errstr<br/>"
+                                    . " - - errfile=$errfile<br/>"
+                                    . " - - errline=$errline<br/>";
+                                $this->error_msg .= $msg;
+                            });
+                            $exif = $rep->getExifData();
+                            restore_error_handler();
+                            $dateTime = $exif["EXIF"]["DateTimeOriginal"] ?? null;
+                            if (is_null($dateTime)) {
+                                $dateTime = $exif["IFD0"]["DateTime"] ?? null;
+                            }
+                            $model = $exif["IFD0"]["Model"] ?? null;
+                            if ($model) $rep->setSource($model);
+                            if ($dateTime) $rep->setDate($dateTime);
+                            Store::representationStore()->persist($rep);
                         }
-                        $model = $exif["IFD0"]["Model"] ?? null;
-                        if ($model) $rep->setSource($model);
-                        if ($dateTime) $rep->setDate($dateTime);
-                        Store::representationStore()->persist($rep);
                     }
                 }
             }
@@ -186,7 +190,7 @@ class UploadControl extends Page3cControl {
                 $this->mode = self::MODE_MOVE_FILES;
             } else {
                 // redirect to directory
-                Site::redirect("/admin/explore/$dir_select");
+                Site::redirect("/admin/file/explore/$dir_select");
             }
         } else { // cancel
             $this->mode = self::MODE_UPLOADED_FILES;

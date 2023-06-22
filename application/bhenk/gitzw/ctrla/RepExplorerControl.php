@@ -7,7 +7,7 @@ use bhenk\gitzw\ctrl\Page3cControl;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\site\Request;
 
-class RepsControl extends Page3cControl {
+class RepExplorerControl extends Page3cControl {
 
     function __construct(Request $request) {
         parent::__construct($request);
@@ -27,7 +27,7 @@ class RepsControl extends Page3cControl {
     }
 
     public function renderColumn2(): void {
-        require_once Env::templatesDir() . "/admin/reps/explore.php";
+        require_once Env::templatesDir() . "/admin/reps/overview.php";
     }
 
     public function getCountByYear(): array {

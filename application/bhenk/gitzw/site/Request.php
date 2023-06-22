@@ -106,6 +106,18 @@ class Request {
     }
 
     /**
+     * Get the last parts of the cleaned url
+     *
+     * $offset may be positive or negative
+     *
+     * @param int $offset
+     * @return string
+     */
+    public function getLastParts(int $offset): string {
+        return implode("/", array_slice($this->url_array, $offset));
+    }
+
+    /**
      * Get the IP address of the client
      *
      * @return string

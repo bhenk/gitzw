@@ -1,8 +1,8 @@
 <?php
-/** @var ImageControl $ctrl */
+/** @var RepEditControl $ctrl */
 
 use bhenk\gitzw\base\Images;
-use bhenk\gitzw\ctrla\ImageControl;
+use bhenk\gitzw\ctrla\RepEditControl;
 
 $ctrl = $this;
 $repr = $ctrl->getRepresentation();
@@ -15,6 +15,7 @@ $exh_rels = $repr->getRelations()->getExhibitionRelations();
 $exhibits = $repr->getRelations()->getExhibitions();
 $exif_data = $repr->getSecureExifData();
 $exif_err = $exif_data["error"] ?? false;
+echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 ?>
 
 <div id="edit_image">
@@ -25,7 +26,7 @@ $exif_err = $exif_data["error"] ?? false;
         </div>
         <div class="img_form">
             <form id="edit_image" name="edit_image" action="/admin/image/<?php echo $repr->getREPID() ?>" method="post">
-                <h2><a href="/admin/explore/images/<?php echo dirname($repr->getREPID()); ?>"> &#8678;&nbsp;&nbsp; </a>
+                <h2><a href="/admin/file/explore/images/<?php echo dirname($repr->getREPID()); ?>"> &#8678;&nbsp;&nbsp; </a>
                     REPID: <span><?php echo $repr->getREPID(); ?></span>
                     <span title="copy REPID" class="copyprevious" onclick="copyPrevious(this)">&nbsp;&#9776; </span></h2>
                 <div>ID: <span><?php echo $repr->getID(); ?></span>

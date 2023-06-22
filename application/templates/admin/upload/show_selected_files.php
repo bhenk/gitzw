@@ -1,13 +1,14 @@
 <?php
 use bhenk\gitzw\base\Env;
-use bhenk\gitzw\ctrla\UploadControl;
+use bhenk\gitzw\ctrla\FileUploadControl;
 
-/** @var UploadControl $ctrl */
+/** @var FileUploadControl $ctrl */
 $ctrl = $this;
 $dir = Env::public_html() . "/uploads";
 $files = array_values(array_diff(scandir($dir), array('..', '.')));
 
 $files_to_handle = $ctrl->getFilesToHandle();
+echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 ?>
 
 <div class="img_uploads">

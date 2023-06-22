@@ -40,6 +40,7 @@ use chillerlan\QRCode\QRCode;
                     <div class="col-label"><label for="password">Password</label></div>
                     <div class="col-input">
                         <input type="password" id="password" name="password">
+                        <p id="cl_text">WARNING! Caps lock is ON.</p>
                     </div>
                 </div>
                 <div class="row"><input type="hidden" name="action" value="login"></div>
@@ -70,6 +71,21 @@ use chillerlan\QRCode\QRCode;
 
     </div>
 </div>
+
+<script>
+    let input = document.getElementById("password");
+    let pw_text = document.getElementById("cl_text");
+    pw_text.style.display = "none"
+
+    input.addEventListener("keyup", function(event) {
+        if (event.getModifierState("CapsLock")) {
+            pw_text.style.display = "block";
+            pw_text.style.color = "red";
+        } else {
+            pw_text.style.display = "none"
+        }
+    });
+</script>
 <!-- /login.php -->
 
 

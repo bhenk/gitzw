@@ -1,6 +1,7 @@
 <?php
 $user = $this->getRequest()->getSessionUser()->getName();
 $last_login = $this->getRequest()->getSessionUser()->getLastLogin();
+echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 ?>
 
 <div id="admin_header">
@@ -8,14 +9,14 @@ $last_login = $this->getRequest()->getSessionUser()->getLastLogin();
     <div class="dd_menu">
         <button class="dd_button">File</button>
         <div class="dd_content">
-            <a href="/admin/upload">Upload</a>
-            <a href="/admin/explore">Explore</a>
+            <a href="/admin/file/upload">Upload</a>
+            <a href="/admin/file/explore">Explore</a>
         </div>
     </div>
     <div class="dd_menu">
         <button class="dd_button">Representation</button>
         <div class="dd_content">
-            <a href="/admin/reps/explore">Explore</a>
+            <a href="/admin/representation/explore">Explore</a>
             <a href="#">menu B2 and a bit</a>
             <a href="#">menu B3</a>
         </div>

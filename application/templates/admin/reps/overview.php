@@ -1,10 +1,11 @@
 <?php
-/** @var RepsControl $ctrl */
+/** @var RepExplorerControl $ctrl */
 
-use bhenk\gitzw\ctrla\RepsControl;
+use bhenk\gitzw\ctrla\RepExplorerControl;
 
 $ctrl = $this;
 $countByYear = $ctrl->getCountByYear();
+echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 ?>
 <div id="overview_page">
 
@@ -20,7 +21,7 @@ $countByYear = $ctrl->getCountByYear();
                 <?php foreach($countByYear as $rep_year => $count) { ?>
                 <div>
                     <span class="span1"><?php echo $count; ?></span>
-                    <a href="/admin/explore/images/<?php echo $rep_year; ?>"><?php echo $rep_year ?></a>
+                    <a href="/admin/file/explore/images/<?php echo $rep_year; ?>"><?php echo $rep_year ?></a>
                 </div>
                 <?php } ?>
                 <div>

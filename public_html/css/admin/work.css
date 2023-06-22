@@ -45,7 +45,7 @@
 }
 
 input, select, textarea {
-    background-color: lightgray;
+    /*background-color: lightgray;*/
     border: none;
 }
 
@@ -131,8 +131,4 @@ span[id^='count_'] {
 input.add_repid {
     margin-left: auto;
     margin-right: 22px;
-}
-
-#submit_edit_work {
-    ;
 }

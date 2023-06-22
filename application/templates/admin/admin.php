@@ -3,7 +3,7 @@
 use bhenk\gitzw\dajson\Registry;
 
 $registry = Registry::actionRegistry();
-
+echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 ?>
 
 <div id="admin_page">

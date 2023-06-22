@@ -7,6 +7,7 @@ use bhenk\gitzw\dajson\Registry;
 
 $ctrl = $this;
 $registry = Registry::actionRegistry();
+echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 ?>
 
 <div id="deploy_page">
