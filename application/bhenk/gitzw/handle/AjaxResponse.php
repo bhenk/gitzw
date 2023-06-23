@@ -2,14 +2,17 @@
 
 namespace bhenk\gitzw\handle;
 
+use bhenk\gitzw\ctrla\RepExplorerControl;
 use bhenk\gitzw\model\ProgressListener;
 use bhenk\gitzw\site\Request;
+use bhenk\logger\log\Log;
 use function http_response_code;
 use function intval;
 use function json_encode;
 use function session_start;
 use function session_status;
 use function session_write_close;
+use function var_export;
 
 class AjaxResponse {
 
@@ -26,6 +29,8 @@ class AjaxResponse {
         $act = $request->getUrlPart(1);
         if ($act == "progress") {
             $this->getProgress();
+        } elseif ($act == "rep_explorer_sql") {
+            $this->getRepExplorerSql();
         } else {
             http_response_code(404);
             echo "Unknown resource: " . $request->getRawUrl();
@@ -51,6 +56,14 @@ class AjaxResponse {
             }
         }
         http_response_code(204);
+    }
+
+    private function getRepExplorerSql(): void {
+        Log::info(var_export($_POST, true));
+        http_response_code(200);
+        echo json_encode([
+            "sql" => RepExplorerControl::getIntermediateSql()
+        ]);
     }
 
 }

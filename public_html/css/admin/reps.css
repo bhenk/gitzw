@@ -13,11 +13,11 @@
     font-size: 1.2em;
 }
 
-.listing {
+.listing_block {
     margin-left: 100px;
 }
 
-.listing div {
+.listing_block div {
     margin: 10px;
     width: 350px;
     display: flex;
@@ -31,5 +31,63 @@
     width: 35px;
     margin-right: 10px;
 }
+
+#filter_block {
+}
+
+.form_block {
+    margin-top: 10px;
+}
+
+.form_row {
+    display: flex;
+    flex-direction: row;
+}
+.form_row div {
+    margin: 2px 0 5px 0;
+    align-items: baseline;
+}
+
+.middle {
+    width: 12em;
+}
+
+.take_part {
+    min-width: 8em;
+}
+
+label {
+    padding: 0 5px;
+    min-width: 8em;
+}
+.sources {
+    display: flex;
+    flex-direction: column;
+}
+
+.sources div label {
+    min-width: 8em;
+}
+
+.radio_vert {
+    display: flex;
+    flex-direction: column;
+}
+
+#sql {
+    line-height: 1.3em;
+    font-size: 0.9em;
+    max-width: 400px;
+    background-color: #cccccc;
+    color: #232323;
+    padding: 5px;
+}
+
+#sql_text {
+    display: block;
+}
+
+
+
 
 

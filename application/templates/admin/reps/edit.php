@@ -25,7 +25,7 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
             <img src="<?php echo $file_loc ?>" alt="representation">
         </div>
         <div class="img_form">
-            <form id="edit_image" name="edit_image" action="/admin/image/<?php echo $repr->getREPID() ?>" method="post">
+            <form id="edit_image" name="edit_image" action="/admin/representation/edit/<?php echo $repr->getREPID() ?>" method="post">
                 <h2><a href="/admin/file/explore/images/<?php echo dirname($repr->getREPID()); ?>"> &#8678;&nbsp;&nbsp; </a>
                     REPID: <span><?php echo $repr->getREPID(); ?></span>
                     <span title="copy REPID" class="copyprevious" onclick="copyPrevious(this)">&nbsp;&#9776; </span></h2>
@@ -59,7 +59,7 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
                     </div>
                     <div class="button_row">
                         <input type="hidden" name="action" value="representation">
-                        <input type="submit" id="submit" value="Save" name="submit" disabled>
+                        <input type="submit" id="submit" value="Save" name="submit">
                     </div>
                 </div>
                 <hr/>
@@ -151,17 +151,6 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 </div>
 
 <script>
-    const original = <?php echo $unchanged; ?>;
-    const form = document.getElementById("edit_image");
-    const source = document.getElementById("source");
-    const date = document.getElementById("date");
-    const desc = document.getElementById("description");
-    const submit = document.getElementById("submit");
-
-    form.addEventListener("input", function () {
-        let current = source.value + date.value + desc.value;
-        submit.disabled = current === original;
-    });
 
     window.addEventListener("DOMContentLoaded", () => {
         let elem = document.getElementById("description");

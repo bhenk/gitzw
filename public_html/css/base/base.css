@@ -33,6 +33,10 @@ a {
     color: var(--link-color);
 }
 
+a:hover {
+    color: white;
+}
+
 input[type=submit] {
     min-width: 100px;
     background: darkgray;

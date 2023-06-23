@@ -45,7 +45,7 @@ input[type=text] {
 }
 
 textarea {
-    background-color: lightgray;
+    /*background-color: lightgray;*/
     border: none;
 }
 

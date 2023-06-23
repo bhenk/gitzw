@@ -27,6 +27,12 @@
     text-align: center;
 }
 
+.rel_desc {
+    font-size: 0.85em;
+    color: gray;
+    margin: 20px 0 40px 50px;
+}
+
 .others {
     margin-bottom: 100px;
 }

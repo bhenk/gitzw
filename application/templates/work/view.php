@@ -8,6 +8,7 @@ use bhenk\gitzw\ctrl\WorkViewControl;
 $page = $this;
 $work = $page->getWork();
 $repr = $work->getRelations()->getPreferredRepresentation();
+$relation = $repr->getRelations()->getWorkRelation($work->getID());
 $location_30 = $repr->getFileLocation(Images::IMG_30);
 $location_15 = $repr->getFileLocation(Images::IMG_15);
 $location_08 = $repr->getFileLocation(Images::IMG_08);
@@ -26,7 +27,9 @@ $exif_err = $exif_data["error"] ?? false;
         </picture>
         <span><?php echo $work->getTitles("&lt;no title&gt;")
                 . " - " . $work->getMedia() . " - " . $work->getDimensions(); ?></span>
+        <div class="rel_desc"><?php echo $relation->getDescription(); ?></div>
     </div>
+
     <?php if (!empty($others)) { ?>
         <div class="others" >
             <?php foreach ($others as $other) { ?>

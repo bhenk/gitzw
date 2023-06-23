@@ -179,7 +179,7 @@ $file_loc = $repr->getFileLocation(Images::IMG_15);
                                 <div class="form_row">
                                     <label class="fm_label" for="repid_<?php echo $id; ?>">REPID: </label>
                                     <span id="repid_<?php echo $id; ?>">
-                                        <a href="/admin/image/<?php echo $representation->getREPID(); ?>">
+                                        <a href="/admin/representation/edit/<?php echo $representation->getREPID(); ?>">
                                             <?php echo $representation->getREPID(); ?>
                                         </a>
                                     </span>
