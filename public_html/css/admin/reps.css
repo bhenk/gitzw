@@ -74,6 +74,16 @@ label {
     flex-direction: column;
 }
 
+.radio_vert div {
+    display: flex;
+    flex-direction: row;
+}
+
+.radio_vert div label {
+    min-width: 7em;
+    display: block;
+}
+
 #sql {
     line-height: 1.3em;
     font-size: 0.9em;
@@ -85,6 +95,11 @@ label {
 
 #sql_text {
     display: block;
+}
+.button_row {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 10px 0;
 }
 
 

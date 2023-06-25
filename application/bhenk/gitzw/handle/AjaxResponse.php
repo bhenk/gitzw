@@ -2,17 +2,15 @@
 
 namespace bhenk\gitzw\handle;
 
-use bhenk\gitzw\ctrla\RepExplorerControl;
-use bhenk\gitzw\model\ProgressListener;
+use bhenk\gitzw\daf\RepFilter;
 use bhenk\gitzw\site\Request;
-use bhenk\logger\log\Log;
+use Exception;
 use function http_response_code;
 use function intval;
 use function json_encode;
 use function session_start;
 use function session_status;
 use function session_write_close;
-use function var_export;
 
 class AjaxResponse {
 
@@ -59,11 +57,17 @@ class AjaxResponse {
     }
 
     private function getRepExplorerSql(): void {
-        Log::info(var_export($_POST, true));
-        http_response_code(200);
-        echo json_encode([
-            "sql" => RepExplorerControl::getIntermediateSql()
-        ]);
+        try {
+            $filter = new RepFilter();
+            http_response_code(200);
+            echo json_encode([
+                "source" => $filter->getSourceCountSql()
+            ]);
+        } catch (Exception $e) {
+            echo json_encode([
+                "source" => $e->getMessage()
+            ]);
+        }
     }
 
 }

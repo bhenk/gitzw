@@ -4,7 +4,7 @@
 
 function copyPrevious(ele) {
 	let el = document.createElement('textarea');
-	el.value = ele.previousElementSibling.innerHTML;
+    el.value = ele.previousElementSibling.innerHTML;
 	el.setAttribute('readonly', '');
     el.style.position = 'absolute';
     el.style.left = '-9999px';
@@ -20,6 +20,25 @@ function copyPrevious(ele) {
 	}
 	ele.innerHTML = "&nbsp; &#9788; ";
 }
+
+function copyPrevious2(ele) {
+    let val = ele.previousElementSibling.innerHTML
+        .replaceAll("<br>", "\n")
+        .replaceAll("<br/>", "\n")
+        .replaceAll("&lt;", "<")
+        .replaceAll("&gt;", ">")
+        .replaceAll("&nbsp;&nbsp;", "\t");
+    const copyContent = async () => {
+        try {
+            await navigator.clipboard.writeText(val);
+            console.log('Content copied to clipboard');
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+        }
+    }
+    copyContent();
+}
+
 
 /* end copy previous */
 

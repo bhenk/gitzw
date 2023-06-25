@@ -316,9 +316,9 @@ class RepresentationStore implements StoreInterface {
         if (!empty($src)) $src .= (is_int($hidden) || is_int($carousel)) ? $op1 : "";
         $hdn = (is_int($hidden)) ? (" wr.hidden=$hidden" . ((is_int($carousel)) ? $op2 : "")) : "";
         $csl = (is_int($carousel)) ? " wr.carousel=$carousel" : "";
-        $whr = empty("$src$hdn$csl") ? ";" : "\nWHERE$src$hdn$csl;";
+        $whr = empty("$src$hdn$csl") ? ";" : "\n" . "WHERE$src$hdn$csl;";
         return "SELECT r.REPID FROM $tnr r"
-            . "\nINNER JOIN $tnwr wr ON r.ID = wr.FK_RIGHT"
+            .  "\n" . "INNER JOIN $tnwr wr ON r.ID = wr.FK_RIGHT"
             . "$whr";
     }
 

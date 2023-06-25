@@ -12,6 +12,7 @@ use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function is_null;
+use function ob_clean;
 use function ob_start;
 use function session_start;
 use function strpos;
@@ -29,6 +30,7 @@ class Handler extends AbstractHandler {
         } catch (Throwable $e) {
             Log::error("Caught exception while serving request: " . $_SERVER["REQUEST_URI"],
                 [$_SERVER, $e]);
+            ob_clean();
             $ctrl = new ErrorControl($request);
             $ctrl->setError($e);
             $ctrl->handleRequest();
