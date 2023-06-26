@@ -19,10 +19,10 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
                     <span class="span1">count</span>
                     <span>crid year</span>
                 </div>
-                <?php foreach ($countByYear as $rep_year => $count) { ?>
+                <?php foreach ($countByYear as $cr_year => $count) { ?>
                     <div>
                         <span class="span1"><?php echo $count; ?></span>
-                        <a href="/admin/file/explore/images/<?php echo $rep_year; ?>"><?php echo $rep_year ?></a>
+                        <a href="/admin/representation/explore/<?php echo $cr_year; ?>"><?php echo $cr_year ?></a>
                     </div>
                 <?php } ?>
                 <div>
@@ -35,8 +35,8 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
             <span class="col_head">Filter</span>
             <div class="form_block">
                 <form id="filter_form" action="/admin/representation/explore" method="post"
-                      onchange="formChanged(this)" onkeyup="formChanged(this)">
-                    <hr/>
+                      onchange="formSChanged(this)" onkeyup="formSChanged(this)">
+
                     <div class="form_row">
                         <div class="take_part">
                             <div>
@@ -58,7 +58,7 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
                         <div class="sources middle">
                             <?php $c = 0;
                             foreach ($countBySource as $source => $count) { ?>
-                                <div class="form_row">
+                                <div class="form_row_small">
                                     <input type="checkbox" id="src_<?php echo $c; ?>" name="src[]"
                                            value="<?php echo $source; ?>"<?php
                                     echo in_array($source, $filter->getSrc()) ? " checked" : "";
@@ -68,10 +68,19 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
                                 </div>
                                 <?php $c++;
                             } ?>
+                            <div class="form_row_small">
+                                <label></label>
+                                <span>&nbsp;&nbsp; (<?php echo array_sum($countBySource); ?>)</span>
+                            </div>
                         </div>
                     </div>
-                    <hr/>
+
                     <div class="form_row">
+                        <div class="take_part">
+                            <input type="checkbox" id="hdn_on" name="hdn_on"<?php
+                            echo $filter->isHdnOn() ? " checked" : "" ?>/>
+                            <label for="hdn_on">Hidden</label>
+                        </div>
                         <div class="radio_vert">
                             <div>
                                 <input type="radio" id="radio_hdn_and" name="hdn_and_or" value="AND"<?php
@@ -86,19 +95,20 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
                                 <label for="radio_hdn_or">OR</label>
                             </div>
                         </div>
-                        <div class="take_part">
-                            <input type="checkbox" id="hdn_on" name="hdn_on"<?php
-                            echo $filter->isHdnOn() ? " checked" : "" ?>/>
-                            <label for="hdn_on">Hidden</label>
-                        </div>
+
                         <div class="middle">
                             <input type="checkbox" id="hidden" name="hidden"<?php
                             echo $filter->getHidden() == 1 ? " checked" : "" ?>/>
                             <label for="hidden">Is hidden</label>
                         </div>
                     </div>
-                    <hr/>
+
                     <div class="form_row">
+                        <div class="take_part">
+                            <input type="checkbox" id="crl_on" name="crl_on"<?php
+                            echo $filter->isCrlOn() ? " checked" : "" ?>/>
+                            <label for="crl_on">Carousel</label>
+                        </div>
                         <div class="radio_vert">
                             <div>
                                 <input type="radio" id="radio_crl_and" name="crl_and_or" value="AND"<?php
@@ -113,11 +123,6 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
                                 <label for="radio_crl_or">OR</label>
                             </div>
                         </div>
-                        <div class="take_part">
-                            <input type="checkbox" id="crl_on" name="crl_on"<?php
-                            echo $filter->isCrlOn() ? " checked" : "" ?>/>
-                            <label for="crl_on">Carousel</label>
-                        </div>
                         <div class="middle">
                             <input type="checkbox" id="carousel" name="carousel"<?php
                             echo $filter->getCarousel() == 1 ? " checked" : "" ?>/>
@@ -126,24 +131,43 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 
                     </div>
 
-                    <div id="sql">
-                        <span id="sql_text"><?php
+                    <div class="sql">
+                        <span id="source_text"><?php
                             echo str_replace("\t", "&nbsp;&nbsp;",
-                                str_replace("\n", "<br/>", $filter->getSourceCountSql()));
+                                str_replace("\n", "<br/>", $filter->getSSourceCountSql()));
                             ?></span>
                         <span title="copy sql" class="copyprevious"
                               onclick="copyPrevious2(this)" style="color: inherit;"> &#9776; </span>
                     </div>
-                    <hr/>
+                    <div class="button_row">
+                        <input type="hidden" name="action" value="source">
+                        <input type="submit" name="submit" value="Execute"/>
+                    </div>
+                </form>
+                <form id="orphan_form" action="/admin/representation/explore" method="post"
+                      onchange="formOChanged(this)" onkeyup="formOChanged(this)">
                     <div class="form_row">
                         <div>
-                            <input type="checkbox" id="work_orphan" name="work_orphan"/>
+                            <input type="checkbox" id="work_orphan" name="work_orphans"<?php
+                            echo $filter->isWorkOrphans() ? " checked" : "";
+                            ?>/>
                             <label for="work_orphan">Work orphans</label>
-                            <input type="checkbox" id="exh_orphan" name="exh_orphan"/>
+                            <input type="checkbox" id="exh_orphan" name="exh_orphans"<?php
+                            echo $filter->isExhOrphans() ? " checked" : "";
+                            ?>/>
                             <label for="exh_orphan">Exhibition orphans</label>
                         </div>
                     </div>
+                    <div class="sql">
+                        <span id="orphan_text"><?php
+                            echo str_replace("\t", "&nbsp;&nbsp;",
+                                str_replace("\n", "<br/>", $filter->getOSourceCountSql()));
+                            ?></span>
+                        <span title="copy sql" class="copyprevious"
+                              onclick="copyPrevious2(this)" style="color: inherit;"> &#9776; </span>
+                    </div>
                     <div class="button_row">
+                        <input type="hidden" name="action" value="orphan">
                         <input type="submit" name="submit" value="Execute"/>
                         <input type="submit" name="submit" value="Clear"/>
                     </div>
@@ -155,18 +179,34 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 </div>
 
 <script>
-    function formChanged(form) {
+    function formSChanged(form) {
         let xhr = new XMLHttpRequest();
         let data = new FormData(form);
-        data.append("mode", "intermediate");
+        data.append("mode", "source");
         xhr.open("POST", "/ajax/rep_explorer_sql")
         xhr.send(data);
 
         xhr.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
-                let sql_text = document.getElementById("sql_text");
+                let source_text = document.getElementById("source_text");
                 let json = JSON.parse(this.responseText);
-                sql_text.innerHTML = json.source.replace(/\n/g, "<br/>").replace(/\t/g, "&nbsp;&nbsp;");
+                source_text.innerHTML = json.source.replace(/\n/g, "<br/>").replace(/\t/g, "&nbsp;&nbsp;");
+            }
+        }
+    }
+
+    function formOChanged(form) {
+        let xhr = new XMLHttpRequest();
+        let data = new FormData(form);
+        data.append("mode", "orphan");
+        xhr.open("POST", "/ajax/rep_explorer_sql")
+        xhr.send(data);
+
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                let orphan_text = document.getElementById("orphan_text");
+                let json = JSON.parse(this.responseText);
+                orphan_text.innerHTML = json.orphan.replace(/\n/g, "<br/>").replace(/\t/g, "&nbsp;&nbsp;");
             }
         }
     }

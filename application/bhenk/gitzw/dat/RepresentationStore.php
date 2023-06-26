@@ -149,6 +149,24 @@ class RepresentationStore implements StoreInterface {
     }
 
     /**
+     * Select Representations with clause that can include fields from relation table to Work
+     *
+     * @param string $where include the WHERE
+     * @param int $offset
+     * @param int $limit
+     * @return Representation[]
+     * @throws Exception
+     */
+    public function selectJoinWorkHasRepWhere(string $where, int $offset = 0, int $limit = PHP_INT_MAX): array {
+        $sql = "SELECT r.* FROM " . Dao::representationDao()->getTableName() . " r"
+            . " INNER JOIN " . Dao::workHasRepDao()->getTableName() . " wr ON r.ID = wr.FK_RIGHT"
+            . " $where LIMIT $offset, $limit;";
+        /** @var RepresentationDo[] $dos */
+        $dos = Dao::representationDao()->selectSql($sql);
+        return $this->make($dos);
+    }
+
+    /**
      * @param array $repids array with
      * @param int $offset
      * @param int $limit
@@ -300,74 +318,18 @@ class RepresentationStore implements StoreInterface {
         }, Dao::representationDao()->execute($sql));
     }
 
-    public function getREPIDsByFilterSql(string|bool $source,
-                                      int|bool    $hidden,
-                                      int|bool    $carousel,
-                                      int         $operator = 11): string {
-        //SELECT r.REPID FROM tbl_representations r
-        //INNER JOIN tbl_work_rep wr ON r.ID = wr.FK_RIGHT
-        //WHERE r.source="MP250 series" AND/OR wr.hidden = 0 AND/OR wr.carousel = 1;
-        $tnr = Dao::representationDao()->getTableName();
-        $tnwr = Dao::workHasRepDao()->getTableName();
-        $op1 = ($operator >= 10) ? " AND" : " OR";
-        $op2 = (($operator % 10) == 1 ) ? " AND" : " OR";
-        $src = "";
-        if (is_string($source)) $src = " $source";
-        if (!empty($src)) $src .= (is_int($hidden) || is_int($carousel)) ? $op1 : "";
-        $hdn = (is_int($hidden)) ? (" wr.hidden=$hidden" . ((is_int($carousel)) ? $op2 : "")) : "";
-        $csl = (is_int($carousel)) ? " wr.carousel=$carousel" : "";
-        $whr = empty("$src$hdn$csl") ? ";" : "\n" . "WHERE$src$hdn$csl;";
-        return "SELECT r.REPID FROM $tnr r"
-            .  "\n" . "INNER JOIN $tnwr wr ON r.ID = wr.FK_RIGHT"
-            . "$whr";
-    }
-
-    public function getREPIDsByFilter(string|bool|null $source,
-                                         int|bool    $hidden,
-                                         int|bool    $carousel,
-                                         int         $operator = 11): array {
-        $sql = $this->getREPIDsByFilterSql($source, $hidden, $carousel, $operator);
-        return array_map(function($x) {
-            return $x["REPID"];
-        }, Dao::representationDao()->execute($sql));
-    }
-
-    /**
-     * Get orphan REPIDs from Work AND Exhibitions or either of them
-     *
-     * @param bool $orphanWork true for selecting orphans from Work
-     * @param bool $orphanExh true for selecting orphans from Exhibitions
-     * @return string[]
-     * @throws Exception
-     */
-    public function getOrphanREPIDs(bool $orphanWork = true, bool $orphanExh = true): array {
-        //SELECT * FROM tbl_representations
-        //WHERE ID NOT IN (SELECT FK_RIGHT FROM tbl_work_rep)
-        //AND ID NOT IN (SELECT FK_RIGHT FROM tbl_exh_rep);
-        $workClause = $orphanWork ? "ID NOT IN (SELECT FK_RIGHT FROM "
-            . Dao::workHasRepDao()->getTableName() . ")" : "1=1";
-        $exhClause = $orphanExh ? "ID NOT IN (SELECT FK_RIGHT FROM "
-            . Dao::exhHasRepDao()->getTableName() . ")" : "1=1";
-        $sql = "SELECT REPID FROM " . Dao::representationDao()->getTableName()
-            . " WHERE " . $workClause
-            . " AND " . $exhClause . ";";
-        return array_map(function($x) {
-            return $x["REPID"];
-        }, Dao::representationDao()->execute($sql));
-    }
-
     public function countByYear(string $where = "1=1"): array {
         //SELECT SUBSTR(REPID, 1, 8) as rep_year, COUNT(*) as count FROM tbl_representations
         //WHERE source = "OpticFilm 8200i"
         //GROUP BY rep_year;
-        $sql = "SELECT SUBSTR(REPID, 1, 8) as rep_year, COUNT(*) as count FROM "
+        $sql = "SELECT SUBSTR(REPID, 1, 8) as cr_year, COUNT(*) as count FROM "
             . Dao::representationDao()->getTableName()
             . " WHERE " . $where
-            . " GROUP BY rep_year";
+            . " GROUP BY cr_year ORDER BY cr_year";
         $rows = Dao::representationDao()->execute($sql);
         $result = [];
         foreach ($rows as $row) {
-            $result[$row["rep_year"]] = intval($row["count"]);
+            $result[$row["cr_year"]] = intval($row["count"]);
         }
         return  $result;
     }

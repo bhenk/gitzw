@@ -10,8 +10,8 @@ use function PHPUnit\Framework\assertEquals;
 class RepFilterTest extends TestCaseRo {
 
     public function testConstructor() {
-        $filter = new RepFilter();
-        $result = $filter->getSourceCountSql();
+        $filter = new RepExplorerFilter();
+        $result = $filter->getSSourceCountSql();
         $split = explode("\n", $result);
         assertEquals("SELECT r.source, COUNT(*) as count FROM tbl_representations r", $split[0]);
         assertEquals("INNER JOIN tbl_work_rep wr ON r.ID = wr.FK_RIGHT", $split[1]);

@@ -4,11 +4,12 @@ namespace bhenk\gitzw\dat;
 
 use bhenk\logger\unit\LogAttribute;
 use bhenk\TestCaseRo;
+use function array_values;
 use function count;
 use function PHPUnit\Framework\assertEquals;
 use function var_dump;
 
-#[LogAttribute(true)]
+#[LogAttribute(false)]
 class RoRepresentationStoreTest extends TestCaseRo {
 
     public function testCountBySource() {
@@ -17,13 +18,16 @@ class RoRepresentationStoreTest extends TestCaseRo {
         assertEquals(1, 1);
     }
 
-    public function testGetREPIDsByFilter() {
-        $s = "NOT (r.source='OpticFilm 8200i' OR r.source='MP250 series')";
-        $h = false;
-        $c = 0;
-        $result = Store::representationStore()->getREPIDsByFilter($s, $h, $c, 10);
-        //var_dump($result);
-        assertEquals(1, 1);
+    public function testSelectJoinWorkHasRepWhere() {
+        $where = "WHERE 1=1";
+        $reps = Store::representationStore()->selectJoinWorkHasRepWhere($where, 0, 10);
+        assertEquals(10, count($reps));
+
+        $where = "WHERE wr.hidden=0";
+        $reps = Store::representationStore()->selectJoinWorkHasRepWhere($where, 0, 10);
+        assertEquals(10, count($reps));
+        self::assertInstanceOf(Representation::class, array_values($reps)[0]);
     }
+
 
 }

@@ -39,9 +39,13 @@
     margin-top: 10px;
 }
 
-.form_row {
+.form_row, .form_row_small {
     display: flex;
     flex-direction: row;
+}
+.form_row {
+    border-top: 1px solid gray;
+    padding-top: 5px;
 }
 .form_row div {
     margin: 2px 0 5px 0;
@@ -71,7 +75,7 @@ label {
 
 .radio_vert {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 .radio_vert div {
@@ -80,29 +84,51 @@ label {
 }
 
 .radio_vert div label {
-    min-width: 7em;
+    min-width: 4em;
     display: block;
 }
 
-#sql {
+.sql {
     line-height: 1.3em;
     font-size: 0.9em;
     max-width: 400px;
     background-color: #cccccc;
     color: #232323;
     padding: 5px;
+    margin: 10px 0;
 }
 
-#sql_text {
+#source_text, #orphan_text {
     display: block;
 }
 .button_row {
     display: flex;
     flex-direction: row-reverse;
-    margin: 10px 0;
+    margin: 15px 0;
 }
 
+#year_view {
+    margin: 0 15px;
+    font-size: 0.9em;
+}
 
+.representations {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.represent {
+    margin: 10px;
+    font-size: 0.85em;
+    text-align: center;
+}
+
+.represent img {
+    max-height:100px;
+    margin: auto;
+    display: block;
+}
 
 
 

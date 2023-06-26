@@ -2,7 +2,7 @@
 
 namespace bhenk\gitzw\handle;
 
-use bhenk\gitzw\daf\RepFilter;
+use bhenk\gitzw\daf\RepExplorerFilter;
 use bhenk\gitzw\site\Request;
 use Exception;
 use function http_response_code;
@@ -58,11 +58,18 @@ class AjaxResponse {
 
     private function getRepExplorerSql(): void {
         try {
-            $filter = new RepFilter();
+            $mode = $_POST["mode"] ?? false;
+            $filter = new RepExplorerFilter();
             http_response_code(200);
-            echo json_encode([
-                "source" => $filter->getSourceCountSql()
-            ]);
+            if ($mode == "source") {
+                echo json_encode([
+                    "source" => $filter->getSSourceCountSql()
+                ]);
+            } else {
+                echo json_encode([
+                    "orphan" => $filter->getOSourceCountSql()
+                ]);
+            }
         } catch (Exception $e) {
             echo json_encode([
                 "source" => $e->getMessage()
