@@ -67,7 +67,7 @@ class RepExplorerFilter {
     public function getSREPIDCountSql(): string {
         $tnr = Dao::representationDao()->getTableName();
         $tnwr = Dao::workHasRepDao()->getTableName();
-        return "SELECT SUBSTR(r.REPID, 1, 8) as cr_year, COUNT(*) as count FROM $tnr r"
+        return "SELECT SUBSTR(r.REPID, 1, 8) as cr_year, COUNT(DISTINCT r.ID) as count FROM $tnr r"
             .  "\n" . "INNER JOIN $tnwr wr ON r.ID = wr.FK_RIGHT"
             . "$this->s_where"
             . "\nGROUP BY cr_year ORDER BY cr_year;";
