@@ -84,7 +84,13 @@ class WorkViewControl extends WorkPageControl {
             "@type" => "WebPage",
             "@id" => Env::HTTP_URL . "/" . $canonical,
             "url" => Env::HTTPS_URL . "/" . $canonical,
-            "mainEntity" => [ "@id" => $this->getWork()->getSDId() ]
+            "mainEntity" => [ "@id" => $this->getWork()->getSDId()],
+            "relatedLink" => [
+                Env::HTTPS_URL . "/"
+                    . Store::workStore()->selectNearestUpByOrder($this->work->getOrder())->getCanonicalUrl(),
+                Env::HTTPS_URL . "/"
+                    . Store::workStore()->selectNearestDownByOrder($this->work->getOrder())->getCanonicalUrl()
+            ]
         ];
         $image_sd = $this->work->getRelations()->getPreferredRepresentation()->getStructuredData();
         $image_sd["copyrightHolder"] = $this->work->getCreator()->getCRID();

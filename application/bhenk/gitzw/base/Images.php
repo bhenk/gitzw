@@ -5,6 +5,7 @@ namespace bhenk\gitzw\base;
 use bhenk\logger\log\Log;
 use ImagickException;
 use function dirname;
+use function file_exists;
 use function is_dir;
 use function is_file;
 use function mkdir;
@@ -27,7 +28,7 @@ class Images {
      * @return string relative filepath to the image
      * @throws ImagickException
      */
-    public static function locationForREPID(string $REPID, array $dimensions): string {
+    public static function locationForREPID(string $REPID, array $dimensions, bool $create = true): string {
         $width = $dimensions[0];
         $height = $dimensions[1];
         $dim = $width . "x$height";
@@ -37,7 +38,7 @@ class Images {
         if (!is_dir($img_dir)) {
             mkdir($img_dir, 0777, true);
         }
-        if (!is_file($img_file)) {
+        if (!is_file($img_file) && $create) {
             $src = Env::dataDir() . "/images/$REPID";
             ImagePlant::resize($src, $img_file, $width, $height);
         }
@@ -45,10 +46,26 @@ class Images {
     }
 
     public static function createImages(string $REPID): void {
-        $sizes = [self::IMG_01, self::IMG_04, self::IMG_08, self::IMG_15, self::IMG_30];
+        $sizes = self::getSizes();
         foreach ($sizes as $dimensions) {
             self::locationForREPID($REPID, $dimensions);
         }
+    }
+
+    public static function getSizes(): array {
+        return [self::IMG_01, self::IMG_04, self::IMG_08, self::IMG_15, self::IMG_30];
+    }
+
+    public static function getFileLocations(string $REPID): array {
+        $locations = [];
+        foreach (self::getSizes() as $size) {
+            $location = self::locationForREPID($REPID, $size, false);
+            $file = Env::public_html() . $location;
+            if (file_exists($file)) {
+                $locations[] = $file;
+            }
+        }
+        return $locations;
     }
 
 }

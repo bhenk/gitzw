@@ -22,7 +22,7 @@ if ($has_repr) {
             <?php if ($has_repr) { ?>
                 <img src="<?php echo $file_loc; ?>" alt="representation">
             <?php } else { ?>
-                <a href="/admin/explore" target="_blank">
+                <a href="/admin/representation/explore" target="_blank">
                     <div class="no_image">
                         <picture class="glower">
                             <source srcset="/img/ico/image-file-add-100-w.png" media="(prefers-color-scheme: dark)">
@@ -69,7 +69,7 @@ if ($has_repr) {
                         <label class="fm_label" for="repid">REPID:</label>
                         <input type="text" id="repid" name="repid" value="<?php echo $repid; ?>"
                                onchange="valueChanged(this)" onkeyup="valueChanged(this)">
-                        <a href="/admin/explore" target="_blank">&nbsp;
+                        <a href="/admin/representation/explore" target="_blank">&nbsp;
                             <picture class="glower">
                                 <source srcset="/img/ico/image-file-add-25-w.png" media="(prefers-color-scheme: dark)">
                                 <img style="height: 1em" src="/img/ico/image-file-add-25.png" alt="search"

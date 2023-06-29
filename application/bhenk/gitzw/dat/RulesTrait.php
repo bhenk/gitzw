@@ -135,7 +135,7 @@ trait RulesTrait {
      * @return bool|Representation
      * @throws Exception
      */
-    private function representationCanBeDeleted(int|string|Representation $representation): bool|Representation {
+    public function representationCanBeDeleted(int|string|Representation $representation): bool|Representation {
         $representation = $this->representationMustExist($representation);
         if (!$representation) return false;
         $workHasReps = $representation->getRelations()->getWorkRelations();

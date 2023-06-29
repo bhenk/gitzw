@@ -17,8 +17,6 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
         <button class="dd_button">Representation</button>
         <div class="dd_content">
             <a href="/admin/representation/explore">Explore</a>
-            <a href="#">menu B2 and a bit</a>
-            <a href="#">menu B3</a>
         </div>
     </div>
     <div class="dd_menu">
@@ -31,11 +29,11 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
         <button class="dd_button">System</button>
         <div class="dd_content">
             <a href="/admin">Admin</a>
-            <a href="/admin/phpinfo">PHPInfo</a>
-            <a href="/admin/store">Store</a>
-            <a href="/admin/deploy">Deploy</a>
+            <a href="/admin/system/phpinfo">PHPInfo</a>
+            <a href="/admin/system/store">Store</a>
+            <a href="/admin/system/deploy">Deploy</a>
             <a href="/foo/bar/baz">Not found page</a>
-            <a href="/admin/error_page">Error page</a>
+            <a href="/admin/system/error_page">Error page</a>
         </div>
     </div>
     <div class="dd_menu">

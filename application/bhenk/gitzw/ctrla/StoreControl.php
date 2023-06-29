@@ -53,7 +53,7 @@ class StoreControl extends Page3cControl {
             if ($_POST["action"] == "do_deserialize" && $_POST["submit"] == "Deserialize") $this->deserialize();
             if ($_POST["action"] == "analyze_tables") $this->analyzeTables();
         } else {
-            $act = $this->getRequest()->getUrlPart(2);
+            $act = $this->getRequest()->getUrlPart(3);
             if ($act == "store.tar.gz") $this->downloadStore();
         }
     }

@@ -50,7 +50,6 @@ class AuthHandler extends AbstractHandler {
                 $path = $_SERVER["HTTP_REFERER"] ?? "";
                 if (str_contains($path, "admin")) $path = "";
                 Site::redirect($path);
-                return;
             }
             if ($this->isRestricted($request) && $this->sessionExpired($request)) return;
         }
@@ -138,7 +137,6 @@ class AuthHandler extends AbstractHandler {
             session_start();
             $_SESSION["next_path"] = $path;
             Site::redirect("/login");
-            return true;
         }
         return false;
     }

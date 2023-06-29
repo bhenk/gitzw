@@ -43,13 +43,13 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
         <div class="info_row">
             <label>Target directory:</label>
             <span><?php echo Store::getDataStore(); ?></span>
-            <a href="/admin/store/store.tar.gz">download tar.gz</a>
+            <a href="/admin/system/store/store.tar.gz">download tar.gz</a>
         </div>
         <div class="info_row">
             <label>Last modified:</label>
             <span><?php echo $registry->getActionByAcid("STORE_S")->getLastModifiedToString(); ?></span>
         </div>
-        <form action="/admin/store" method="post">
+        <form action="/admin/system/store" method="post">
             <div class="button_panel">
                 <input type="hidden" name="action" value="serialize">
                 <input type="submit" name="submit" value="Serialize" onclick="startProgressBar('progress_store_s')">
@@ -105,7 +105,7 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
             <label>Last modified:</label>
             <span><?php echo $registry->getActionByAcid("STORE_D")->getLastModifiedToString(); ?></span>
         </div>
-        <form action="/admin/store" method="post">
+        <form action="/admin/system/store" method="post">
             <div class="button_panel">
                 <?php if ($ctrl->showDeserialize()) { ?>
                     <input type="hidden" name="action" value="do_deserialize">
@@ -168,7 +168,7 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
                     <?php echo Dao::getAnalyzeTablesStatement(); ?>
                 </code>
             </div>
-            <form action="/admin/store" method="post">
+            <form action="/admin/system/store" method="post">
                 <div class="left_button">
                     <input type="hidden" name="action" value="analyze_tables">
                     <input type="submit" name="submit" value="Analyze">

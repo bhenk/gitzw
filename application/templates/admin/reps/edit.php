@@ -60,6 +60,8 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
                     <div class="button_row">
                         <input type="hidden" name="action" value="representation">
                         <input type="submit" id="submit" value="Save" name="submit">
+                        <input type="submit" id="delete" value="Delete" name="submit"
+                        <?php echo $ctrl->isDeleteEnabled() ? "" : " disabled" ?>>
                     </div>
                 </div>
                 <hr/>

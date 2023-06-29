@@ -8,6 +8,7 @@ $ctrl = $this;
 $work = $ctrl->getWork();
 $repr = $work->getRelations()->getPreferredRepresentation();
 $file_loc = $repr->getFileLocation(Images::IMG_15);
+echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
 ?>
 
 <div id="edit_work">

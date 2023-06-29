@@ -14,7 +14,7 @@ use bhenk\gitzw\handle\AjaxResponse;
 use bhenk\gitzw\model\WorkCategories;
 use bhenk\gitzw\site\Request;
 use bhenk\logger\log\Log;
-use PHPUnit\TextUI\XmlConfiguration\Exception;
+use Exception;
 use XMLWriter;
 use function count;
 use function curl_close;
@@ -109,6 +109,7 @@ class DeployControl extends Page3cControl {
         $this->updateSession([
             "progress_" . self::ID_PROGRESS_SITEMAP => $this->create_sitemap_count,
         ]);
+        $this->createSmCreatorViews($xw);
         $this->createSmYearViews($xw);
         $this->createSmWorkViews($xw);
 
@@ -128,6 +129,28 @@ class DeployControl extends Page3cControl {
             ->setLastModified($this->getRequest()->getSessionUser()->getName());
         $registry->persist();
         $this->setPageTitle("Deploy - created sitemap");
+    }
+
+    private function createSmCreatorViews(XMLWriter $xw): void {
+        Log::info("Creating sitemap entries for creator views");
+        $iter = new CreatorIterator();
+        while ($iter->hasNext()) {
+            $creator = $iter->next();
+            $href = "/" . $creator->getUriName();
+            $this->writeEntry($xw, $href);
+            $this->updateSession([
+                "progress_" . self::ID_PROGRESS_SITEMAP => $this->create_sitemap_count,
+            ]);
+            $cats = Store::workStore()->getCategories("creatorId=" . $creator->getID());
+            /** @var WorkCategories $cat */
+            foreach ($cats as $cat) {
+                $href_ = $href . "/work/" . $cat->value;
+                $this->writeEntry($xw, $href_);
+                $this->updateSession([
+                    "progress_" . self::ID_PROGRESS_SITEMAP => $this->create_sitemap_count,
+                ]);
+            }
+        }
     }
 
     private function createSmYearViews(XMLWriter $xw): void {

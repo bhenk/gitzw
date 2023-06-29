@@ -30,7 +30,7 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
             <label>Last modified:</label>
             <span><?php echo $registry->getActionByAcid("UOOW")->getLastModifiedToString(); ?></span>
         </div>
-        <form action="/admin/deploy" method="post">
+        <form action="/admin/system/deploy" method="post">
             <div class="button_panel">
                 <input type="hidden" name="action" value="update_order">
                 <input type="submit" name="submit" value="Update" onclick="startProgressBar('progress_order')">
@@ -65,7 +65,7 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
             <label>Last modified:</label>
             <span><?php echo $registry->getActionByAcid("CACHE")->getLastModifiedToString(); ?></span>
         </div>
-        <form action="/admin/deploy" method="post">
+        <form action="/admin/system/deploy" method="post">
             <div class="button_panel">
                 <input type="hidden" name="action" value="create_cache">
                 <input type="submit" name="submit" value="Create" onclick="startProgressBar('progress_cache')">
@@ -96,7 +96,7 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
             <label>Last modified:</label>
             <span><?php echo $registry->getActionByAcid("SITEMAP")->getLastModifiedToString(); ?></span>
         </div>
-        <form action="/admin/deploy" method="post">
+        <form action="/admin/system/deploy" method="post">
             <div class="button_panel">
                 <input type="hidden" name="action" value="create_sitemap">
                 <input type="submit" name="submit" value="Create" onclick="startProgressBar('progress_sitemap')">
