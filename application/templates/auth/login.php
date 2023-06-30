@@ -1,7 +1,6 @@
 <?php
 
 use bhenk\gitzw\base\Site;
-use chillerlan\QRCode\QRCode;
 
 ?>
 <!-- login.php -->

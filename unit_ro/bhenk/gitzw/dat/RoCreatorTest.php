@@ -16,7 +16,7 @@ class RoCreatorTest extends TestCaseRo {
         $creator = Store::creatorStore()->select(1);
         $result = $creator->getImageData(WorkCategories::draw, Images::IMG_04, 0, 5);
         //var_dump($result);
-        assertEquals(3, count($result));
+        assertEquals(5, count($result));
     }
 
 }

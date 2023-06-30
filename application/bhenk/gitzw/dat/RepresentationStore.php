@@ -12,10 +12,7 @@ use function array_values;
 use function count;
 use function gettype;
 use function intval;
-use function is_int;
 use function is_null;
-use function is_string;
-use function str_repeat;
 use function substr;
 
 /**

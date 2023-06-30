@@ -1,5 +1,7 @@
 <?php
+
 use bhenk\gitzw\dat\Store;
+
 ?>
 <div id="home_div1">
     <div id="home_div2">

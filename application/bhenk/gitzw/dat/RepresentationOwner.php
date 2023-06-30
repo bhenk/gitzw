@@ -7,7 +7,6 @@ use Exception;
 use function array_keys;
 use function in_array;
 use function is_null;
-use function uasort;
 
 /**
  * Administers related Representations

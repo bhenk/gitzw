@@ -2,7 +2,6 @@
 
 namespace bhenk\gitzw\dao;
 
-use bhenk\msdata\abc\AbstractDao;
 use Exception;
 
 trait GitDao  {

@@ -6,7 +6,6 @@ use bhenk\msdata\abc\AbstractDao;
 use Exception;
 use function array_values;
 use function file_get_contents;
-use function str_repeat;
 use function str_replace;
 
 class RepresentationDao extends AbstractDao {

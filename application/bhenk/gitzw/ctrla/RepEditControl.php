@@ -10,7 +10,6 @@ use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\site\Request;
 use function file_exists;
 use function is_null;
-use function substr;
 use function unlink;
 
 /**

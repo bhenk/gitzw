@@ -18,7 +18,6 @@ use function json_decode;
 use function json_encode;
 use function str_replace;
 use function substr;
-use function urldecode;
 
 class Creator implements StoredObjectInterface {
     use PersonTrait;

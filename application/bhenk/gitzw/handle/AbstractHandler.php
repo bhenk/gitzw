@@ -2,8 +2,6 @@
 
 namespace bhenk\gitzw\handle;
 
-use bhenk\gitzw\site\Request;
-
 abstract class AbstractHandler implements HandlerInterface {
 
     private ?HandlerInterface $nextHandler = null;

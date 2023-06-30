@@ -13,14 +13,11 @@ use function array_map;
 use function array_values;
 use function count;
 use function gettype;
-use function in_array;
 use function intval;
 use function is_null;
-use function str_ends_with;
 use function str_pad;
 use function strlen;
 use function substr;
-use function var_export;
 
 /**
  * Store for obtaining and persisting Works

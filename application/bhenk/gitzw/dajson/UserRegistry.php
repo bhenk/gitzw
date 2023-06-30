@@ -3,7 +3,6 @@
 namespace bhenk\gitzw\dajson;
 
 use bhenk\gitzw\base\Env;
-use bhenk\gitzw\site\Request;
 use function file_get_contents;
 use function file_put_contents;
 use function json_decode;

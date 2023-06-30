@@ -2,14 +2,12 @@
 
 namespace bhenk\gitzw\base;
 
-use bhenk\logger\log\Log;
 use ImagickException;
 use function dirname;
 use function file_exists;
 use function is_dir;
 use function is_file;
 use function mkdir;
-use function str_replace;
 
 class Images {
 

@@ -17,7 +17,6 @@ use function print_r;
 use function session_destroy;
 use function session_start;
 use function str_contains;
-use function str_starts_with;
 
 class AuthHandler extends AbstractHandler {
 

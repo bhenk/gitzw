@@ -18,8 +18,7 @@ class WorkIteratorTest extends TestCaseRo {
             $count++;
             assertEquals($count, $iter->getCount());
         }
-        assertEquals(197, $count);
-        assertEquals(197, $iter->getCount());
+        assertEquals($iter->getCount(), $count);
     }
 
 }

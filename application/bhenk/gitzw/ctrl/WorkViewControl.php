@@ -6,7 +6,6 @@ use bhenk\gitzw\base\Env;
 use bhenk\gitzw\dat\Store;
 use bhenk\gitzw\dat\Work;
 use bhenk\gitzw\site\Request;
-use bhenk\logger\log\Log;
 use Exception;
 use function header;
 use function json_encode;

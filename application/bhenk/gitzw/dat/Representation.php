@@ -15,7 +15,6 @@ use function json_encode;
 use function restore_error_handler;
 use function set_error_handler;
 use function str_replace;
-use function strrpos;
 
 /**
  * A Representation represents a manifestation of a Work

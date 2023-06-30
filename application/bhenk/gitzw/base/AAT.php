@@ -21,7 +21,6 @@ use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function fopen;
-use function in_array;
 use function is_null;
 use function json_decode;
 use function json_encode;

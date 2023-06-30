@@ -2,7 +2,6 @@
 
 namespace bhenk\gitzw\dao;
 
-use bhenk\msdata\abc\AbstractDao;
 use Exception;
 use function array_map;
 use function implode;

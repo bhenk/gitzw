@@ -2,10 +2,8 @@
 
 namespace bhenk\gitzw\ctrl;
 
-use bhenk\gitzw\site\Menu;
 use bhenk\gitzw\site\Request;
 use function gettype;
-use function is_null;
 use function json_encode;
 use function str_contains;
 
