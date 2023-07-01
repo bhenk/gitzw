@@ -29,6 +29,7 @@ class TestCaseDb extends TestCase {
             "username" => "user",           // required
             "password" => "user",           // required
             "database" => "gitzw_test",     // required
+            "use_parameterized_queries" => false
         ];
         MysqlConnector::get()->setConfiguration($configuration);
 

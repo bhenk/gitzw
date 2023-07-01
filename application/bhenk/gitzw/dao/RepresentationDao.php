@@ -45,5 +45,4 @@ class RepresentationDao extends AbstractDao {
             file_get_contents(self::TABLE_DEFINITION_FILE));
     }
 
-
 }

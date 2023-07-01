@@ -34,6 +34,7 @@ class ErrorControl extends Page1cControl {
 
     /**
      * @param Throwable $error
+     * @return ErrorControl
      */
     public function setError(Throwable $error): ErrorControl {
         $this->error = $error;

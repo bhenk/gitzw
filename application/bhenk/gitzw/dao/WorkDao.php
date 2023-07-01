@@ -30,4 +30,5 @@ class WorkDao extends AbstractDao {
         return str_replace("%tbl_name%", $this->getTableName(),
             file_get_contents(self::TABLE_DEFINITION_FILE));
     }
+
 }

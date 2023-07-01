@@ -6,8 +6,6 @@ use function in_array;
 
 trait MultiLanguageTitleTrait {
 
-    const LANGUAGES = ["nl", "en"];
-
     private MultiLanguageTitleInterface $ml_title;
 
     public function initTitleTrait(MultiLanguageTitleInterface $ml_title): void {
@@ -34,7 +32,7 @@ trait MultiLanguageTitleTrait {
      * @return bool
      */
     public function setPreferredLanguage(string $preferred): bool {
-        if (in_array($preferred, self::LANGUAGES)) {
+        if (in_array($preferred, TraitConstants::LANGUAGES)) {
             $this->ml_title->setPreferredLanguage($preferred);
             return true;
         }

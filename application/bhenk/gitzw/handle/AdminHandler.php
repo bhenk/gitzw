@@ -28,25 +28,6 @@ class AdminHandler extends AbstractHandler {
         };
     }
 
-//    private function handleOldStyle(Request $request): void {
-//        echo "old style " . self::class;
-//        $act = $request->getUrlPart(1);
-//        $ctrl = match ($act) {
-//            //"upload" => new FileUploadControl($request),
-//            //"explore" => new FileExplorerControl($request),
-//            //"image" => new RepEditControl($request),
-//            //"reps" => new RepExplorerControl($request),
-//            //"work" => new WorkControl($request),
-////            "phpinfo" => new PhpInfoControl($request),
-////            "deploy" => new DeployControl($request),
-////            "store" => new StoreControl($request),
-////            "error_page" => (new ErrorControl($request))->setError(new Exception("TestError", 200)),
-//            default => new AdminControl($request),
-//        };
-//        $ctrl->handleRequest();
-//        $ctrl->renderPage();
-//    }
-
     private function handleAdminRequest(Request $request): void {
         $ctrl = new AdminControl($request);
         $ctrl->handleRequest();

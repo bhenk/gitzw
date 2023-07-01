@@ -7,8 +7,6 @@ use function number_format;
 
 trait DimensionsTrait {
 
-    const CM_TO_IN = 2.54;
-
     private DimensionsInterface $dims;
 
     public function initDimensionsTrait(DimensionsInterface $dimensions): void {
@@ -45,7 +43,7 @@ trait DimensionsTrait {
         if ($w > 0) {
             $cm .= number_format($w, $decCm);
             $dim .= "w";
-            $in .= number_format($w / self::CM_TO_IN, $decIn);
+            $in .= number_format($w / TraitConstants::CM_TO_IN, $decIn);
         }
         if ($w > 0 and $h > 0) {
             $cm .= " x ";
@@ -55,7 +53,7 @@ trait DimensionsTrait {
         if ($h > 0) {
             $cm .= number_format($h, $decCm);
             $dim .= "h";
-            $in .= number_format($h / self::CM_TO_IN, $decIn);
+            $in .= number_format($h / TraitConstants::CM_TO_IN, $decIn);
         }
         if (($h > 0 and $d > 0) or ($h <= 0 and $d > 0 and $w > 0)) {
             $cm .= " x ";
@@ -65,7 +63,7 @@ trait DimensionsTrait {
         if ($d > 0) {
             $cm .= number_format($d, $decCm);
             $dim .= "d";
-            $in .= number_format($d / self::CM_TO_IN, $decIn);
+            $in .= number_format($d / TraitConstants::CM_TO_IN, $decIn);
         }
         if ($w > 0 or $h > 0 or $d > 0) {
             $cm .= " cm. ";

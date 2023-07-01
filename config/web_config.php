@@ -1,8 +1,8 @@
 <?php
 
 return [
-    "useCache" => false,
-    "sessionExpirationMinutes" => PHP_INT_MAX,
-    "version" => "2.0.0",
-    "versionDate" => "2023-06-15",
+    "useCache" => true,
+    "sessionExpirationMinutes" => 15,
+    "version" => "2.0.1",
+    "versionDate" => "2023-07-01",
 ];

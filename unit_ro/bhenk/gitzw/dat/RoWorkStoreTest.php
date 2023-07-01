@@ -44,4 +44,6 @@ class RoWorkStoreTest extends TestCaseRo {
         self::assertInstanceOf(WorkCategories::class, $result[0]);
     }
 
+
+
 }

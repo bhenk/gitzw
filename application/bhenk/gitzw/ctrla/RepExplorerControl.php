@@ -129,8 +129,9 @@ class RepExplorerControl extends Page3cControl {
 
     private function handleYearViewOrphan(): void {
         $where = $_SESSION[self::class . ".where"] ?? "WHERE 1=1";
+        if ($where == "") $where = "WHERE 1=1";
         $where .= " AND SUBSTR(REPID, 1, 8)='$this->cr_year'";
-        $where = str_replace("WHERE", "", $where);
+        $where = str_replace("WHERE ", "", $where);
         $this->representations = Store::representationStore()->selectWhere($where);
     }
 

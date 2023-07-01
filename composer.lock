@@ -4,25 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a58b41a564db0a749b7a82bc48739ecd",
+    "content-hash": "e0951846fd05198cc8a5efc9afb9c285",
     "packages": [
         {
             "name": "bhenk/logger",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bhenk/logger.git",
-                "reference": "33d8a46ad2f2c78214fbf4da452e1dce55526719"
+                "reference": "2a72a9fd97de754b42969c7be206812a663d7a3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bhenk/logger/zipball/33d8a46ad2f2c78214fbf4da452e1dce55526719",
-                "reference": "33d8a46ad2f2c78214fbf4da452e1dce55526719",
+                "url": "https://api.github.com/repos/bhenk/logger/zipball/2a72a9fd97de754b42969c7be206812a663d7a3f",
+                "reference": "2a72a9fd97de754b42969c7be206812a663d7a3f",
                 "shasum": ""
             },
             "require": {
                 "monolog/monolog": "^3.3",
-                "php": ">=8.2",
+                "php": ">=8.1",
                 "psr/log": "^3.0"
             },
             "type": "library",
@@ -50,30 +50,29 @@
             ],
             "support": {
                 "issues": "https://github.com/bhenk/logger/issues",
-                "source": "https://github.com/bhenk/logger/tree/1.0.6"
+                "source": "https://github.com/bhenk/logger/tree/1.0.7"
             },
-            "time": "2023-04-29T12:40:57+00:00"
+            "time": "2023-06-30T11:01:49+00:00"
         },
         {
             "name": "bhenk/msdata",
-            "version": "dev-main",
+            "version": "1.04",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bhenk/msdata.git",
-                "reference": "81b0b1397aa0b825146527ac57d2c22fec565637"
+                "reference": "b33ee6b5b8bc6826b4ab48fda7d3a2d13a022311"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bhenk/msdata/zipball/81b0b1397aa0b825146527ac57d2c22fec565637",
-                "reference": "81b0b1397aa0b825146527ac57d2c22fec565637",
+                "url": "https://api.github.com/repos/bhenk/msdata/zipball/b33ee6b5b8bc6826b4ab48fda7d3a2d13a022311",
+                "reference": "b33ee6b5b8bc6826b4ab48fda7d3a2d13a022311",
                 "shasum": ""
             },
             "require": {
                 "bhenk/logger": "^1.0",
                 "ext-mysqli": "*",
-                "php": ">=8.2"
+                "php": ">=8.1"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -99,9 +98,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bhenk/msdata/issues",
-                "source": "https://github.com/bhenk/msdata/tree/main"
+                "source": "https://github.com/bhenk/msdata/tree/1.04"
             },
-            "time": "2023-05-01T14:42:31+00:00"
+            "time": "2023-07-01T13:08:46+00:00"
         },
         {
             "name": "chillerlan/php-qrcode",
@@ -2163,13 +2162,11 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "bhenk/msdata": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.2",
+        "php": ">=8.1",
         "ext-curl": "*",
         "ext-exif": "*",
         "ext-fileinfo": "*",

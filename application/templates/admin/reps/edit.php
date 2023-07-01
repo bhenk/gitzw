@@ -61,7 +61,7 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
                         <input type="hidden" name="action" value="representation">
                         <input type="submit" id="submit" value="Save" name="submit">
                         <input type="submit" id="delete" value="Delete" name="submit"
-                        <?php echo $ctrl->isDeleteEnabled() ? "" : " disabled" ?>>
+                            <?php echo $ctrl->isDeleteEnabled() ? "" : " disabled" ?>>
                     </div>
                 </div>
                 <hr/>
@@ -75,7 +75,7 @@ echo "<!-- Control: " . $this::class . " template: " . __FILE__ . " -->";
                     <div class="form_row">
                         <label for="resid">RESID: </label>
                         <a href="/<?php echo $work->getCanonicalUrl(); ?>">
-                        <span id="resid"><?php echo $work->getRESID(); ?></span>
+                            <span id="resid"><?php echo $work->getRESID(); ?></span>
                         </a>
                         <span style="display: none"><?php echo $work->getRESID(); ?></span>
                         <span title="copy RESID" class="copyprevious" onclick="copyPrevious(this)">&nbsp;&#9776; </span>

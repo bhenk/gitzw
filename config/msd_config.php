@@ -5,4 +5,5 @@ return [
     "username" => "user",       // required
     "password" => "user",       // required
     "database" => "gitzw",      // required
+    "use_parameterized_queries" => false,
 ];
