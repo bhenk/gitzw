@@ -129,6 +129,26 @@ class Work implements StoredObjectInterface {
         $this->workDo->setMedia($media);
     }
 
+    public function getSurfaceAndMediaCodes(): array {
+        $surface_codes = [];
+        $media_codes = [];
+        if (!is_null($this->getMedia())) {
+            foreach (explode(" ", $this->getMedia()) as $word) {
+                $term = strtolower(trim($word));
+                $sc = AAT::ART_SURFACE[$term] ?? null;
+                if ($sc) {
+                    $surface_codes[] = $sc;
+                } else {
+                    $mc = AAT::ART_MEDIA[$term] ?? null;
+                    if ($mc) {
+                        $media_codes[] = $mc;
+                    }
+                }
+            }
+        }
+        return [$surface_codes, $media_codes];
+    }
+
     /**
      * @return bool
      */
@@ -246,6 +266,12 @@ class Work implements StoredObjectInterface {
         } else {
             $this->workDo->setTypes(implode(";", $types));
         }
+    }
+
+    public function getTypeCodes(): array {
+        return array_map(function($x) {
+            return AAT::ART_TYPES[strtolower($x)];
+        }, $this->getTypes());
     }
 
     /**

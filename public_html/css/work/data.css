@@ -62,11 +62,16 @@
 #data_links {
     margin-top: 20px;
     padding: 5px;
-    font-size: 0.9em;
+    /*font-size: 0.9em;*/
 }
 
 #data_links > a {
     color: var(--link-color);
+}
+
+.data_links_list {
+    display: flex;
+    flex-direction: column;
 }
 
 #qr_code div {

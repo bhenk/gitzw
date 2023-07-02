@@ -131,9 +131,23 @@ $media = $aat->getMedia($work->getMedia());
     </div>
     <hr/>
     <div id="data_links">
-        <div class="data_term">download</div>
-        <div class="data_def">
-            <a href="/<?php echo $work->getCanonicalUrl() . '.json' ?>">[ json ]</a>
+        <div class="data_term">download resource description</div>
+        <div class="data_links_list">
+            <div class="data_def">
+                <a href="/<?php echo $work->getCanonicalUrl() . '.json' ?>">[ application/json ]</a>
+            </div>
+            <div class="data_def">
+                <a href="/<?php echo $work->getCanonicalUrl() . '.rdf' ?>">[ application/rdf+xml ]</a>
+            </div>
+            <div class="data_def">
+                <a href="/<?php echo $work->getCanonicalUrl() . '.n3' ?>">[ text/n3 ]</a>
+            </div>
+            <div class="data_def">
+                <a href="/<?php echo $work->getCanonicalUrl() . '.ttl' ?>">[ text/turtle ]</a>
+            </div>
+            <div class="data_def">
+                <a href="/<?php echo $work->getCanonicalUrl() . '.nt' ?>">[ application/rdf-triples ]</a>
+            </div>
         </div>
     </div>
     <hr/>

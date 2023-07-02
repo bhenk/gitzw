@@ -55,6 +55,13 @@ class AAT {
         'wood'=>'aat:300011914',
     ];
 
+    const ART_SURFACE = [
+        'canvas'=>'aat:300014078',
+        'cardboard'=>'aat:300014224',
+        'paper'=>'aat:300014109',
+        'wood'=>'aat:300011914',
+    ];
+
     const ART_TYPES = [
         'acrylic painting'=>'aat:300181918',
         'aquarelle' => 'aat:300404216',

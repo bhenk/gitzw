@@ -12,6 +12,7 @@ use bhenk\gitzw\site\Request;
 use bhenk\logger\log\Log;
 use Exception;
 use function count;
+use function intval;
 use function is_null;
 use function strlen;
 use function substr;
@@ -33,7 +34,7 @@ class WorkHandler extends AbstractHandler {
             $this->getNextHandler()->handleRequest($request);
             return;
         }
-
+        // /creator-name/work
         $cat = $request->getUrlPart(2);
         if (empty($cat)) {
             $canonical = $request->getCreator()->getUriName() . "/work";
@@ -46,12 +47,13 @@ class WorkHandler extends AbstractHandler {
         } else {
             $category = WorkCategories::get($cat);
             if (is_null($category)) {
-                (new NotFoundHandler())->handleRequest($request);
-                return;
+                $canonical = $request->getCreator()->getUriName() . "/work";
+                Site::redirect($canonical);
             }
             $request->setWorkCategory($category);
         }
 
+        // /creator-name/work/cat-value
         $year = $request->getUrlPart(3);
         if (empty($year)) {
             $canonical = $request->getCreator()->getUriName() . "/work/" . $request->getWorkCategory()->value;
@@ -63,6 +65,12 @@ class WorkHandler extends AbstractHandler {
             return;
         }
 
+        if (intval($year) < 10) {
+            $canonical = $request->getCreator()->getUriName() . "/work/" . $request->getWorkCategory()->value;
+            Site::redirect("/" . $canonical);
+        }
+
+        // /creator-name/work/cat-value/year
         $last = explode(".", $request->getUrlPart(4));
         $number = $last[0];
         $format = (count($last) > 1) ? $last[1] : false;
@@ -79,13 +87,13 @@ class WorkHandler extends AbstractHandler {
             $this->goWorkYearViewControl($request);
             return;
         }
-
         $RESID = $request->getCreator()->getShortCRID() . ".work."
             . $request->getWorkCategory()->name . ".$year.$number";
         $work = Store::workStore()->selectByRESID($RESID);
         if (!$work) {
-            (new NotFoundHandler())->handleRequest($request);
-            return;
+            $canonical = $request->getCreator()->getUriName() . "/work/"
+                . $request->getWorkCategory()->value . "/$year";
+            Site::redirect($canonical);
         }
         $request->setWork($work);
         $canonical = $work->getCanonicalUrl($request->getCreator());
@@ -99,11 +107,11 @@ class WorkHandler extends AbstractHandler {
     }
 
     private function goWorkViewControl(Request $request): void {
-        $ctrl = new WorkViewControl($request);
+        new WorkViewControl($request);
     }
 
     private function goWorkYearViewControl(Request $request): void {
-        $ctrl = new WorkYearViewControl($request);
+        new WorkYearViewControl($request);
     }
 
     private function goCreatorControl(Request $request): void {

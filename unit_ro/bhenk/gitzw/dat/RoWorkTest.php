@@ -48,4 +48,12 @@ class RoWorkTest extends TestCaseRo {
         assertEquals([12, 14], array_keys($others));
     }
 
+    public function testGetSurfaceAndMediaCodes() {
+        $work = Store::workStore()->selectByRESID("hnq.work.draw.2022.0013");
+        list($surface_codes, $media_codes) = $work->getSurfaceAndMediaCodes();
+        //var_dump($work->getSurfaceAndMediaCodes());
+        assertEquals(1,1);
+        //var_dump($surface_codes);
+    }
+
 }

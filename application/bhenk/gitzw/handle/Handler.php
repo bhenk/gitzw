@@ -62,7 +62,6 @@ class Handler extends AbstractHandler {
             ->setNextHandler(new CreatorHandler())
             ->setNextHandler(new WorkHandler())
             ->setNextHandler(new NotFoundHandler());
-
         $this->getNextHandler()->handleRequest($this->request);
     }
 

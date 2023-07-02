@@ -195,6 +195,10 @@ class DeployControl extends Page3cControl {
             $href_ = "/" . $work->getCanonicalUrl();
             $this->writeEntry($xw, $href_, $options);
             $this->writeEntry($xw, $href_ . ".json");
+            $this->writeEntry($xw, $href_ . ".rdf");
+            $this->writeEntry($xw, $href_ . ".ttl");
+            $this->writeEntry($xw, $href_ . ".nt");
+
             $this->updateSession([
                 "progress_" . self::ID_PROGRESS_SITEMAP => $this->create_sitemap_count,
             ]);
