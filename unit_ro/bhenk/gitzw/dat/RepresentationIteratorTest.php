@@ -8,11 +8,11 @@ use bhenk\TestCaseRo;
 class RepresentationIteratorTest extends TestCaseRo {
 
     public function testImages() {
-//        $iter = new RepresentationIterator();
-//        while ($iter->hasNext()) {
-//            $repr = $iter->next();
-//            Images::createImages($repr->getREPID());
-//        }
+        $iter = new RepresentationIterator();
+        while ($iter->hasNext()) {
+            $repr = $iter->next();
+            Images::createImages($repr->getREPID());
+        }
         self::assertEquals(1, 1);
     }
 

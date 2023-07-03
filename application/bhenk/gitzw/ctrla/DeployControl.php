@@ -399,7 +399,7 @@ class DeployControl extends Page3cControl {
 
     private function callUrl(string $loc): void {
         $handle = curl_init();
-        curl_setopt($handle, CURLOPT_URL, "http://127.0.0.1" . $loc);
+        curl_setopt($handle, CURLOPT_URL, Env::HTTPS_URL . $loc);
         curl_setopt($handle, CURLOPT_HEADER  , true);  // we want headers
         curl_setopt($handle, CURLOPT_RETURNTRANSFER,1);
         curl_setopt($handle, CURLOPT_TIMEOUT,10);

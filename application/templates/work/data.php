@@ -131,7 +131,7 @@ $media = $aat->getMedia($work->getMedia());
     </div>
     <hr/>
     <div id="data_links">
-        <div class="data_term">download resource description</div>
+        <div class="data_term">resource description</div>
         <div class="data_links_list">
             <div class="data_def">
                 <a href="/<?php echo $work->getCanonicalUrl() . '.json' ?>">[ application/json ]</a>

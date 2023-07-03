@@ -23,6 +23,7 @@ class Images {
      * If the image does not exist, it will be created.
      * @param string $REPID
      * @param array $dimensions preferably one of the IMG_XX constants
+     * @param bool $create
      * @return string relative filepath to the image
      * @throws ImagickException
      */
@@ -43,6 +44,12 @@ class Images {
         return "/img/resized/$dim/" . $REPID;
     }
 
+    /**
+     * Create images for the given REPID in all sizes.
+     * @param string $REPID
+     * @return void
+     * @throws ImagickException
+     */
     public static function createImages(string $REPID): void {
         $sizes = self::getSizes();
         foreach ($sizes as $dimensions) {
@@ -50,10 +57,24 @@ class Images {
         }
     }
 
+    /**
+     * Get the sizes as defined in this class
+     * @return int[][]
+     */
     public static function getSizes(): array {
         return [self::IMG_01, self::IMG_04, self::IMG_08, self::IMG_15, self::IMG_30];
     }
 
+    /**
+     * Get existing absolute file locations for the given REPID for all sizes
+     *
+     * Returns absolute paths, in the format "{public_html}/img/resized/$dim/$REPID".
+     * Will not create the images.
+     *
+     * @param string $REPID
+     * @return string[]
+     * @throws ImagickException
+     */
     public static function getFileLocations(string $REPID): array {
         $locations = [];
         foreach (self::getSizes() as $size) {
