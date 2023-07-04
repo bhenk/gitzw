@@ -154,7 +154,7 @@ $media = $aat->getMedia($work->getMedia());
     <div id="qr_code">
         <div>
             <?php
-            $data = Env::HTTPS_URL . "/" . $work->getCanonicalUrl();
+            $data = Env::getHttpsUrl() . "/" . $work->getCanonicalUrl();
             echo '<img src="' . (new QRCode)->render($data) . '" alt="QR Code" />';
             ?>
         </div>

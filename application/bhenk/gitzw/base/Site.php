@@ -3,6 +3,7 @@
 namespace bhenk\gitzw\base;
 
 use bhenk\logger\log\Log;
+use bhenk\msdata\connector\MysqlConnector;
 use JetBrains\PhpStorm\NoReturn;
 use function header;
 use function implode;
@@ -15,12 +16,12 @@ class Site {
 
     private static bool $redirected = false;
 
-    public static function hostName() : string {
+    public static function hostName() : string|bool {
         if (isset($_SERVER['HTTP_HOST'])) {
             return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")
                 .'://'.$_SERVER['HTTP_HOST'];
         } else {
-            return 'http://no_host';
+            return false;
         }
     }
 
@@ -44,6 +45,7 @@ class Site {
     #[NoReturn] public static function redirect(string $path) : void {
         $location = self::redirectLocation($path);
         self::$redirected = true;
+        MysqlConnector::closeConnection();
         Log::info("Redirecting, location=$location");
         header("Location: ".$location, TRUE, 301);
         exit();

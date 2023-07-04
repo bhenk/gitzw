@@ -19,7 +19,7 @@
     "ext-fileinfo": "*",
     "ext-xmlwriter": "*",
     "ext-imagick": "*",
-    "bhenk/msdata": "^1.0",
+    "bhenk/msdata": "^1.1",
     "chillerlan/php-qrcode": "^4.3",
     "easyrdf/easyrdf": "^1.1",
     "ext-zlib": "*",

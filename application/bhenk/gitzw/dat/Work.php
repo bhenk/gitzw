@@ -111,7 +111,7 @@ class Work implements StoredObjectInterface {
         $this->creator = $creator;
         $cat = WorkCategories::forName($resid_array[2]);
         $url = $creator->getUriName() . "/work/$cat->value/$resid_array[3]/$resid_array[4]";
-        if ($full) $url = Env::HTTPS_URL . "/" . $url;
+        if ($full) $url = Env::getHttpsUrl() . "/" . $url;
         return $url;
     }
 
@@ -322,7 +322,7 @@ class Work implements StoredObjectInterface {
             "@type" => "VisualArtwork",
             "@id"=> $this->getSDId(),
             "additionalType" => $additionalTypes,
-            "url" => Env::HTTPS_URL . "/" . $this->getCanonicalUrl(),
+            "url" => Env::getHttpsUrl() . "/" . $this->getCanonicalUrl(),
             "name" => $this->getTitles("<no title>"),
             "image" => $this->getRelations()->getPreferredRepresentation()->getSDId(),
             "material" => $material,

@@ -88,12 +88,12 @@ class WorkViewControl extends WorkPageControl {
         $page_sd = [
             "@type" => "WebPage",
             "@id" => Env::HTTP_URL . "/" . $canonical,
-            "url" => Env::HTTPS_URL . "/" . $canonical,
+            "url" => Env::getHttpsUrl() . "/" . $canonical,
             "mainEntity" => [ "@id" => $this->getWork()->getSDId()],
             "relatedLink" => [
-                Env::HTTPS_URL . "/"
+                Env::getHttpsUrl() . "/"
                     . Store::workStore()->selectNearestUpByOrder($this->work->getOrder())->getCanonicalUrl(),
-                Env::HTTPS_URL . "/"
+                Env::getHttpsUrl() . "/"
                     . Store::workStore()->selectNearestDownByOrder($this->work->getOrder())->getCanonicalUrl()
             ]
         ];
@@ -168,11 +168,11 @@ class WorkViewControl extends WorkPageControl {
             $res->add('rdf:type', new Resource($type));
         }
         // https://gitzw.art/{crid-full-name}/work/drawing/2020/0000
-        $res->add('schema:url', new Resource(Env::HTTPS_URL . "/" . $this->work->getCanonicalUrl()));
+        $res->add('schema:url', new Resource(Env::getHttpsUrl() . "/" . $this->work->getCanonicalUrl()));
         // http://gitzw.art/#hnq.2022._DSC0888.jpg
         $representation = $this->work->getRelations()->getPreferredRepresentation();
         $repId = Env::HTTP_URL . "/#" . str_replace("/", ".", $representation->getREPID());
-        $repUrl = Env::HTTPS_URL . $representation->getFileLocation(Images::IMG_30);
+        $repUrl = Env::getHttpsUrl() . $representation->getFileLocation(Images::IMG_30);
 
         $res->add('schema:image', new Resource($repId));
 

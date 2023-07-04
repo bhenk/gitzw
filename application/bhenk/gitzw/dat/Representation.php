@@ -174,7 +174,7 @@ class Representation implements StoredObjectInterface {
         return [
             "@type" => "ImageObject",
             "@id" => $this->getSDId(),
-            "url" => Env::HTTPS_URL . $this->getFileLocation(),
+            "url" => Env::getHttpsUrl() . $this->getFileLocation(),
         ];
     }
 

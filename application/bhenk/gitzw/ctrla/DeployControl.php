@@ -189,7 +189,7 @@ class DeployControl extends Page3cControl {
             $cr_name = $work->getCreator()->getFullName();
             $options = [];
             $options["image"] = [
-                "imgLoc" => Env::HTTPS_URL . $representation->getFileLocation(Images::IMG_15),
+                "imgLoc" => Env::getHttpsUrl() . $representation->getFileLocation(Images::IMG_15),
                 "imgCaption" => $cr_name . " - " . $work->getTitles("no title") . " - " . $work->getMedia(),
             ];
             $href_ = "/" . $work->getCanonicalUrl();
@@ -210,7 +210,7 @@ class DeployControl extends Page3cControl {
         $xw->startElement('url');
 
         $xw->startElement('loc');
-        $xw->text(Env::HTTPS_URL.$loc);
+        $xw->text(Env::getHttpsUrl().$loc);
         $xw->endElement();
 
         $xw->startElement('lastmod');
@@ -243,7 +243,7 @@ class DeployControl extends Page3cControl {
 
     private function getLastModified(string $loc): string {
         $handle = curl_init();
-        curl_setopt($handle, CURLOPT_URL, Env::HTTPS_URL.$loc);
+        curl_setopt($handle, CURLOPT_URL, Env::getHttpsUrl().$loc);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER,1);
         curl_setopt($handle, CURLOPT_TIMEOUT,10);
         curl_setopt($handle, CURLOPT_MAXREDIRS, 10);
@@ -399,7 +399,7 @@ class DeployControl extends Page3cControl {
 
     private function callUrl(string $loc): void {
         $handle = curl_init();
-        curl_setopt($handle, CURLOPT_URL, Env::HTTPS_URL . $loc);
+        curl_setopt($handle, CURLOPT_URL, Env::getHttpsUrl() . $loc);
         curl_setopt($handle, CURLOPT_HEADER  , true);  // we want headers
         curl_setopt($handle, CURLOPT_RETURNTRANSFER,1);
         curl_setopt($handle, CURLOPT_TIMEOUT,10);

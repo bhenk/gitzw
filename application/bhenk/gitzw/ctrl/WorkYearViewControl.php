@@ -45,8 +45,10 @@ class WorkYearViewControl extends WorkPageControl {
         $limit = 30;
         $cat_name = $request->getWorkCategory()->name;
         $id = $request->getCreator()->getID();
+        $paged_request = false;
         if ($request->getUrlPart(4) == "view") {
             $offset = intval($request->getUrlPart(5));
+            $paged_request = true;
         }
 
         $where = "creatorId = $id AND YEAR(date) = $year AND category = '$cat_name' AND hidden = 0 ORDER BY RESID DESC";
@@ -69,7 +71,7 @@ class WorkYearViewControl extends WorkPageControl {
         $url = "/" . $creator->getUriName() . "/work/" . $request->getWorkCategory()->value . "/$year";
         $this->url_next = $url . "/view/" . $next;
         $this->url_previous = $url . "/view/" . $previous;
-        $request->setUseCache(true);
+        if (!$paged_request) $request->setUseCache(true);
         $this->renderPage();
     }
 
